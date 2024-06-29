@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.Nav {
+  display: flex;
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.Nav-Logo {
+  width: 100px;
+  height: 100px;
+  margin: 0 50px;
+}
+.Nav-List {
+  display: flex;
+  list-style: none;
+  width: 500px;
+  padding: 1rem;
+  justify-content: space-around;
+}
+.Nav-Item a {
+  text-decoration: none;
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+}

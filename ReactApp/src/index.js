@@ -1,18 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Crear un root para React 18+
-const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// Renderizar la aplicación
-root.render(
+ReactDOM.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
-// Para medir el rendimiento de tu aplicación
 reportWebVitals();
