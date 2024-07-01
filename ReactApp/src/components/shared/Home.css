@@ -1,0 +1,120 @@
+:root {
+    --color-primary: rgb(12, 106, 255);
+    ;
+    --color-title: #000000;
+    --color-secondary: #f0f0f0;
+    --color-background: #fff;
+    --color-button-primary: #1e90ff;
+    --color-button-secondary: #ffffff;
+    --color-error: #ff0000;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px);
+    background-color: var(--color-background);
+}
+
+.home-content {
+    display: grid;
+    text-align: center;
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px;
+    grid-template-areas:
+        "Description Logo";
+    gap: 20px;
+}
+
+.Inicio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    grid-area: Description;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: var(--color-title);
+    margin-bottom: 10px;
+}
+
+.highlight {
+    color: var(--color-primary);
+}
+
+.description {
+    font-size: 1rem;
+    color: var(--color-title);
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button.primary {
+    background-color: var(--color-button-primary);
+    color: white;
+}
+
+.button.secondary {
+    background-color: var(--color-button-secondary);
+    color: var(--color-button-primary);
+    border: 1px solid var(--color-button-primary);
+}
+
+.button.primary:hover,
+.button.secondary:hover {
+    opacity: 0.8;
+}
+
+.home-logo {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin-top: 20px;
+    grid-area: Logo;
+}
+
+/* Media query para pantallas más pequeñas */
+@media screen and (max-width: 768px) {
+    .home-content {
+        grid-template-areas:
+            "Description"
+            "Buttons";
+    }
+
+    .home-logo {
+        display: none;
+        /* Ocultar el logo en pantallas más pequeñas */
+    }
+}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import "../shared/Register.css";
+import "./Registro_Usuario.css";
 
 const RegistroUsuario = () => {
   const {

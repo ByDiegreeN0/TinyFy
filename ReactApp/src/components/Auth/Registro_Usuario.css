@@ -1,16 +1,22 @@
+/* Variables CSS */
 :root {
-  --color-primary: #575757;
+  --color-primary: rgb(12, 106, 255);
+  --color-title: #000000;
   --color-secondary: #f0f0f0;
   --color-background: #fff;
-  --color-error: #ff0000; /* Color para el mensaje de error */
+  --color-button-primary: #1e90ff;
+  --color-button-secondary: #ffffff;
+  --color-error: #ff0000;
 }
 
+/* Reset y estilos generales */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Estilos para la sección de registro de usuario */
 .Registro-usuario {
   display: flex;
   flex-direction: column;
@@ -21,6 +27,7 @@
   background-color: var(--color-background);
 }
 
+/* Estilos para el formulario de registro */
 .Form-Registro {
   width: 100%;
   padding: 1rem;
@@ -34,23 +41,26 @@
   margin-bottom: 1rem;
 }
 
+/* Estilos para grupos de campos */
 .Form-Group {
   margin-bottom: 2rem;
-  position: relative;
 }
 
+/* Estilos para etiquetas de campos */
 .Label-Forms {
   font-size: 1.125rem;
   font-weight: bold;
-  color: var(--color-primary);
+  color: var(--color-title);
 }
 
+/* Estilos para campos de entrada */
 .Input-Forms {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
   border: none;
   border-radius: 5px;
+  margin-bottom: 10px;
   background: var(--color-secondary);
   transition: background-color 0.3s ease;
 }
@@ -60,20 +70,7 @@
   background: linear-gradient(to top, var(--color-secondary) 0%, #fff 100%);
 }
 
-.Input-Forms.error {
-  outline: 2px solid var(--color-error);
-}
-
-.Error-Container {
-  height: 10px; /* Ajusta esta altura según sea necesario */
-}
-
-.Error-Message {
-  color: var(--color-error);
-  font-size: 0.875rem;
-  position: absolute;
-}
-
+/* Estilos para botones */
 .Button-Forms {
   width: 100%;
   height: 50px;
@@ -90,14 +87,16 @@
   background-color: #444;
 }
 
+/* Estilos para texto de redirección */
 .Redirect-Text {
   font-size: 1.5rem;
   font-weight: 500;
   margin-top: 2rem;
-  color: var(--color-primary);
+  color: var(--color-title);
 }
 
+/* Estilos para enlaces y textos */
 .link-forms {
-  color: var(--color-primary);
+  color: var(--color-title);
   font-weight: 600;
 }

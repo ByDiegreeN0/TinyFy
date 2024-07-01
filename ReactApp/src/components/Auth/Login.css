@@ -1,16 +1,23 @@
+/* Variables CSS */
 :root {
-  --color-primary: #575757;
+  /* Colores */
+  --color-primary: rgb(12, 106, 255);
+  --color-title: #000000;
   --color-secondary: #f0f0f0;
   --color-background: #fff;
-  --color-error: #ff0000; /* Color para el mensaje de error */
+  --color-button-primary: #1e90ff;
+  --color-button-secondary: #ffffff;
+  --color-error: #ff0000;
 }
 
+/* Reset y Estilos Generales */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Estilos de la página de login */
 .login-usuario {
   display: flex;
   flex-direction: column;
@@ -20,6 +27,7 @@
   background-color: var(--color-background);
 }
 
+/* Grid y disposición de elementos */
 .GridArea {
   display: grid;
   width: 100%;
@@ -34,45 +42,36 @@
   padding: 1rem;
 }
 
+/* Estilos para la sección de bienvenida */
 .Welcome {
   grid-area: welcome;
   width: 100%;
   padding: 1rem;
 }
 
+/* Tipografía y estilos de texto */
 .Info-Title {
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.Welcome-Text {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-bottom: 2rem;
-  color: var(--color-primary);
-}
-
+/* Enlaces y estilos de texto */
+.Welcome-Text,
 .Redirect-Text {
   font-size: 1.5rem;
   font-weight: 500;
-  margin-top: 2rem;
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-.link-forms {
-  color: var(--color-primary);
-  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--color-title);
   text-decoration: none;
 }
 
 .Link-Forms {
-  color: var(--color-primary);
-  font-weight: 600;
   text-decoration: none;
+  color: var(--color-primary);
 }
 
+/* Formulario de inicio de sesión */
 .Form-Login {
   width: 100%;
   padding: 1rem;
@@ -80,23 +79,27 @@
   background: var(--color-background);
 }
 
+/* Estilos para títulos de secciones */
 .Form-Login h2 {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
+/* Estilos para grupos de campos */
 .Form-Group {
   margin-bottom: 2rem;
   position: relative;
 }
 
+/* Estilos para etiquetas de campos */
 .Label-Forms {
   font-size: 1.125rem;
   font-weight: bold;
   color: var(--color-primary);
 }
 
+/* Estilos para campos de entrada */
 .Input-Forms {
   width: 100%;
   padding: 10px;
@@ -116,8 +119,10 @@
   outline: 1px solid var(--color-error);
 }
 
+/* Estilos para mensajes de error */
 .Error-Container {
-  height: 10px; /* Ajusta esta altura según sea necesario */
+  height: 10px;
+  /* Ajusta esta altura según sea necesario */
 }
 
 .Error-Message {
@@ -127,6 +132,7 @@
   position: absolute;
 }
 
+/* Estilos para botones */
 .Button-Forms {
   width: 100%;
   height: 50px;
@@ -141,4 +147,22 @@
 
 .Button-Forms:hover {
   background-color: #444;
+}
+
+@media (max-width: 768px) {
+  .GridArea {
+    display: flex;
+    height: calc(100vh - 120px);
+    flex-direction: column;
+    z-index: 500;
+    box-shadow: none;
+  }
+  .Welcome {
+    display: none;
+  }
+  .Redirect-Text {
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
+  }
 }

@@ -1,0 +1,38 @@
+<svg class="img-fluid" id="outputsvg"
+  xmlns="http://www.w3.org/2000/svg" style="transform: matrix(1, 0, 0, 1, 0, 0); transform-origin: 50% 50%; cursor: move; max-height: none; transition: transform 200ms ease-in-out 0s;" width="174" height="174" viewBox="0 0 1740 1740">
+  <defs>
+    <linearGradient id="lg2vzD9fr4C0jau" gradientUnits="userSpaceOnUse" x1="46.7%" y1="5.7%" x2="53%" y2="82.4%">
+      <stop offset="0%" style="stop-color:rgb(0,31,63);"></stop>
+      <stop offset="5%" style="stop-color:rgb(0,35,75);"></stop>
+      <stop offset="10%" style="stop-color:rgb(0,39,87);"></stop>
+      <stop offset="15%" style="stop-color:rgb(0,43,99);"></stop>
+      <stop offset="20%" style="stop-color:rgb(0,47,111);"></stop>
+      <stop offset="25%" style="stop-color:rgb(0,51,123);"></stop>
+      <stop offset="30%" style="stop-color:rgb(0,55,135);"></stop>
+      <stop offset="35%" style="stop-color:rgb(0,59,147);"></stop>
+      <stop offset="40%" style="stop-color:rgb(0,63,159);"></stop>
+      <stop offset="45%" style="stop-color:rgb(0,67,171);"></stop>
+      <stop offset="50%" style="stop-color:rgb(0,71,183);"></stop>
+      <stop offset="55%" style="stop-color:rgb(0,75,195);"></stop>
+      <stop offset="60%" style="stop-color:rgb(0,79,207);"></stop>
+      <stop offset="75%" style="stop-color:rgb(0,83,219);"></stop>
+      <stop offset="80%" style="stop-color:rgb(0,87,231);"></stop>
+      <stop offset="85%" style="stop-color:rgb(0,91,243);"></stop>
+      <stop offset="90%" style="stop-color:rgb(0,95,255);"></stop>
+      <stop offset="95%" style="stop-color:rgb(12,106,255);"></stop>
+      <stop offset="100%" style="stop-color:rgb(12,106,255);"></stop>
+    </linearGradient>
+  </defs>
+  <g id="lmTb71gUbEIRjdDKcJuBay" fill="rgb(0,0,0)" style="transform: none; transform-origin: 50% 50%;">
+    <g style="transform: none;">
+      <path id="pgovrknZF" d="M 753 1439 c -111 -19 -225 -81 -305 -166 -33 -34 -98 -142 -98 -161 0 -11 14 -13 72 -10 58 4 74 9 83 24 22 41 105 112 161 140 53 25 70 28 164 29 94 0 111 -3 162 -27 32 -15 80 -48 107 -73 48 -45 101 -124 101 -150 0 -9 -29 -14 -101 -17 -96 -4 -103 -5 -125 -31 -38 -44 -29 -108 17 -132 22 -12 74 -15 241 -15 195 0 216 2 246 20 27 17 32 26 32 58 0 20 -7 47 -15 59 -17 24 -77 45 -115 41 -25 -3 -24 -4 -74 105 -59 130 -181 242 -312 286 -73 24 -172 32 -241 20 z " fill="url(#lg2vzD9fr4C0jau)"></path>
+      <path id="p16CrH5Yoy" d="M 236 1020 c -85 -16 -101 -119 -26 -157 18 -9 87 -13 235 -13 192 0 213 2 243 20 28 17 32 25 32 60 0 42 -33 89 -62 90 -132 6 -393 5 -422 0 z " fill="url(#lg2vzD9fr4C0jau)"></path>
+      <path id="p1AdlncZ16" d="M 350 748 c 0 -19 44 -93 85 -143 89 -108 223 -173 375 -182 135 -8 270 36 364 118 54 48 131 153 141 192 l 7 27 -71 0 c -68 0 -71 -1 -85 -29 -37 -71 -164 -152 -268 -171 -136 -25 -310 44 -378 151 l -32 49 -69 0 c -49 0 -69 -4 -69 -12 z " fill="url(#lg2vzD9fr4C0jau)"></path>
+      <path id="ppqSfsD8o" d="M 797 194 c -33 -30 -34 -34 -16 -39 11 -4 29 -21 40 -38 10 -18 19 -26 19 -19 0 8 13 26 28 40 l 28 27 -31 31 -32 31 -36 -33 z " fill="url(#lg2vzD9fr4C0jau)"></path>
+    </g>
+  </g>
+  <g id="texts" style="transform: none; transform-origin: 50% 50%;">
+    <g style="transform: none;">
+    </g>
+  </g>
+</svg>

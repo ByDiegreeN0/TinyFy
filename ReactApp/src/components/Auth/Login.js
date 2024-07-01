@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import '../shared/Login.css';
+import './Login.css';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
