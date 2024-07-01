@@ -1,6 +1,24 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import "./Registro_Usuario.css";
+
+const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
+  <div className="Form-Group">
+    <label className="Label-Forms" htmlFor={id}>
+      {label}
+    </label>
+    <input
+      id={id}
+      type={type}
+      className={`Input-Forms ${errors[id] ? "error" : ""}`}
+      {...register(id, rules)}
+    />
+    <div className="Error-Container">
+      {errors[id] && <span className="Error-Message">{errors[id].message}</span>}
+    </div>
+  </div>
+);
 
 const RegistroUsuario = () => {
   const {
@@ -15,17 +33,13 @@ const RegistroUsuario = () => {
   const password = watch("password");
 
   const onSubmit = async (data) => {
-    console.log(data);
     if (step === 1) {
       const isValid = await trigger(["name", "email"]);
-      if (isValid) {
-        setStep((prevStep) => prevStep + 1);
-      }
-    }
-    if (step === 2) {
+      if (isValid) setStep(2);
+    } else if (step === 2) {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
-        handleSubmit(onSubmit)();
+        console.log(data);
         setHasMoreLinks(false);
       }
     }
@@ -44,9 +58,9 @@ const RegistroUsuario = () => {
           {step === 1 && (
             <p className="Redirect-Text">
               ¿Ya tienes una cuenta?{" "}
-              <a className="Link-Forms" href="/login">
+              <Link className="Link-Forms" to="/login">
                 Inicia sesión aquí
-              </a>
+              </Link>
             </p>
           )}
         </div>
@@ -54,97 +68,69 @@ const RegistroUsuario = () => {
           <h2 className="Info-Title">Registrarse</h2>
           {step === 1 && (
             <>
-              <div className="Form-Group">
-                <label className="Label-Forms" htmlFor="name">
-                  Nombre
-                </label>
-                <input
-                  id="name"
-                  className={`Input-Forms ${errors.name ? "error" : ""}`}
-                  {...register("name", { required: "El nombre es obligatorio" })}
-                />
-                <div className="Error-Container">
-                  {errors.name && <span className="Error-Message">{errors.name.message}</span>}
-                </div>
-              </div>
-
-              <div className="Form-Group">
-                <label className="Label-Forms" htmlFor="email">
-                  Correo Electrónico
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className={`Input-Forms ${errors.email ? "error" : ""}`}
-                  {...register("email", {
-                    required: "El correo electrónico es obligatorio",
-                    pattern: {
-                      value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
-                      message: "El correo electrónico no es válido",
-                    },
-                  })}
-                />
-                <div className="Error-Container">
-                  {errors.email && <span className="Error-Message">{errors.email.message}</span>}
-                </div>
-              </div>
-
+              <FormGroup
+                id="name"
+                label="Nombre"
+                register={register}
+                rules={{ required: "El nombre es obligatorio" }}
+                errors={errors}
+              />
+              <FormGroup
+                id="email"
+                label="Correo Electrónico"
+                type="email"
+                register={register}
+                rules={{
+                  required: "El correo electrónico es obligatorio",
+                  pattern: {
+                    value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
+                    message: "El correo electrónico no es válido",
+                  },
+                }}
+                errors={errors}
+              />
               <button
                 className="Button-Forms"
-                type={hasMoreLinks ? "button" : "submit"}
+                type="button"
                 onClick={onSubmit}
               >
-                {hasMoreLinks ? "Continuar" : "Enviar"}
+                Continuar
               </button>
+              <ButtonLogin />
             </>
           )}
 
           {step === 2 && (
             <>
-              <div className="Form-Group">
-                <label className="Label-Forms" htmlFor="password">
-                  Contraseña
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  className={`Input-Forms ${errors.password ? "error" : ""}`}
-                  {...register("password", {
-                    required: "La contraseña es obligatoria",
-                    minLength: {
-                      value: 6,
-                      message: "La contraseña debe tener al menos 6 caracteres",
-                    },
-                  })}
-                />
-                <div className="Error-Container">
-                  {errors.password && <span className="Error-Message">{errors.password.message}</span>}
-                </div>
-              </div>
-
-              <div className="Form-Group">
-                <label className="Label-Forms" htmlFor="passwordConfirm">
-                  Confirmar Contraseña
-                </label>
-                <input
-                  id="passwordConfirm"
-                  type="password"
-                  className={`Input-Forms ${errors.passwordConfirm ? "error" : ""}`}
-                  {...register("passwordConfirm", {
-                    required: "La confirmación de la contraseña es obligatoria",
-                    validate: (value) => value === password || "Las contraseñas no coinciden",
-                  })}
-                />
-                <div className="Error-Container">
-                  {errors.passwordConfirm && (
-                    <span className="Error-Message">{errors.passwordConfirm.message}</span>
-                  )}
-                </div>
-              </div>
-
+              <FormGroup
+                id="password"
+                label="Contraseña"
+                type="password"
+                register={register}
+                rules={{
+                  required: "La contraseña es obligatoria",
+                  minLength: {
+                    value: 6,
+                    message: "La contraseña debe tener al menos 6 caracteres",
+                  },
+                }}
+                errors={errors}
+              />
+              <FormGroup
+                id="passwordConfirm"
+                label="Confirmar Contraseña"
+                type="password"
+                register={register}
+                rules={{
+                  required: "La confirmación de la contraseña es obligatoria",
+                  validate: (value) => value === password || "Las contraseñas no coinciden",
+                }}
+                errors={errors}
+              />
               <button className="Button-Forms" type="submit">
                 Registrar
               </button>
+              <ButtonLogin />
             </>
           )}
         </form>
@@ -152,5 +138,11 @@ const RegistroUsuario = () => {
     </div>
   );
 };
+
+const ButtonLogin = () => (
+  <Link className='Redirect-Boton Redirect-Text' to='./Login'>
+    ¿No tienes cuenta? <span className='Link-Forms'>Registrate</span>
+  </Link>
+);
 
 export default RegistroUsuario;

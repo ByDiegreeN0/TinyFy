@@ -3,14 +3,26 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import './Login.css';
 
+const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
+    <div className='Form-Group'>
+        <label className='Label-Forms' htmlFor={id}>{label}</label>
+        <input
+            id={id}
+            type={type}
+            className={`Input-Forms ${errors[id] ? 'error' : ''}`}
+            {...register(id, rules)}
+        />
+        <div className="Error-Container">
+            {errors[id] && <span className="Error-Message">{errors[id].message}</span>}
+        </div>
+    </div>
+);
+
 const Login = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const password = watch('password');
+
     const onSubmit = data => {
-        if (data.password !== data.confirmPassword) {
-            alert('Las contraseñas no coinciden');
-            return;
-        }
         console.log(data);
         // Aquí puedes hacer una llamada a la API para autenticar al usuario.
     };
@@ -23,56 +35,52 @@ const Login = () => {
                     <p className='Welcome-Text'>
                         Bienvenidos al acortador de links CarlitosApp
                         Si ya tienes una cuenta, inicia sesión para continuar.
-                        Si no tienes una cuenta, crea una para comenzar. 
+                        Si no tienes una cuenta, crea una para comenzar.
                     </p>
-                    <Link className='Redirect-Text' to='../Registro-usuario'>¿No tienes cuenta? <span className='Link-Forms'>Registrate</span></Link>
+                    <Link className='Redirect-Text' to='../Registro-usuario'>
+                        ¿No tienes cuenta? <span className='Link-Forms'>Registrate</span>
+                    </Link>
                 </div>
                 <form className='Form-Login' onSubmit={handleSubmit(onSubmit)}>
                     <h2 className='Info-Title'>Inicio de Sesión</h2>
-                    <div className='Form-Group'>
-                        <label className='Label-Forms' htmlFor="email">Correo Electrónico</label>
-                        <input
-                            id="email"
-                            type="email"
-                            className={`Input-Forms ${errors.email ? 'error' : ''}`}
-                            {...register('email', { required: 'El correo electrónico es obligatorio' })}
-                        />
-                        <div className="Error-Container">
-                            {errors.email && <span className="Error-Message">{errors.email.message}</span>}
-                        </div>
-                    </div>
-
-                    <div className='Form-Group'>
-                        <label className='Label-Forms' htmlFor="password">Contraseña</label>
-                        <input
-                            id="password"
-                            type="password"
-                            className={`Input-Forms ${errors.password ? 'error' : ''}`}
-                            {...register('password', { required: 'La contraseña es obligatoria' })}
-                        />
-                        <div className="Error-Container">
-                            {errors.password && <span className="Error-Message">{errors.password.message}</span>}
-                        </div>
-                    </div>
-
-                    <div className='Form-Group'>
-                        <label className='Label-Forms' htmlFor="confirmPassword">Confirmar Contraseña</label>
-                        <input
-                            id="confirmPassword"
-                            type="password"
-                            className={`Input-Forms ${errors.confirmPassword ? 'error' : ''}`}
-                            {...register('confirmPassword', { required: 'Por favor confirma tu contraseña' })}
-                        />
-                        <div className="Error-Container">
-                            {errors.confirmPassword && <span className="Error-Message">{errors.confirmPassword.message}</span>}
-                        </div>
-                    </div>
-
+                    <FormGroup
+                        id="email"
+                        label="Correo Electrónico"
+                        type="email"
+                        register={register}
+                        rules={{ required: 'El correo electrónico es obligatorio' }}
+                        errors={errors}
+                    />
+                    <FormGroup
+                        id="password"
+                        label="Contraseña"
+                        type="password"
+                        register={register}
+                        rules={{ required: 'La contraseña es obligatoria' }}
+                        errors={errors}
+                    />
+                    <FormGroup
+                        id="confirmPassword"
+                        label="Confirmar Contraseña"
+                        type="password"
+                        register={register}
+                        rules={{
+                            required: 'Por favor confirma tu contraseña',
+                            validate: value => value === password || 'Las contraseñas no coinciden'
+                        }}
+                        errors={errors}
+                    />
                     <button className='Button-Forms' type="submit">Iniciar Sesión</button>
+                    <ButtonLogin />
                 </form>
             </div>
         </div>
     );
 };
+const ButtonLogin = () => (
+    <Link className='Redirect-Boton Redirect-Text' to='../Registro-usuario'>
+        ¿No tienes cuenta? <span className='Link-Forms'>Registrate</span>
+    </Link>
+);
 
 export default Login;

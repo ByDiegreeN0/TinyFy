@@ -148,8 +148,11 @@
 .Button-Forms:hover {
   background-color: #444;
 }
+.Redirect-Boton{
+  display: none;
+}
 
-@media (max-width: 768px) {
+@media screen and (max-width: 375px) and (max-height: 667px) {
   .GridArea {
     display: flex;
     height: calc(100vh - 120px);
@@ -160,9 +163,9 @@
   .Welcome {
     display: none;
   }
-  .Redirect-Text {
+  .Redirect-Boton {
     display: block;
-    margin-top: 1rem;
     text-align: center;
   }
+
 }
