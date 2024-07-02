@@ -1,4 +1,5 @@
-import React from 'react';
+
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import './Login.css';
@@ -17,6 +18,15 @@ const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
         </div>
     </div>
 );
+
+FormGroup.propTypes = {
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    type: PropTypes.string,
+    register: PropTypes.func.isRequired,
+    rules: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired,
+};
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
@@ -38,7 +48,7 @@ const Login = () => {
                         Si no tienes una cuenta, crea una para comenzar.
                     </p>
                     <Link className='Redirect-Text' to='../Registro-usuario'>
-                        ¿No tienes cuenta? <span className='Link-Forms'>Registrate</span>
+                        ¿No tienes cuenta? <span className='Link-Forms'>Regístrate</span>
                     </Link>
                 </div>
                 <form className='Form-Login' onSubmit={handleSubmit(onSubmit)}>
@@ -77,9 +87,10 @@ const Login = () => {
         </div>
     );
 };
+
 const ButtonLogin = () => (
     <Link className='Redirect-Boton Redirect-Text' to='../Registro-usuario'>
-        ¿No tienes cuenta? <span className='Link-Forms'>Registrate</span>
+        ¿No tienes cuenta? <span className='Link-Forms'>Regístrate</span>
     </Link>
 );
 

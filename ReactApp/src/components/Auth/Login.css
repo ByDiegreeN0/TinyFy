@@ -148,7 +148,7 @@
 .Button-Forms:hover {
   background-color: #444;
 }
-.Redirect-Boton{
+.Redirect-Boton {
   display: none;
 }
 
@@ -167,5 +167,4 @@
     display: block;
     text-align: center;
   }
-
 }

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import "./Registro_Usuario.css";
@@ -15,10 +16,21 @@ const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
       {...register(id, rules)}
     />
     <div className="Error-Container">
-      {errors[id] && <span className="Error-Message">{errors[id].message}</span>}
+      {errors[id] && (
+        <span className="Error-Message">{errors[id].message}</span>
+      )}
     </div>
   </div>
 );
+
+FormGroup.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  register: PropTypes.func.isRequired,
+  rules: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+};
 
 const RegistroUsuario = () => {
   const {
@@ -29,7 +41,6 @@ const RegistroUsuario = () => {
     trigger,
   } = useForm();
   const [step, setStep] = useState(1);
-  const [hasMoreLinks, setHasMoreLinks] = useState(true);
   const password = watch("password");
 
   const onSubmit = async (data) => {
@@ -40,7 +51,6 @@ const RegistroUsuario = () => {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
         console.log(data);
-        setHasMoreLinks(false);
       }
     }
   };
@@ -51,9 +61,9 @@ const RegistroUsuario = () => {
         <div className="Welcome">
           <h2 className="Info-Title">Registro de Usuario</h2>
           <div className="Welcome-Text">
-            Bienvenido al acortador de links CarlitosApp
-            Si ya tienes una cuenta, inicia sesión para continuar.
-            Si no tienes una cuenta, crea una para comenzar.
+            Bienvenido al acortador de links CarlitosApp. Si ya tienes una
+            cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
+            una para comenzar.
           </div>
           {step === 1 && (
             <p className="Redirect-Text">
@@ -89,11 +99,7 @@ const RegistroUsuario = () => {
                 }}
                 errors={errors}
               />
-              <button
-                className="Button-Forms"
-                type="button"
-                onClick={onSubmit}
-              >
+              <button className="Button-Forms" type="button" onClick={onSubmit}>
                 Continuar
               </button>
               <ButtonLogin />
@@ -123,7 +129,8 @@ const RegistroUsuario = () => {
                 register={register}
                 rules={{
                   required: "La confirmación de la contraseña es obligatoria",
-                  validate: (value) => value === password || "Las contraseñas no coinciden",
+                  validate: (value) =>
+                    value === password || "Las contraseñas no coinciden",
                 }}
                 errors={errors}
               />
@@ -140,8 +147,8 @@ const RegistroUsuario = () => {
 };
 
 const ButtonLogin = () => (
-  <Link className='Redirect-Boton Redirect-Text' to='./Login'>
-    ¿No tienes cuenta? <span className='Link-Forms'>Registrate</span>
+  <Link className="Redirect-Boton Redirect-Text" to="/login">
+    ¿No tienes cuenta? <span className="Link-Forms">Registrate</span>
   </Link>
 );
 

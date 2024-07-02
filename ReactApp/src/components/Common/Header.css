@@ -1,5 +1,5 @@
 :root {
-  --color-primary: rgb(12, 106, 255);;
+  --color-primary: rgb(12, 106, 255);
   --color-title: #000000;
   --color-secondary: #f0f0f0;
   --color-background: #fff;
@@ -7,7 +7,6 @@
   --color-button-secondary: #ffffff;
   --color-error: #ff0000;
 }
-
 
 * {
   margin: 0;
@@ -98,8 +97,8 @@
     display: inline-block;
     align-self: flex-end;
     margin: 20px 0;
-    padding: 15px 10px; 
-    border-radius: .5rem;
+    padding: 15px 10px;
+    border-radius: 0.5rem;
     border: none;
     background-color: var(--color-primary);
     color: var(--color-background);

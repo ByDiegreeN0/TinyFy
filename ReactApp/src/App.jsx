@@ -1,9 +1,9 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header from './components/Common/Header';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Login from './components/Auth/Login';
 import RegistroUsuario from './components/Auth/RegistroUsuario';
+import Header from './components/Common/Header';
 import Home from './components/shared/Home';
+import './index.css';
 
 const App = () => {
     return (
