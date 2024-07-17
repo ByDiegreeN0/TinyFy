@@ -5,6 +5,6 @@ from django.db import models
 
 class roles(models.Model): # CREACION DE LA TABLA DE ROLES
     # TODAVIA SE LE TIENE QUE AÑADIR LA FOREIGN KEY PARA USUARIOS
-    role_data = models.CharField(max_length=100)
-    created_at = models.DateTimeField()
+    role_data = models.CharField(max_length=100) # coloca el nombre del rol 
+    created_at = models.DateTimeField() 
     updated_at = models.DateTimeField()

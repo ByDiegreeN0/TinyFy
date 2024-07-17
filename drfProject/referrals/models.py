@@ -1,13 +1,12 @@
+
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+class Referral(models.Model):
+    referrer_from = models.ForeignKey(User, related_name='referrals_given', on_delete=models.CASCADE) # crea una relacion de foreign key para el modelo de uesrs
+    referrer_to = models.OneToOneField(User, related_name='referral_received', on_delete=models.CASCADE) # crea una relacion de foreign key para el modelo de uesrs
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
-class user_referrals(models.Model):
-    user_id = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    referral_id = models.ForeignKey('referrals', on_delete=models.CASCADE)
 
 
-class referrals(models.Model):
-    # no se q mas hacer aca jaja
-    referral_created_at = models.DateField()

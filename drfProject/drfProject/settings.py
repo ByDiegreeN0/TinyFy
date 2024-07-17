@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = [ # se define CADA app creada y CADA libreria nueva usada
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,24 +39,27 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
     'rest_framework',
+    'links',
+    'roles',
+    'referrals',
     'API',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware', # Se muestran todas las utilidades para el middleware de la aplicacion
+    'django.contrib.sessions.middleware.SessionMiddleware', # Se muestran todas las utilidades para el middleware de la aplicacion
+    'django.middleware.common.CommonMiddleware', # Se muestran todas las utilidades para el middleware de la aplicacion
+    'django.middleware.csrf.CsrfViewMiddleware', # Se muestran todas las utilidades para el middleware de la aplicacion
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # Se muestran todas las utilidades para el middleware de la aplicacion,
+    'django.contrib.messages.middleware.MessageMiddleware', # Se muestran todas las utilidades para el middleware de la aplicacion
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', # Se muestran todas las utilidades para el middleware de la aplicacion
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',  
-        'rest_framework.authentication.BasicAuthentication',    
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',  # Se definen todas las utilidades de rest_framework
+        'rest_framework.authentication.BasicAuthentication',    # Se definen todas las utilidades de rest_framework
+        'rest_framework_simplejwt.authentication.JWTAuthentication',# Se definen todas las utilidades de rest_framework
     ),
 }
 
@@ -88,7 +91,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "carlitosappdatabase",
-        "USER": "root",
+        "USER": "root", # DATOS POR DEFECTO PARA ACCEDER A LA BASE DE DATOS
         "PASSWORD": "",
         "HOST": "127.0.0.1",
         "PORT": "3306",
@@ -114,6 +117,32 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+from datetime import timedelta
+
+SIMPLE_JWT = { ## ESTE BLOQUE ES PARA LA CONFIGURACION DE SIMPLE JWT
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Duración del token de acceso
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Duración del token de refresco
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    
+    'ALGORITHM': 'HS256',  # Algoritmo de encriptación 
+    'SIGNING_KEY': 'your_secret_key',  # Clave secreta para firmar los tokens
+    'VERIFYING_KEY': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id', # obtener ids de las tablas de usuarios
+    'USER_ID_CLAIM': 'user_id', # obtener ids de las tablas de usuarios
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5), # se define cuanto dura cada SLIDING TOKEN
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1), # se define cuanto dura cada SLIDING TOKEN
+}
 
 
 # Internationalization
