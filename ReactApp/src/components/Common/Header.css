@@ -1,0 +1,91 @@
+.Nav {
+  display: flex;
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 120px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #fff;
+}
+
+.Nav-Logo {
+  width: 100px;
+  height: 100px;
+  margin: 0 50px;
+}
+
+.Nav-List {
+  display: flex;
+  list-style: none;
+  padding: 1rem;
+  justify-content: space-around;
+}
+
+.Nav-Item {
+  margin: 0 10px;
+}
+
+.Nav-Item a {
+  text-decoration: none;
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.Nav.scrolled {
+  background-color: var(--color-secondary);
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.1);
+}
+
+.Menu-Button {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .Nav {
+    display: flex;
+    position: sticky;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .Nav-Logo {
+    margin: 20px;
+  }
+
+  .Nav-List {
+    display: none;
+    position: absolute;
+    top: 120px;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-background);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 1000;
+    flex-direction: column;
+  }
+  .Nav-List.open {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .Nav-Item {
+    margin: 10px 0;
+  }
+  .Menu-Button {
+    display: inline-block;
+    align-self: flex-end;
+    margin: 20px 0;
+    padding: 15px 10px;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    font-weight: 900;
+  }
+}
