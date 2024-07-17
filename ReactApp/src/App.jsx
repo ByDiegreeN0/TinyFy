@@ -3,8 +3,8 @@ import SignIn from './components/pages/Signin';
 import SignUp from './components/pages/Signup';
 import Header from './components/layouts/Header';
 import Home from './components/pages/Home';
+import ScrollReveal from 'scrollreveal';
 import './components/styles/index.css';
-
 const App = () => {
     return (
         <Router>

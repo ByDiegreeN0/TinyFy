@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Logo_Negro.svg";
+import TextWithBorder from "../../utils/TextWithBorder"; // Importa el componente TextWithBorder
+import initScrollReveal from "../../utils/ScrollReveals";
 import "../styles/Header.css";
 
 const Header = () => {
@@ -14,7 +16,6 @@ const Header = () => {
         setScrolled(isScrolled);
       }
     };
-
     document.addEventListener("scroll", handleScroll);
 
     return () => {
@@ -22,37 +23,48 @@ const Header = () => {
     };
   }, [scrolled]);
 
+  useEffect(() => {
+    initScrollReveal(".headline", {
+      origin: "top",
+      distance: "50px",
+      duration: 700,
+      reset: true,
+    });
+  }, []);
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   return (
-    <nav className={`Nav ${scrolled ? "scrolled" : ""} animate-fade-down animate-once animate-duration-1000 animate-ease-in-out animate-normal animate-fill-both`}>
+    <nav className={`Nav ${scrolled ? "scrolled" : ""}`}>
       <Link to="/">
-        <img
-          src={logo}
-          alt="Logo"
-          className="Nav-Logo "
-        />
+        <img src={logo} alt="Logo" className="Nav-Logo headline" />
       </Link>
       <button className="Menu-Button" onClick={toggleMenu}>
         <span className="Menu-Icon">&#9776;</span>
       </button>
       <ul className={`Nav-List ${menuOpen ? "open" : ""}`}>
-        <li className="Nav-Item">
-          <Link to="/" onClick={toggleMenu}>
-            Home
-          </Link>
+        <li className="Nav-Item headline">
+          <TextWithBorder>
+            <Link to="/" onClick={toggleMenu} className="text-with-border">
+              Home
+            </Link>
+          </TextWithBorder>
         </li>
-        <li className="Nav-Item">
-          <Link to="/Signin" onClick={toggleMenu}>
-            Sign-in
-          </Link>
+        <li className="Nav-Item headline">
+          <TextWithBorder>
+            <Link to="/Signin" onClick={toggleMenu} className="text-with-border">
+              Sign in
+            </Link>
+          </TextWithBorder>
         </li>
-        <li className="Nav-Item">
-          <Link to="/Signup" onClick={toggleMenu}>
-            Sign-up
-          </Link>
+        <li className="Nav-Item headline">
+          <TextWithBorder>
+            <Link to="/Signup" onClick={toggleMenu} className="text-with-border">
+              Sign up
+            </Link>
+          </TextWithBorder>
         </li>
       </ul>
     </nav>

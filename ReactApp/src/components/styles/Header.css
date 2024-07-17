@@ -20,28 +20,35 @@
   display: flex;
   list-style: none;
   padding: 1rem;
-  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-arround;
 }
 
 .Nav-Item {
-  margin: 0 10px;
+  text-align: center;
+  width: 150px;
 }
 
-.Nav-Item a {
+.Nav-Item a{
   text-decoration: none;
-  color: #000000;
-  font-size: 20px;
+  color: var(--color-title);
   font-weight: bold;
+  font-size: 1.25rem;
 }
 
 .Nav.scrolled {
   background-color: var(--color-secondary);
   transition: background-color 0.3s ease;
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 14px var(--color-background);
 }
 
 .Menu-Button {
   display: none;
+}
+
+.headline {
+  color: var(--color-primary);
 }
 
 @media screen and (max-width: 768px) {
