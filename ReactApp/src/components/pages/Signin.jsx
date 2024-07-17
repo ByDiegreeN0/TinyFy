@@ -46,7 +46,7 @@ const Signin = () => {
                         Si ya tienes una cuenta, inicia sesión para continuar.
                         Si no tienes una cuenta, crea una para comenzar.
                     </p>
-                    <Link className='Redirect-Text' to='./Signup'>
+                    <Link className='Redirect-Text' to='../Signup'>
                         ¿No tienes cuenta? <span className='Link-Forms'>Regístrate</span>
                     </Link>
                 </div>
@@ -80,19 +80,11 @@ const Signin = () => {
                         errors={errors}
                     />
                     <button className='Button-Forms' type="submit">Iniciar Sesión</button>
-                    <ButtonLogin />
                 </form>
             </div>
         </div>
     );
 };
 
-const ButtonLogin = () => (
-    <div>
-        <Link className='Redirect-Boton Redirect-Text' to='./Signup'>
-            ¿No tienes cuenta? <span className='Link-Forms'>Regístrate</span>
-        </Link>
-    </div>
-);
 
 export default Signin;

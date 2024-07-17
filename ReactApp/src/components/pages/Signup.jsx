@@ -68,7 +68,7 @@ const Signup = () => {
           {step === 1 && (
             <p className="Redirect-Text">
               ¿Ya tienes una cuenta?{" "}
-              <Link className="Link-Forms" to="./Signin">
+              <Link className="Link-Forms" to="../Signin">
                 Inicia sesión aquí
               </Link>
             </p>
@@ -102,7 +102,6 @@ const Signup = () => {
               <button className="Button-Forms" type="button" onClick={onSubmit}>
                 Continuar
               </button>
-              <ButtonLogin />
             </>
           )}
 
@@ -135,9 +134,8 @@ const Signup = () => {
                 errors={errors}
               />
               <button className="Button-Forms" type="submit">
-                Registrar
+                Registrard
               </button>
-              <ButtonLogin />
             </>
           )}
         </form>
@@ -146,10 +144,6 @@ const Signup = () => {
   );
 };
 
-const ButtonLogin = () => (
-  <Link className="Redirect-Boton Redirect-Text" to="/Signin">
-    ¿No tienes cuenta? <span className="Link-Forms">Registrate</span>
-  </Link>
-);
+
 
 export default Signup;
