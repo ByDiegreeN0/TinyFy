@@ -27,12 +27,12 @@ const Header = () => {
   };
 
   return (
-    <nav className={`Nav ${scrolled ? "scrolled" : ""}`}>
+    <nav className={`Nav ${scrolled ? "scrolled" : ""} animate-fade-down animate-once animate-duration-1000 animate-ease-in-out animate-normal animate-fill-both`}>
       <Link to="/">
         <img
           src={logo}
           alt="Logo"
-          className="Nav-Logo animate-fade-right animate-once animate-duration-1000 animate-delay-100 animate-ease-out"
+          className="Nav-Logo "
         />
       </Link>
       <button className="Menu-Button" onClick={toggleMenu}>
@@ -45,13 +45,13 @@ const Header = () => {
           </Link>
         </li>
         <li className="Nav-Item">
-          <Link to="/login" onClick={toggleMenu}>
-            Login
+          <Link to="/Signin" onClick={toggleMenu}>
+            Sign-in
           </Link>
         </li>
         <li className="Nav-Item">
-          <Link to="/registro-usuario" onClick={toggleMenu}>
-            Sign in
+          <Link to="/Signup" onClick={toggleMenu}>
+            Sign-up
           </Link>
         </li>
       </ul>

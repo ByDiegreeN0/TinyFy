@@ -3,7 +3,7 @@
 @import "tailwindcss/utilities";
 
 :root {
-  --color-primary: rgb(12, 106, 255);
+  --color-primary: #0c6aff;
   --color-title: #000000;
   --color-secondary: #f0f0f0;
   --color-background: #fff;
@@ -12,61 +12,13 @@
   --color-error: #ff0000;
 }
 
-a {
-  font-weight: 500;
-  color: var(--color-button-primary);
-  text-decoration: inherit;
-}
-a:hover {
-  color: var(--color-primary);
+* {
+  margin : 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--color-title);
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: var(--color-button-primary);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --color-primary: rgb(12, 106, 255);
-    --color-title: #000000;
-    --color-secondary: #f0f0f0;
-    --color-background: #fff;
-    --color-button-primary: #1e90ff;
-    --color-button-secondary: #ffffff;
-    --color-error: #ff0000;
-  }
-  a:hover {
-    color: var(--color-button-primary);
-  }
-  button {
-    background-color: var(--color-background);
-  }
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
 }

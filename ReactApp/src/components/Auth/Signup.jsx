@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import "./Registro_Usuario.css";
+import "./Singup.css";
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
@@ -32,7 +32,7 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
-const RegistroUsuario = () => {
+const Signup = () => {
   const {
     register,
     handleSubmit,
@@ -68,7 +68,7 @@ const RegistroUsuario = () => {
           {step === 1 && (
             <p className="Redirect-Text">
               ¿Ya tienes una cuenta?{" "}
-              <Link className="Link-Forms" to="/login">
+              <Link className="Link-Forms" to="./Signin">
                 Inicia sesión aquí
               </Link>
             </p>
@@ -152,4 +152,4 @@ const ButtonLogin = () => (
   </Link>
 );
 
-export default RegistroUsuario;
+export default Signup;
