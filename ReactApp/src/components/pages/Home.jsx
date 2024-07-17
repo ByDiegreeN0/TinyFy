@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom"; // Asegúrate de importar Link desde react-router-dom
 import logo from "../../assets/Logo_home.svg";
-import Footer from "../Common/Footer";
-import "./Home.css";
+import Footer from "../layouts/Footer";
+import "../styles/Home.css";
 
 const HomeContent = ({ title, description, logoSrc }) => (
   <div className="home-content ">
@@ -51,10 +51,10 @@ HomeContent.propTypes = {
 
 const BotonsHome = () => (
   <div className="buttons">
-    <Link to="/login" className="button primary">
+    <Link to="/Signin" className="button primary">
       Iniciar Sesión
     </Link>
-    <Link to="/Registro-usuario" className="button secondary">
+    <Link to="/Signup" className="button secondary">
       Registro
     </Link>
   </div>

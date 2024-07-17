@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import "./Singup.css";
+import "../styles/Singup.css";
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
@@ -147,7 +147,7 @@ const Signup = () => {
 };
 
 const ButtonLogin = () => (
-  <Link className="Redirect-Boton Redirect-Text" to="/login">
+  <Link className="Redirect-Boton Redirect-Text" to="/Signin">
     ¿No tienes cuenta? <span className="Link-Forms">Registrate</span>
   </Link>
 );

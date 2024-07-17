@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Logo_Negro.svg";
-import "./Header.css";
+import "../styles/Header.css";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);

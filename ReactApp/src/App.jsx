@@ -1,9 +1,9 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import SignIn from './components/Auth/Signin';
-import SignUp from './components/Auth/Signup';
-import Header from './components/Common/Header';
-import Home from './components/shared/Home';
-import './index.css';
+import SignIn from './components/pages/Signin';
+import SignUp from './components/pages/Signup';
+import Header from './components/layouts/Header';
+import Home from './components/pages/Home';
+import './components/styles/index.css';
 
 const App = () => {
     return (

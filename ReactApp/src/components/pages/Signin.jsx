@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import './Signin.css';
+import '../styles/Signin.css';
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
     <div className='Form-Group'>
@@ -88,9 +88,11 @@ const Signin = () => {
 };
 
 const ButtonLogin = () => (
-    <Link className='Redirect-Boton Redirect-Text' to='../Registro-usuario'>
-        ¿No tienes cuenta? <span className='Link-Forms'>Regístrate</span>
-    </Link>
+    <div>
+        <Link className='Redirect-Boton Redirect-Text' to='./Signup'>
+            ¿No tienes cuenta? <span className='Link-Forms'>Regístrate</span>
+        </Link>
+    </div>
 );
 
 export default Signin;
