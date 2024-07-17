@@ -25,29 +25,6 @@ class linksTable(models.Model): # CREACION DE LA TABLA LINKS
     updated_at = models.DateTimeField()
     
 
-class monthlyViews(models.Model): # CREACION DE LA TABLA PARA VISTAS MENSUALES DE LOS LINKS
-    
-    link_id = models.ForeignKey(
-            linksTable, on_delete=models.CASCADE
-        )
-    
-    monthly_views = models.IntegerField()
-    year = models.IntegerField()
-    month = models.SmallIntegerField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    
-
-class dailyViews(models.Model): # CREACION DE LA TABLA PARA VISTAS DIARIAS DE LOS LINKS
-    
-    link_id = models.ForeignKey(
-            linksTable, on_delete=models.CASCADE
-        )
-    
-    daily_views = models.IntegerField()
-    date = models.DateField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
 
     
     
