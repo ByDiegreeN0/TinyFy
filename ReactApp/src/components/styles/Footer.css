@@ -1,0 +1,45 @@
+:root {
+    --color-primary: rgb(12, 106, 255);
+    --color-title: #000000;
+    --color-secondary: #f0f0f0;
+    --color-background: #fff;
+    --color-button-primary: #1e90ff;
+    --color-button-secondary: #ffffff;
+    --color-error: #ff0000;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+footer {
+    display: flex;
+    width: 100vw;
+    height: 150px;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 2px -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Footer-Logo {
+    width: 150px;
+    height: 100%;
+    align-self: center;
+    text-align: center;
+}
+
+.Derechos {
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--color-title);
+    margin-top: 1rem;
+}
+
+.Name-Footer {
+    color: var(--color-primary);
+}

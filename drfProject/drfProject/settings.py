@@ -39,10 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'links',
-    'users',
-    'roles',
-    'referrals',
+    'API',
 ]
 
 MIDDLEWARE = [
@@ -55,13 +52,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',  
+        'rest_framework.authentication.BasicAuthentication',    
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
     ),
 }
 
@@ -89,16 +84,10 @@ WSGI_APPLICATION = 'drfProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# settings.py
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'carlitosappdatabase',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost', 
-        'PORT': '3306', 
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
