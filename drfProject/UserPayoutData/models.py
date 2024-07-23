@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User  # Importa el modelo de usuario por defecto de Django
+from django.conf import settings # importa las configuraciones de django
+
 
 class UserPayoutData(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el modelo de usuario
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     payoutdata_username = models.CharField(max_length=255)
     payoutdata_email = models.EmailField()
     payoutdata_address1 = models.CharField(max_length=255)
