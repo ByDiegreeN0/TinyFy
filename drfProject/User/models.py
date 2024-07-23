@@ -8,6 +8,7 @@ class user(AbstractUser):
     email = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     phone_mnumber = models.IntegerField(default=0)
+    role_id = models.ForeignKey('role', null=True)
     
     username = None
     

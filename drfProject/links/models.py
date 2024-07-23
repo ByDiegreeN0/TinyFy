@@ -19,12 +19,8 @@ def validateYear(value): # FUNCION PARA VALIDAR EL AÑO EN LAS TABLAS
 
 
 
-class linksTable(models.Model): # CREACION DE LA TABLA LINKS
-    
-    # ATRIBUTOS DE LA TABLA
-    
-    
-    link_name = models.CharField(max_length=255)
+class linksTable(models.Model): # CREACION DE LA TABLA LINKSx,c,, ,    
+    nk_name = models.CharField(max_length=255)
     link_old_url = models.URLField(max_length=255) # URL SIN ACORTAR
     link_new_url = models.URLField(max_length=255) #  URL YA ACORTADA
     link_views = models.IntegerField()

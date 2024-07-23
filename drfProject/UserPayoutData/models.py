@@ -4,7 +4,7 @@ from django.conf import settings # importa las configuraciones de django
 
 
 class UserPayoutData(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)                                                   c          m.,                                                                                                                                                                                                                                                                                                                                                     c                        ,  n                                                                                                                                                                                                                                                                        
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     payoutdata_username = models.CharField(max_length=255)
     payoutdata_email = models.EmailField()
