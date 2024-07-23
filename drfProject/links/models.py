@@ -32,6 +32,10 @@ class linksTable(models.Model): # CREACION DE LA TABLA LINKS
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     
+    class Meta:
+        db_table = 'links_table' # NOMBRE DE LA TABLA EN LA BASE DE DATOS
+        
+    
 
 
     
