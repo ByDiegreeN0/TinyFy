@@ -31,11 +31,13 @@ INSTALLED_APPS = [ # se define CADA app creada y CADA libreria nueva usada
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
     'rest_framework',
-    'links',
-    'roles',
-    'referrals',
-    'API',
-    'User'
+    'links', # AQUI SE DEFINEN TODAS LAS APLICACIONES CREADAS CON DJANGO
+    'roles', # AQUI SE DEFINEN TODAS LAS APLICACIONES CREADAS CON DJANGO
+    'referrals', # AQUI SE DEFINEN TODAS LAS APLICACIONES CREADAS CON DJANGO
+    'User', # AQUI SE DEFINEN TODAS LAS APLICACIONES CREADAS CON DJANGO
+    'payouts', # AQUI SE DEFINEN TODAS LAS APLICACIONES CREADAS CON DJANGO
+    'user_payoutdata', # AQUI SE DEFINEN TODAS LAS APLICACIONES CREADAS CON DJANGO
+    
 ]
 
 MIDDLEWARE = [

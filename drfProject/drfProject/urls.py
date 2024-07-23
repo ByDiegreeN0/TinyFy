@@ -14,8 +14,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
-    path('roles/', include('roles.urls')),
-    path('links/', include('links.urls')),
-    path('referrals/', include('referrals.urls')),
-    path('users/', include('users.urls')),
+    # path('roles/', include('roles.urls')),
+    # path('links/', include('links.urls')),
+    # path('referrals/', include('referrals.urls')),
 ]
