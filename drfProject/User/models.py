@@ -8,8 +8,7 @@ class User(AbstractUser):
     email = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     phone_number = models.IntegerField(default=0)  
-    user_config = models.OneToOneField('UserConfig', null=True, on_delete=models.SET_NULL)  # Corregido on_delete
-    
+    user_config = models.OneToOneField('UserConfig', null=True, on_delete=models.CASCADE)  # Corregido on_delete
     username = None
     
     USERNAME_FIELD = 'email'  # Campo a usar como nombre de usuario
