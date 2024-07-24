@@ -4,12 +4,16 @@
 
 :root {
   --color-primary: #0c6aff;
+  --color-intermediate-one: #00698F;
+  --color-secondary: #00415D;
+  --color-intermediate-two: #4C9AE4;
+  --color-tertiary: #7CC0E5;
+  --color-intermediate-three: #0098C6;
   --color-title: #000000;
-  --color-secondary: #f0f0f0;
   --color-background: #fff;
-  --color-button-primary: #1e90ff;
-  --color-button-secondary: #ffffff;
+  --color-inputs: #f0f0f0;
   --color-error: #ff0000;
+  --font-family-primary: Arial, sans-serif, "Robot", "Roboto", "Helvetica Neue", "Helvetica", ;
 }
 
 * {
@@ -20,5 +24,31 @@
 
 body {
   overflow-x: hidden;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-family-primary);
+}
+
+/* Personaliza la barra de scroll en navegadores basados en WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 12px; /* Ancho de la barra de scroll vertical */
+  height: 12px; /* Altura de la barra de scroll horizontal */
+}
+
+/* Personaliza la parte de la barra de scroll */
+::-webkit-scrollbar-thumb {
+  background-color: #333; /* Color de la barra */
+  border-radius: 6px; /* Bordes redondeados */
+  border: 3px solid transparent; /* Añade un borde transparente */
+  background-clip: content-box; /* Ajusta el recorte de fondo */
+  opacity: 0.2; /* Establece una opacidad inicial */
+  transition: opacity 0.3s ease; /* Añade una transición suave para la opacidad */
+}
+
+/* Personaliza el track de la barra de scroll */
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+/* Cambia la opacidad del thumb al pasar el mouse */
+::-webkit-scrollbar-thumb:hover {
+  opacity: 1; 
 }

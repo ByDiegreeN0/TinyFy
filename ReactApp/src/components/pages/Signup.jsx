@@ -2,10 +2,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import "../../utils/TransitionBorder.css";
+import "../../utils/withFadeInOnScroll.css"
 import "../styles/Singup.css";
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
-  <div className="Form-Group">
+  <div className="Form-Group ">
     <label className="Label-Forms" htmlFor={id}>
       {label}
     </label>
@@ -57,7 +59,7 @@ const Signup = () => {
 
   return (
     <div className="Registro-usuario">
-      <div className="GridArea">
+      <div className="GridArea animationFade">
         <div className="Welcome">
           <h2 className="Info-Title">Registro de Usuario</h2>
           <div className="Welcome-Text">
@@ -68,7 +70,7 @@ const Signup = () => {
           {step === 1 && (
             <p className="Redirect-Text">
               ¿Ya tienes una cuenta?{" "}
-              <Link className="Link-Forms" to="../Signin">
+              <Link className="Link-Forms transitionBorder" to="../Signin">
                 Inicia sesión aquí
               </Link>
             </p>

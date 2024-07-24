@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import "../../utils/TransitionBorder.css";
+import "../../utils/withFadeInOnScroll.css"
 import '../styles/Signin.css';
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
-    <div className='Form-Group'>
+    <div className='Form-Group '>
         <label className='Label-Forms' htmlFor={id}>{label}</label>
         <input
             id={id}
@@ -37,8 +39,8 @@ const Signin = () => {
     };
 
     return (
-        <div className="login-usuario">
-            <div className='GridArea'>
+        <div className="login-usuario animationFade">
+            <div className='GridArea '>
                 <div className='Welcome'>
                     <h1 className='Info-Title'>Bienvenido</h1>
                     <p className='Welcome-Text'>
@@ -47,7 +49,7 @@ const Signin = () => {
                         Si no tienes una cuenta, crea una para comenzar.
                     </p>
                     <Link className='Redirect-Text' to='../Signup'>
-                        ¿No tienes cuenta? <span className='Link-Forms'>Regístrate</span>
+                        ¿No tienes cuenta? <span className='Link-Forms transitionBorder'>Regístrate</span>
                     </Link>
                 </div>
                 <form className='Form-Login' onSubmit={handleSubmit(onSubmit)}>

@@ -87,13 +87,13 @@
   font-size: 1rem;
   border: none;
   border-radius: 5px;
-  background: var(--color-secondary);
-  transition: background-color 0.3s ease;
+  background: var(--color-inputs);
+  transition: background 800ms cubic-bezier(0.7, 0.27, 0.51, 1.06);
 }
 
 .Input-Forms:focus {
   outline: none;
-  background: linear-gradient(to top, var(--color-secondary) 0%, #fff 100%);
+  background: linear-gradient(to top, var(--color-inputs) 0%, var(--color-background) 100%);
 }
 
 .Input-Forms.error {
@@ -121,7 +121,7 @@
   border: none;
   border-radius: 5px;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-background);
   cursor: pointer;
   transition: background-color 0.3s ease;
 }

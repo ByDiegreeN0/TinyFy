@@ -1,0 +1,21 @@
+@keyframes flipInUp {
+    from {
+        opacity: 0;
+        transform: rotateX(50deg); /* Rotación inicial desde arriba */
+    }
+    to {
+        opacity: 1;
+        transform: rotateX(0); /* Rotación final */
+    }
+}
+
+.animationFlip {
+    opacity: 0;
+    transform: rotateX(50deg); /* Rotación inicial desde arriba */
+    animation: flipInUp 2s cubic-bezier(0.06, 0.29, 0.91, 0.5) forwards; /* Ajusta la duración y la aceleración según sea necesario */
+}
+
+.animationFlip.visible {
+    opacity: 1;
+    transform: rotateX(0); /* Rotación final */
+}

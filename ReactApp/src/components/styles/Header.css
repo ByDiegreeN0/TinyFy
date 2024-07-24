@@ -7,12 +7,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background-color: #fff;
+  background-color: var(--color-background);
+  z-index: 1000;
 }
 
 .Nav-Logo {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   margin: 0 50px;
 }
 
@@ -37,18 +38,39 @@
   font-size: 1.25rem;
 }
 
+.Nav-Item a{
+  text-decoration: none;
+  color: var(--color-title);
+  position: relative;
+}
+
+.Nav-Item a::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px; /* Adjust as needed */
+  width: 0;
+  height: 2px; /* Height of the border */
+  background-color: var(--color-primary);
+  transition: width 800ms ease;
+}
+
+.Nav-Item a {
+  width: 100%;
+  transform: translateX(-50%);
+}
+.Nav-Item a:not(:hover)::after {
+  transform: translateX(-50%);
+}
+
 .Nav.scrolled {
-  background-color: var(--color-secondary);
+  filter: brightness(0.95);
   transition: background-color 0.3s ease;
-  box-shadow: 0 2px 14px var(--color-background);
+  box-shadow: 0 2px 14px #333; 
 }
 
 .Menu-Button {
   display: none;
-}
-
-.headline {
-  color: var(--color-primary);
 }
 
 @media screen and (max-width: 768px) {
@@ -57,7 +79,7 @@
     position: sticky;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     z-index: 1000;
   }
   .Nav-Logo {
@@ -87,12 +109,16 @@
   .Menu-Button {
     display: inline-block;
     align-self: flex-end;
-    margin: 20px 0;
-    padding: 15px 10px;
+    margin: 20px 10px;
+    padding: 20px 15px;
     border-radius: 0.5rem;
     border: none;
     background-color: var(--color-primary);
     color: var(--color-background);
     font-weight: 900;
+  }
+  .Nav.scrolled .Nav-Logo {
+    width: 80px;
+    height: 80px;
   }
 }

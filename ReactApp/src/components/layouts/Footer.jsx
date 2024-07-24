@@ -1,15 +1,35 @@
-import logo from "../../assets/Logo_Nombre_negro.svg";
+import logo from "../../assets/Logo_Negro.svg";
 import "../styles/Footer.css";
 
 const Footer = () => {
   return (
     <footer>
-      <img src={logo} alt="Logo" className="Footer-Logo" />
       <p className="Derechos">
-        <span className="Name-Footer">CarlitosApp 2024 </span>
-        <br />
-        <span>© Todos los derechos reservados</span>
+        <img src={logo} alt="Logo" className="Footer-Logo" />
+        <span className="Name-Footer">&copy; CarlitosApp 2024 </span>
+        <span>Todos los derechos reservados</span>
       </p>
+      <div class="contact-info">
+            <h3>Contacto</h3>
+            <p>Dirección: Calle Principal, Ciudad, País</p>
+            <p>Teléfono: +123456789</p>
+            <p>Email: info@tuempresa.com</p>
+            <div class="social-links">
+                <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="#" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
+            </div>
+        </div>
+        <div class="useful-links">
+            <h3>Enlaces útiles</h3>
+            <ul>
+                <li><a href="#">Acerca de nosotros</a></li>
+                <li><a href="#">Términos y condiciones</a></li>
+                <li><a href="#">Política de privacidad</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </div>
     </footer>
   );
 };
