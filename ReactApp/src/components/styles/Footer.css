@@ -25,3 +25,29 @@ footer {
 .Name-Footer {
     text-shadow: 0 0 10px var(--color-intermediate-two);
 }
+
+.info-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+    color: var(--color-background);
+    margin: 0 30px;
+    list-style: none;
+}
+.info-footer a {
+    color: var(--color-background);
+    text-decoration: none;
+}
+.social-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-background);
+}
+.useful-links ul {
+    color: var(--color-background);
+    list-style: none;
+}

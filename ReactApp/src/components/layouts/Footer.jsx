@@ -9,18 +9,13 @@ const Footer = () => {
         <span className="Name-Footer">&copy; CarlitosApp 2024 </span>
         <span>Todos los derechos reservados</span>
       </p>
-      <div class="contact-info">
+      <div class="info-footer contact-info">
             <h3>Contacto</h3>
-            <p>Dirección: Calle Principal, Ciudad, País</p>
+            <p>Dirección: Casa de Diego, Bogota, Colombia</p>
             <p>Teléfono: +123456789</p>
-            <p>Email: info@tuempresa.com</p>
-            <div class="social-links">
-                <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a>
-                <a href="#" target="_blank" rel="noopener noreferrer">Twitter</a>
-                <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
-            </div>
+            <p>Email: TrujisCompanys@trujis.com</p>
         </div>
-        <div class="useful-links">
+        <div class="info-footer useful-links">
             <h3>Enlaces útiles</h3>
             <ul>
                 <li><a href="#">Acerca de nosotros</a></li>

@@ -2,7 +2,7 @@
 .text-with-border {
     position: relative;
     display: inline-block;
-    color: #333; /* Color del texto */
+    color: var(--color-intermediate-two); /* Color del texto */
     text-align: center;
   }
   
@@ -13,7 +13,7 @@
     left: 50%;
     width: 0;
     height: 3px; /* Grosor del borde */
-    background-color: #333; /* Color del borde */
+    background-color: var(--color-intermediate-two); /* Color del borde */
     transition: width 0.5s ease, left 0.5s ease; /* Transición para la animación de expansión y retracción */
   }
   
