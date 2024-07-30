@@ -1,0 +1,23 @@
+.dashboard {
+    display: inline-flex;
+    position: relative;
+    left: 280px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vmax;
+    width: calc(100vw - 280px);
+    padding: 3em 5em;
+}
+
+.titleDashboard{
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+fieldset{
+    width: 100%;
+    padding: 4em;
+    width: 90%;
+    transition: border 2s ease;
+}

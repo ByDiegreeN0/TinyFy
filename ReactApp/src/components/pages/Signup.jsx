@@ -1,13 +1,13 @@
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import "../../utils/TransitionBorder.css";
-import "../../utils/withFadeInOnScroll.css"
-import "../styles/Singup.css";
+import { Link, useNavigate } from "react-router-dom";
+import "../../utils/stylesUtils/TransitionBorder.css";
+import "../../utils/stylesUtils/withFadeInOnScroll.css";
+import "../styles/Sign.css";
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
-  <div className="Form-Group ">
+  <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
       {label}
     </label>
@@ -34,7 +34,7 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
-const Signup = () => {
+const Signup = ({ onRegister }) => {
   const {
     register,
     handleSubmit,
@@ -44,6 +44,7 @@ const Signup = () => {
   } = useForm();
   const [step, setStep] = useState(1);
   const password = watch("password");
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     if (step === 1) {
@@ -53,12 +54,22 @@ const Signup = () => {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
         console.log(data);
+        // Aquí simularemos un registro exitoso
+        // En una aplicación real, aquí harías una llamada a tu API de registro
+        const keepSession = window.confirm('¿Desea mantener la sesión iniciada?');
+        if (keepSession) {
+          localStorage.setItem('isAuthenticated', 'true');
+        } else {
+          sessionStorage.setItem('isAuthenticated', 'true');
+        }
+        onRegister();
+        navigate('/dashboard');
       }
     }
   };
 
   return (
-    <div className="Registro-usuario">
+    <div className="Sing-usuario">
       <div className="GridArea animationFade">
         <div className="Welcome">
           <h2 className="Info-Title">Registro de Usuario</h2>
@@ -136,7 +147,7 @@ const Signup = () => {
                 errors={errors}
               />
               <button className="Button-Forms" type="submit">
-                Registrard
+                Registrar
               </button>
             </>
           )}
@@ -146,6 +157,8 @@ const Signup = () => {
   );
 };
 
-
+Signup.propTypes = {
+  onRegister: PropTypes.func.isRequired,
+};
 
 export default Signup;

@@ -9,20 +9,20 @@ const Footer = () => {
         <span className="Name-Footer">&copy; CarlitosApp 2024 </span>
         <span>Todos los derechos reservados</span>
       </p>
-      <div class="info-footer contact-info">
+      <div className="info-footer contact-info">
             <h3>Contacto</h3>
             <p>Dirección: Casa de Diego, Bogota, Colombia</p>
             <p>Teléfono: +123456789</p>
             <p>Email: TrujisCompanys@trujis.com</p>
         </div>
-        <div class="info-footer useful-links">
+        <div className="info-footer useful-links">
             <h3>Enlaces útiles</h3>
             <ul>
-                <li><a href="#">Acerca de nosotros</a></li>
-                <li><a href="#">Términos y condiciones</a></li>
-                <li><a href="#">Política de privacidad</a></li>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Contacto</a></li>
+                <li><a href="/">Acerca de nosotros</a></li>
+                <li><a href="/">Términos y condiciones</a></li>
+                <li><a href="/">Política de privacidad</a></li>
+                <li><a href="/">FAQ</a></li>
+                <li><a href="/">Contacto</a></li>
             </ul>
         </div>
     </footer>

@@ -1,19 +1,19 @@
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom"; // Asegúrate de importar Link desde react-router-dom
+import { Link } from "react-router-dom";
 import logo from "../../assets/Logo_home.svg";
 import Footer from "../layouts/Footer";
+import "../../utils/stylesUtils/divider.css";
 import "../styles/Home.css";
 
 const HomeContent = ({ title, description, logoSrc }) => (
   <div className="home-content">
-    <p className="description animationFade">
+    <div className="description animationFade">
       <h1 className="title">
-        {" "}
         Bienvenidos a <span className="highlight">{title}</span>
       </h1>
-      <span className="description_p">{description}</span>
+      <p className="description_p">{description}</p>
       <BotonsHome />
-    </p>
+    </div>
     <img src={logoSrc} alt="Logo" className="home-logo animationFade" />
   </div>
 );
@@ -37,11 +37,11 @@ const BotonsHome = () => (
 
 const Features = () => (
   <div className="features shapedividers_com-1036">
-    <h1 className="title-features">Características</h1>
+    <h2 className="title-features">Características</h2>
     <div className="container-caracteristicas animationFlip">
       <div className="card">
         <div className="card-content">
-          <h1>Acortamiento rápido y fácil de URLs</h1>
+          <h3>Acortamiento rápido y fácil de URLs</h3>
           <p className="paragraph-features animationFade">
             CarlitosApp permite acortar URLs de forma rápida y sencilla. Con una
             interfaz intuitiva, cualquier usuario puede transformar enlaces
@@ -52,7 +52,7 @@ const Features = () => (
       </div>
       <div className="card">
         <div className="card-content">
-          <h1>Estadísticas detalladas de rendimiento de los enlaces</h1>
+          <h3>Estadísticas detalladas de rendimiento de los enlaces</h3>
           <p className="paragraph-features animationFade">
             CarlitosApp ofrece herramientas analíticas completas que muestran el
             número de clics, la ubicación geográfica de los visitantes,
@@ -64,7 +64,7 @@ const Features = () => (
       </div>
       <div className="card">
         <div className="card-content">
-          <h1>Seguridad y privacidad de datos</h1>
+          <h3>Seguridad y privacidad de datos</h3>
           <p className="paragraph-features animationFade">
             CarlitosApp prioriza la seguridad y privacidad de tus datos con
             medidas avanzadas de encriptación y cumplimiento de normativas

@@ -21,10 +21,10 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   overflow-x: hidden;
   font-family: var(--font-family-primary);
+  display: inline-flex;
 }
 
 /* Personaliza la barra de scroll en navegadores basados en WebKit (Chrome, Safari) */

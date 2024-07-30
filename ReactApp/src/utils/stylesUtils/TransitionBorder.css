@@ -10,7 +10,7 @@
     bottom: 0; /* Adjust as needed */
     width: 0;
     height: 2px; /* Height of the border */
-    background-color: var(--color-background);
+    background-color: var(--color-primary);
     transition: width 800ms ease;
     transform: translateX(-50%);
 }

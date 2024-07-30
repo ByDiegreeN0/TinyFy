@@ -1,10 +1,13 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import "../styles/Signin.css";
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/Sign.css";
+import "../../utils/stylesUtils/TransitionBorder.css";
+import "../../utils/stylesUtils/withFadeInOnScroll.css";
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
-  <div className="Form-Group ">
+  <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
       {label}
     </label>
@@ -31,27 +34,34 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
-const Signin = () => {
+const Signin = ({ onLogin }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm();
-  const password = watch("password");
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     console.log(data);
-    // Aquí puedes hacer una llamada a la API para autenticar al usuario.
+    // Aquí simularemos un inicio de sesión exitoso
+    // En una aplicación real, aquí harías una llamada a tu API de autenticación
+    const keepSession = window.confirm("¿Desea mantener la sesión iniciada?");
+    if (keepSession) {
+      localStorage.setItem("isAuthenticated", "true");
+    } else {
+      sessionStorage.setItem("isAuthenticated", "true");
+    }
+    onLogin();
+    navigate("/dashboardlinks");
   };
-
   return (
-    <div className="login-usuario animationFade">
-      <div className="GridArea ">
+    <div className="Sing-usuario animationFade">
+      <div className="GridArea">
         <div className="Welcome">
           <h1 className="Info-Title">Bienvenido</h1>
           <p className="Welcome-Text">
-            Bienvenidos al acortador de links CarlitosApp Si ya tienes una
+            Bienvenidos al acortador de links CarlitosApp. Si ya tienes una
             cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
             una para comenzar.
           </p>
@@ -67,7 +77,13 @@ const Signin = () => {
             label="Correo Electrónico"
             type="email"
             register={register}
-            rules={{ required: "El correo electrónico es obligatorio" }}
+            rules={{
+              required: "El correo electrónico es obligatorio",
+              pattern: {
+                value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
+                message: "El correo electrónico no es válido",
+              },
+            }}
             errors={errors}
           />
           <FormGroup
@@ -75,18 +91,12 @@ const Signin = () => {
             label="Contraseña"
             type="password"
             register={register}
-            rules={{ required: "La contraseña es obligatoria" }}
-            errors={errors}
-          />
-          <FormGroup
-            id="confirmPassword"
-            label="Confirmar Contraseña"
-            type="password"
-            register={register}
             rules={{
-              required: "Por favor confirma tu contraseña",
-              validate: (value) =>
-                value === password || "Las contraseñas no coinciden",
+              required: "La contraseña es obligatoria",
+              minLength: {
+                value: 6,
+                message: "La contraseña debe tener al menos 6 caracteres",
+              },
             }}
             errors={errors}
           />
@@ -97,6 +107,10 @@ const Signin = () => {
       </div>
     </div>
   );
+};
+
+Signin.propTypes = {
+  onLogin: PropTypes.func.isRequired,
 };
 
 export default Signin;
