@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import logo from "../../assets/Logo_Negro.svg";
-import FotoDePerfil from "../../assets/Img/AvatarUser.png";
+import logo from "../../assets/Svg/Logos/Logo_Negro.svg";
+import link from "../../assets/Svg/Nav/Link.svg";
+import referrals from "../../assets/Svg/Nav/Referrals.svg";
+import payouts from "../../assets/Svg/Nav/payouts.svg";
+import support from "../../assets/Svg/Nav/support.svg";
+import logout from "../../assets/Svg/Nav/logout.svg";
+import FotoDePerfil from "../../assets/Img/AvatarUser.jpg";
 import "../styles/Header.css";
 import "../styles/HeaderDash.css";
 
@@ -33,7 +38,6 @@ const Header = ({ isAuthenticated, onLogout }) => {
     navigate('/');
   };
 
-
   // Header para usuarios no autenticados
   const UnauthenticatedHeader = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -55,20 +59,12 @@ const Header = ({ isAuthenticated, onLogout }) => {
             </Link>
           </li>
           <li className="Nav-Item">
-            <Link
-              to="/Signin"
-              onClick={toggleMenu}
-              className="transitionBorder"
-            >
+            <Link to="/Signin" onClick={toggleMenu} className="transitionBorder">
               Sign in
             </Link>
           </li>
           <li className="Nav-Item">
-            <Link
-              to="/Signup"
-              onClick={toggleMenu}
-              className="transitionBorder"
-            >
+            <Link to="/Signup" onClick={toggleMenu} className="transitionBorder">
               Sign up
             </Link>
           </li>
@@ -79,22 +75,52 @@ const Header = ({ isAuthenticated, onLogout }) => {
 
   // Header para usuarios autenticados
   const AuthenticatedHeader = () => {
-    const isDashboard = location.pathname === "/dashboard";
+    const [isExpanded, setIsExpanded] = useState(false);
+    const location = useLocation();
 
     return (
-      <nav className={`HeaderDash ${isDashboard ? "dashboard-header" : ""}`}>
+      <nav 
+        className={`HeaderDash ${isExpanded ? "expanded" : ""}`}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+      >
         <Link to="/dashboardlinks" className="PefilUsuario">
           <img src={FotoDePerfil} alt="CarlitosApp FotoDePerfil" />
-          <h1>Username</h1>
+          <h1 className="title-nav">Usuario</h1>
         </Link>
         <div className="container-links">
-          <Link to="/dashboardlinks" className="Nav-Link ">Links</Link>
-          <Link to="/dashboardreferrals" className="Nav-Link ">Referrals</Link>
-          <Link to="/dashboardpayouts" className="Nav-Link ">Payouts</Link>
-          <Link to="/dashboardsupport" className="Nav-Link   ">Support</Link>
+          <Link 
+            to="/dashboardlinks" 
+            className={`Nav-Link ${location.pathname === '/dashboardlinks' ? 'active' : ''}`}
+          >
+            <img src={link} alt="Links" className="Nav-Ico" />
+            <div className="text-nav">Links</div>
+          </Link>
+          <Link 
+            to="/dashboardreferrals" 
+            className={`Nav-Link ${location.pathname === '/dashboardreferrals' ? 'active' : ''}`}
+          >
+            <img src={referrals} alt="Referrals" className="Nav-Ico" />
+            <div className="text-nav">Referrals</div>
+          </Link>
+          <Link 
+            to="/dashboardpayouts" 
+            className={`Nav-Link ${location.pathname === '/dashboardpayouts' ? 'active' : ''}`}
+          >
+            <img src={payouts} alt="Payouts" className="Nav-Ico" />
+            <div className="text-nav">Payouts</div>
+          </Link>
+          <Link 
+            to="/dashboardsupport" 
+            className={`Nav-Link ${location.pathname === '/dashboardsupport' ? 'active' : ''}`}
+          >
+            <img src={support} alt="Support" className="Nav-Ico" />
+            <div className="text-nav">Support</div>
+          </Link>
         </div>
         <button onClick={handleLogout} className="Logout-Button">
-          Logout
+          <img src={logout} alt="Logout" className="Nav-Ico" />
+          <div className="text-nav">Logout</div> 
         </button>
       </nav>
     );

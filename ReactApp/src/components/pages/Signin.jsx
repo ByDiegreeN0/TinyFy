@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,6 +34,23 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
+const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="Dialog-Overlay">
+      <div className="Dialog-Content">
+        <h2>Mantener sesión</h2>
+        <p>¿Desea mantener la sesión iniciada?</p>
+        <div className="Dialog-Actions">
+          <button className="Button-Forms" onClick={() => onConfirm(true)}>Sí</button>
+          <button className="Button-Forms" onClick={() => onConfirm(false)}>No</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Signin = ({ onLogin }) => {
   const {
     register,
@@ -41,20 +58,25 @@ const Signin = ({ onLogin }) => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const [showDialog, setShowDialog] = useState(false);
 
   const onSubmit = (data) => {
     console.log(data);
-    // Aquí simularemos un inicio de sesión exitoso
     // En una aplicación real, aquí harías una llamada a tu API de autenticación
-    const keepSession = window.confirm("¿Desea mantener la sesión iniciada?");
-    if (keepSession) {
+    setShowDialog(true);
+  };
+
+  const handleKeepSession = (keep) => {
+    if (keep) {
       localStorage.setItem("isAuthenticated", "true");
     } else {
       sessionStorage.setItem("isAuthenticated", "true");
     }
+    setShowDialog(false);
     onLogin();
     navigate("/dashboardlinks");
   };
+
   return (
     <div className="Sing-usuario animationFade">
       <div className="GridArea">
@@ -105,6 +127,11 @@ const Signin = ({ onLogin }) => {
           </button>
         </form>
       </div>
+      <CustomDialog 
+        isOpen={showDialog}
+        onClose={() => setShowDialog(false)}
+        onConfirm={handleKeepSession}
+      />
     </div>
   );
 };
