@@ -1,0 +1,212 @@
+.dashboard {
+  display: flex;
+  width: calc(100vw - 80px);
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 80px;
+  padding: 90px;
+}
+
+.dashboard-grid {
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+  width: 90rem;
+}
+.card-title {
+  font-size: 2.5rem;
+}
+
+.link-management {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--color-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
+}
+
+.shorten-link-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+  animation: pulse 1.5s infinite;
+}
+
+.shorten-link-btn:hover {
+  background-color: var(--color-intermediate-one);
+}
+
+.link-table {
+  width: 100%;
+  border-collapse: collapse;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.link-table th,
+.link-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.link-table th {
+  color: #000;
+  animation: fadeInDown 1s ease-in-out;
+}
+
+.link-table tbody tr {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  animation: slideIn 0.5s ease-in-out;
+}
+
+.link-table tbody tr:nth-child(even) {
+  background-color: #ddd;
+}
+
+.link-table button {
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #fff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  animation: pulse 1.5s infinite;
+}
+
+.link-table button:hover {
+  background-color: var(--color-intermediate-three);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--color-background);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px var(--color-title);
+  max-width: 500px;
+  width: 90%;
+}
+
+/* Estilos para el título del modal */
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+/* Estilos para los grupos de formulario */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+/* Estilos para las etiquetas */
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: bold;
+}
+
+/* Estilos para los campos de entrada */
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Estilos para el contenedor de acciones del formulario */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+/* Estilos para los botones */
+.form-actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Estilos para el botón de envío */
+.form-actions button[type="submit"] {
+  background-color: var(--color-primary);
+  color: white;
+  margin-right: 0.5rem;
+}
+
+.form-actions button[type="submit"]:hover {
+  background-color: var(--color-intermediate-one);
+}
+
+/* Estilos para el botón de cancelar */
+.form-actions button[type="button"] {
+  background-color: var(--color-intermediate-two);
+  color: white;
+}
+
+.form-actions button[type="button"]:hover {
+  background-color: var(--color-tertiary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

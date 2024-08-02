@@ -1,3 +1,5 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import logo from "../../assets/Svg/Logos/Logo_Negro.svg";
 import "../styles/stylesLayouts/Footer.css";
 
@@ -10,21 +12,21 @@ const Footer = () => {
         <span>Todos los derechos reservados</span>
       </p>
       <div className="info-footer contact-info">
-            <h3>Contacto</h3>
-            <p>Dirección: Casa de Diego, Bogota, Colombia</p>
-            <p>Teléfono: +123456789</p>
-            <p>Email: TrujisCompanys@trujis.com</p>
-        </div>
-        <div className="info-footer useful-links">
-            <h3>Enlaces útiles</h3>
-            <ul>
-                <li><a href="/">Acerca de nosotros</a></li>
-                <li><a href="/">Términos y condiciones</a></li>
-                <li><a href="/">Política de privacidad</a></li>
-                <li><a href="/">FAQ</a></li>
-                <li><a href="/">Contacto</a></li>
-            </ul>
-        </div>
+        <h3>Contacto</h3>
+        <p>Dirección: Casa de Diego, Bogota, Colombia</p>
+        <p>Teléfono: +123456789</p>
+        <p>Email: TrujisCompanys@trujis.com</p>
+      </div>
+      <div className="info-footer useful-links">
+        <h3>Enlaces útiles</h3>
+        <ul>
+          <li><Link to="/acerca-de">Acerca de nosotros</Link></li>
+          <li><Link to="/terminosy-condiciones">Términos y condiciones</Link></li>
+          <li><Link to="/privacidad">Política de privacidad</Link></li>
+          <li><Link to="/faq">FAQ</Link></li>
+          <li><Link to="/contacto">Contacto</Link></li>
+        </ul>
+      </div>
     </footer>
   );
 };

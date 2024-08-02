@@ -8,7 +8,8 @@ import DashboardLinks from './components/pages/DashboardLinks';
 import DashboardReferrals from './components/pages/DashboardReferrals';
 import DashboardPayouts from './components/pages/DashboardPayouts';
 import DashboardSupport from './components/pages/DashboardSupport';
-import PageLoader from './components/Common/PageLoader'; 
+import PageLoader from './components/Common/PageLoader';
+import TerminosYCondiciones from './components/Common/TerminosCondiciones';
 import './components/styles/index.css';
 
 const App = () => {
@@ -76,6 +77,7 @@ const App = () => {
                         path="/dashboardsupport"   
                         element={isAuthenticated ? <DashboardSupport /> : <Navigate to="/Signin" />} 
                     />
+                    <Route path='/TerminosYCondiciones' element={<TerminosYCondiciones />} />
                 </Routes>
             </PageLoader>
         </>

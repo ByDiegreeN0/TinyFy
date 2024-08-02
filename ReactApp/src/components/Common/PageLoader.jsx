@@ -10,7 +10,7 @@ const PageLoader = ({ children }) => {
     setIsLoading(true);
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500); // Ajusta este tiempo según tus preferencias
+    }, 1000); // Ajusta este tiempo según tus preferencias
 
     return () => clearTimeout(timer);
   }, [location]);

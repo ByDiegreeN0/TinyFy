@@ -40,11 +40,9 @@ const DashboardLinks = () => {
 
   return (
     <div className="dashboard animationFade">
-      <h1 className="dashboard-title">Dashboard</h1>
       <div className="dashboard-grid">
         <div className="dashboard-card">
           <div className="card-header">
-            <span className="card-icon" role="img" aria-label="chart">📊</span>
             <h2 className="card-title">Gráfico Mensual</h2>
           </div>
           <div className="card-content">
