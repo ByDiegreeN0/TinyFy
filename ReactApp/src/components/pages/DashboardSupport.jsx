@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/DashboardSupport.css";
+import "../styles/stylesPages/DashboardSupport.css";
 
 const DashboardSupport = () => {
   const navigate = useNavigate();

@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Svg/Logos/Logo_home.svg";
 import Footer from "../layouts/Footer";
-import "../../utils/stylesUtils/divider.css";
-import "../styles/Home.css";
+import "../styles/stylesUtils/divider.css";
+import "../styles/stylesPages/Home.css";
 
 const HomeContent = ({ title, description, logoSrc }) => (
   <div className="home-content">

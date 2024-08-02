@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/DashboardPayouts.css";
+import "../styles/stylesPages/DashboardPayouts.css";
 
 const DashboardPayouts = () => {
   const navigate = useNavigate();

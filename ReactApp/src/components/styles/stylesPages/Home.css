@@ -142,17 +142,17 @@
 }
 
 .card:first-child {
-  background-image: url("../../assets/Img/AcortadorURL.jpg");
+  background-image: url("../../../assets/Img/AcortadorURL.jpg");
   background-position: center;
   background-size: cover;
 }
 .card:nth-child(2) {
-  background-image: url("../../assets/Img/Estadisticas.jpg");
+  background-image: url("../../../assets/Img/Estadisticas.jpg");
   background-position: center;
   background-size: cover;
 }
 .card:nth-child(3) {
-  background-image: url("../../assets/Img/Seguridad.jpg");
+  background-image: url("../../../assets/Img/Seguridad.jpg");
   background-position: center;
   background-size: cover;
 }

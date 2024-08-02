@@ -8,8 +8,8 @@ import payouts from "../../assets/Svg/Nav/payouts.svg";
 import support from "../../assets/Svg/Nav/support.svg";
 import logout from "../../assets/Svg/Nav/logout.svg";
 import FotoDePerfil from "../../assets/Img/AvatarUser.jpg";
-import "../styles/Header.css";
-import "../styles/HeaderDash.css";
+import "../styles/stylesLayouts/Header.css";
+import "../styles/stylesLayouts/HeaderDash.css";
 
 const Header = ({ isAuthenticated, onLogout }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -51,7 +51,13 @@ const Header = ({ isAuthenticated, onLogout }) => {
         <Link to="/" className="logoShadow">
           <img src={logo} alt="CarlitosApp Logo" className="Nav-Logo" />
         </Link>
-        <button className="Menu-Button" onClick={toggleMenu}></button>
+        <button className="Menu-Button" onClick={toggleMenu}>
+          <div className={`menuBarra ${menuOpen ? 'open' : ''}`}>
+            <span className={`fila1 ${menuOpen ? 'fila1Animation' : ''}`}></span>
+            <span className={`fila2 ${menuOpen ? 'fila2Animation' : ''}`}></span>
+            <span className={`fila3 ${menuOpen ? 'fila3Animation' : ''}`}></span>
+          </div>
+        </button>
         <ul className={`Nav-List ${menuOpen ? "open" : ""}`}>
           <li className="Nav-Item">
             <Link to="/" onClick={toggleMenu} className="transitionBorder">

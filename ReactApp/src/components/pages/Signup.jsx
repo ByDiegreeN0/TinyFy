@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import "../../utils/stylesUtils/TransitionBorder.css";
-import "../../utils/stylesUtils/withFadeInOnScroll.css";
-import "../styles/Sign.css";
+import "../styles/stylesUtils/TransitionBorder.css";
+import "../styles/stylesUtils/withFadeInOnScroll.css";
+import "../styles/stylesPages/Sign.css";
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">

@@ -10,7 +10,7 @@
   padding: 1rem;
   transition: width 300ms ease;
   overflow: hidden;
-  z-index: 90000000;
+  z-index: 9000;
 }
 
 .HeaderDash.expanded {

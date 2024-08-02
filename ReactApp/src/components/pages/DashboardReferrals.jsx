@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/DashboardReferrals.css"
+import "../styles/stylesPages/DashboardReferrals.css"
 
 const DashboardReferrals = () => {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Example from "../../utils/SimpleBarChart";
-import "../styles/DashboardLinks.css";
+import Example from "../Common/SimpleBarChart";
+import "../styles/stylesPages/DashboardLinks.css";
 
 const DashboardLinks = () => {
   const navigate = useNavigate();
