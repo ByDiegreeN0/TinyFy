@@ -21,7 +21,7 @@ const Footer = () => {
         <h3>Enlaces útiles</h3>
         <ul>
           <li><Link to="/acerca-de">Acerca de nosotros</Link></li>
-          <li><Link to="/terminosy-condiciones">Términos y condiciones</Link></li>
+          <li><Link to="/terminosycondiciones">Términos y condiciones</Link></li>
           <li><Link to="/privacidad">Política de privacidad</Link></li>
           <li><Link to="/faq">FAQ</Link></li>
           <li><Link to="/contacto">Contacto</Link></li>
