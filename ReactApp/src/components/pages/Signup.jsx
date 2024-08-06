@@ -109,7 +109,7 @@ const Signup = ({ onRegister }) => {
             </p>
           )}
         </div>
-        <form className="Form-Registro" onSubmit={handleSubmit(onSubmit)}>
+        <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="Info-Title">Registrarse</h2>
           {step === 1 && (
             <>

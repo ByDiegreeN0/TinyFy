@@ -10,6 +10,7 @@ import DashboardPayouts from './components/pages/DashboardPayouts';
 import DashboardSupport from './components/pages/DashboardSupport';
 import PageLoader from './components/Common/PageLoader';
 import TerminosYCondiciones from './components/Common/TerminosCondiciones';
+import UserEditForm from './components/pages/UserEditForm';
 import './components/styles/index.css';
 
 const App = () => {
@@ -76,6 +77,10 @@ const App = () => {
                     <Route 
                         path="/dashboardsupport"   
                         element={isAuthenticated ? <DashboardSupport /> : <Navigate to="/Signin" />} 
+                    />
+                    <Route 
+                        path="/edit-profile"   
+                        element={isAuthenticated ? <UserEditForm /> : <Navigate to="/Signin" />} 
                     />
                     <Route path='/TerminosYCondiciones' element={<TerminosYCondiciones />} />
                 </Routes>

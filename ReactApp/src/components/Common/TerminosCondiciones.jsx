@@ -105,6 +105,7 @@ const TerminosYCondiciones = () => {
           </div>
         </div>
       ))}
+      
     </div>
   );
 };

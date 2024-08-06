@@ -7,11 +7,11 @@ import referrals from "../../assets/Svg/Nav/Referrals.svg";
 import payouts from "../../assets/Svg/Nav/payouts.svg";
 import support from "../../assets/Svg/Nav/support.svg";
 import logout from "../../assets/Svg/Nav/logout.svg";
-import FotoDePerfil from "../../assets/Img/AvatarUser.jpg";
+import defaultAvatar from "../../assets/Img/AvatarUser.jpg";
 import "../styles/stylesLayouts/Header.css";
 import "../styles/stylesLayouts/HeaderDash.css";
 
-const Header = ({ isAuthenticated, onLogout }) => {
+const Header = ({ isAuthenticated, onLogout, user }) => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -82,7 +82,6 @@ const Header = ({ isAuthenticated, onLogout }) => {
   // Header para usuarios autenticados
   const AuthenticatedHeader = () => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const location = useLocation();
 
     return (
       <nav 
@@ -90,9 +89,12 @@ const Header = ({ isAuthenticated, onLogout }) => {
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
-        <Link to="/dashboardlinks" className="PefilUsuario">
-          <img src={FotoDePerfil} alt="CarlitosApp FotoDePerfil" />
-          <h1 className="title-nav">Usuario</h1>
+        <Link to="/edit-profile" className="PefilUsuario">
+          <img 
+            src={user?.profilePicture || defaultAvatar} 
+            alt={`${user?.name || 'Usuario'}'s profile picture`} 
+          />
+          <h1 className="title-nav">{user?.name || "Usuario"}</h1>
         </Link>
         <div className="container-links">
           <Link 
@@ -138,6 +140,10 @@ const Header = ({ isAuthenticated, onLogout }) => {
 Header.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   onLogout: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    profilePicture: PropTypes.string
+  })
 };
 
 export default Header;

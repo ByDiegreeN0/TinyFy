@@ -92,7 +92,7 @@ const Signin = ({ onLogin }) => {
             <span className="Link-Forms transitionBorder">Regístrate</span>
           </Link>
         </div>
-        <form className="Form-Login" onSubmit={handleSubmit(onSubmit)}>
+        <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="Info-Title">Inicio de Sesión</h2>
           <FormGroup
             id="email"
