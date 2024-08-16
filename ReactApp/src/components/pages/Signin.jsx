@@ -83,7 +83,7 @@ const Signin = ({ onLogin }) => {
         <div className="Welcome">
           <h1 className="Info-Title">Bienvenido</h1>
           <p className="Welcome-Text">
-            Bienvenidos al acortador de links CarlitosApp. Si ya tienes una
+            Bienvenidos al acortador de links TinyFy. Si ya tienes una
             cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
             una para comenzar.
           </p>

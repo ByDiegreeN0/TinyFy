@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from "../../assets/Svg/Logos/Logo_Negro.svg";
+import logo from "../../assets/Svg/Logos/TInyFyLogoNombreBlanco.svg";
 import "../styles/stylesLayouts/Footer.css";
 
 const Footer = () => {
@@ -8,8 +8,7 @@ const Footer = () => {
     <footer>
       <p className="Derechos">
         <img src={logo} alt="Logo" className="Footer-Logo" />
-        <span className="Name-Footer">&copy; CarlitosApp 2024 </span>
-        <span>Todos los derechos reservados</span>
+        <span>&copy;Todos los derechos reservados</span>
       </p>
       <div className="info-footer contact-info">
         <h3>Contacto</h3>

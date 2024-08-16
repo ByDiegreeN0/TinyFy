@@ -1,4 +1,78 @@
-.Nav {
+.HomeNav {
+  display: flex;
+  position: fixed;
+  width: 100vw;
+  height: 120px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  z-index: 99999999999999;
+}
+
+.HomeNav .Nav-Logo {
+  width: 60px;
+  height: 60px;
+  scale: 3;
+  margin: 0 0 10px 80px;
+  background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreBlancoLado.svg');
+  background-position: center;
+}
+
+.HomeNav .Nav-List {
+  display: flex;
+  list-style: none;
+  padding: 1rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.HomeNav .Nav-Item {
+  text-align: center;
+  width: 150px;
+}
+
+.HomeNav .Nav-Item a {
+  text-decoration: none;
+  color: var(--color-background);
+  font-weight: bold;
+  font-size: 1.25rem;
+  position: relative;
+}
+
+.HomeNav .Nav-Item a::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-title);
+  transition: width 800ms ease;
+  transform: translateX(-50%);
+}
+.HomeNav .Nav-Item a:not(:hover)::after {
+  width: 0px;
+}
+
+.HomeNav.scrolled {
+  background-color: var(--color-background);
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 14px #333;
+}
+
+.HomeNav.scrolled a{
+  color: var(--color-title);
+}
+.HomeNav.scrolled .Nav-Item a::after{
+  background-color: var(--color-primary);
+}
+.HomeNav.scrolled .Nav-Logo{
+  background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreLado.svg');
+}
+
+Nav {
   display: flex;
   position: sticky;
   top: 0;
@@ -8,13 +82,16 @@
   align-items: center;
   padding: 0.5rem;
   background-color: var(--color-background);
-  z-index: 9999999999999999999999999999999999999;
+  z-index: 99999999999999;
 }
 
-.Nav-Logo {
-  width: 90px;
-  height: 90px;
+Nav .Nav-Logo {
+  width: 60px;
+  height: 60px;
   margin: 0 50px;
+  scale: 3;
+  margin: 0 0 10px 80px;
+  background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreLado.svg');
 }
 
 .Nav-List {
@@ -60,6 +137,7 @@
   transition: background-color 0.3s ease;
   box-shadow: 0 2px 14px #333;
 }
+
 
 .Menu-Button {
   display: none;

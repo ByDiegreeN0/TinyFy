@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from "../../assets/Svg/Logos/Logo_Negro.svg";
+import logo from "../../assets/Svg/Logos/TInyFyLogo.svg";
 import '../styles/stylesCommon/LoadingScreen.css';
 
 function App() {
@@ -18,16 +18,15 @@ function App() {
       {loading ? (
         <div className="loading-content">
           <div className="logo-container">
-            <img src={logo} alt="Logo de Carlitos App" />
+            <img src={logo} alt="Logo de TinyFy" />
           </div>
           <div className="loading-animation">
             <div className="spinner"></div>
-          </div>
-          <p className="loading-text">Cargando...</p>
+          </div>\
         </div>
       ) : (
         <div className="loaded-content">
-          <h1>Bienvenido a Carlitos App!</h1>
+          <h1>Bienvenido a TinyFy!</h1>
           <p>La carga ha finalizado.</p>
         </div>
       )}

@@ -96,7 +96,7 @@ const Signup = ({ onRegister }) => {
         <div className="Welcome">
           <h2 className="Info-Title">Registro de Usuario</h2>
           <div className="Welcome-Text">
-            Bienvenido al acortador de links CarlitosApp. Si ya tienes una
+            Bienvenido al acortador de links TinyFy. Si ya tienes una
             cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
             una para comenzar.
           </div>

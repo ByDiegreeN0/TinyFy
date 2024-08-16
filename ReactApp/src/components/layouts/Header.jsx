@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import logo from "../../assets/Svg/Logos/Logo_Negro.svg";
 import link from "../../assets/Svg/Nav/Link.svg";
 import referrals from "../../assets/Svg/Nav/Referrals.svg";
 import payouts from "../../assets/Svg/Nav/payouts.svg";
@@ -41,16 +40,17 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
   // Header para usuarios no autenticados
   const UnauthenticatedHeader = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-
     const toggleMenu = () => {
       setMenuOpen(!menuOpen);
     };
 
+    // Verificar si la ruta es la específica para Home
+    const esHome = location.pathname === '/';
+    const navClass = esHome ? 'HomeNav' : 'Nav';
+
     return (
-      <nav className={`Nav Unauthenticated ${scrolled ? "scrolled" : ""}`}>
-        <Link to="/" className="logoShadow">
-          <img src={logo} alt="CarlitosApp Logo" className="Nav-Logo" />
-        </Link>
+      <nav className={`${navClass} Unauthenticated ${scrolled ? "scrolled" : ""}`}>
+        <Link to="/" className="Nav-Logo"></Link>
         <button className="Menu-Button" onClick={toggleMenu}>
           <div className={`menuBarra ${menuOpen ? 'open' : ''}`}>
             <span className={`fila1 ${menuOpen ? 'fila1Animation' : ''}`}></span>
