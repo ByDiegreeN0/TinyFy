@@ -1,16 +1,16 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.User import db  
 
-class Links(db.Links):
+class Links(db.Model):
     __tablename__='Links'
 
-    LinkId = db.column(db.Integer, PrimaryKey = True)
-    LinkUrl = db.column(db.String(50), nullable = False)
-    CreatedAt = db.column(db.datetime, default=db.func.now())
-    ClickCount = db.column(db.Integer, nullable = False)
-    DailyViewCount = db.column(db.Integer, nullable = False)
-    MonthlyViewCount = db.column(db.Integer, nullable = False)
-    YearlyViewCount = db.column(db.Integer, nullable = False)
+    LinkId = db.Column(db.Integer, primary_key = True)
+    LinkUrl = db.Column(db.String(50), nullable = False)
+    CreatedAt = db.Column(db.DateTime, default=db.func.now())
+    ClickCount = db.Column(db.Integer, nullable = False)
+    DailyViewCount = db.Column(db.Integer, nullable = False)
+    MonthlyViewCount = db.Column(db.Integer, nullable = False)
+    YearlyViewCount = db.Column(db.Integer, nullable = False)
 
     def __init__(self, LinkUrl,  ClickCount, DailyViewCount, MonthlyViewCount, YearlyViewCount, CreatedAt = None):
 

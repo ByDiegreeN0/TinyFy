@@ -1,13 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.User import db  
 
-class Permissions(db.Permissions):
+class Permissions(db.Model ):
     __tablename__ = 'Permissions'
 
-    PermissionsId = db.column(db.Integer, PrimaryKey = True)
-    Permission_Desc = db.column(db.String(40), nullable = False)
-    CreatedAt = db.column(db.datetime, default=db.func.now())
-    userId = db.column(db.Integer, db.Foreign_Key('user.id'))
+    PermissionsId = db.Column(db.Integer, primary_key = True)
+    Permission_Desc = db.Column(db.String(40), nullable = False)
+    CreatedAt = db.Column(db.DateTime, default=db.func.now())
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self,Permission_Desc):
         

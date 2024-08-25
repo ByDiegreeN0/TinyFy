@@ -4,14 +4,14 @@ from models.User import db
 class Payout_Data(db.Model):
     __tablename__= 'Payout_Data'
 
-    PayoutDataId = db.column(db.Integer, Primary_Key = True)
-    WithDrawId = db.column(db.Integer, db.Foreign_key())
-    Name = db.column(db.String(20), nullable = False)
-    Method = db.column(db.String(10), nullable = False)
-    AccountNumber = db.column(db.String(20), nullable = False)
-    PayoutAmount = db.column(db.Numeric(precision=10, scale=2), nullable = False)
-    PayoutCurrency = db.column(db.String(200))
-    CreateAt = db.column(db.datetime, default=db.func.now())
+    PayoutDataId = db.Column(db.Integer, primary_key = True)
+    WithDrawId = db.Column(db.Integer, db.ForeignKey('banned_accounts.UserId'))
+    Name = db.Column(db.String(20), nullable = False)
+    Method = db.Column(db.String(10), nullable = False)
+    AccountNumber = db.Column(db.String(20), nullable = False)
+    PayoutAmount = db.Column(db.Numeric(precision=10, scale=2), nullable = False)
+    PayoutCurrency = db.Column(db.String(200))
+    CreateAt = db.Column(db.DateTime, default=db.func.now())
 
     def __init__(self, Name, Method, AccountNumber, PayoutAmount, PayoutCurrency):
         self.Name = Name
