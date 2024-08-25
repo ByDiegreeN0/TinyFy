@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from models.User import db  
 
 class Payout_Data(db.Model):
-    __tablename__='Payout_Data'
+    __tablename__= 'Payout_Data'
 
     PayoutDataId = db.column(db.Integer, Primary_Key = True)
     WithDrawId = db.column(db.Integer, db.Foreign_key())

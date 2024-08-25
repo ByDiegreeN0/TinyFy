@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from models.User import db  
 
 class Permissions(db.Permissions):
-    __tablename__ = ('Permissions')
+    __tablename__ = 'Permissions'
 
     PermissionsId = db.column(db.Integer, PrimaryKey = True)
     Permission_Desc = db.column(db.String(40), nullable = False)
