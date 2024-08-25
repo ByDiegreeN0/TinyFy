@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import logo from "../../assets/Svg/Logos/TInyFyLogo.svg";
+import logo from "../../assets/Svg/Logos/LoadingAnimated.svg";
 import '../styles/stylesCommon/LoadingScreen.css';
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
+    const forceReflow = () => {
+      const svg = document.querySelector('.logo-container svg');
+      if (svg) {
+        svg.style.animation = 'none';
+        svg.offsetHeight; 
+        svg.style.animation = null;
+      }
+    };
+    setKey(prevKey => prevKey + 1);
+    setTimeout(forceReflow, 50);
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 4800);
 
     return () => clearTimeout(timer);
   }, []);
@@ -18,11 +29,10 @@ function App() {
       {loading ? (
         <div className="loading-content">
           <div className="logo-container">
-            <img src={logo} alt="Logo de TinyFy" />
+            <object key={key} type="image/svg+xml" data={logo}>
+              Tu navegador no soporta SVG
+            </object>
           </div>
-          <div className="loading-animation">
-            <div className="spinner"></div>
-          </div>\
         </div>
       ) : (
         <div className="loaded-content">

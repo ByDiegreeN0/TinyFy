@@ -66,7 +66,7 @@ const Signup = ({ onRegister }) => {
 
   const onSubmit = async (data) => {
     if (step === 1) {
-      const isValid = await trigger(["name", "email"]);
+      const isValid = await trigger(["firstName", "lastName", "email"]);
       if (isValid) setStep(2);
     } else if (step === 2) {
       const isValid = await trigger(["password", "passwordConfirm"]);
@@ -114,10 +114,17 @@ const Signup = ({ onRegister }) => {
           {step === 1 && (
             <>
               <FormGroup
-                id="name"
+                id="firstName"
                 label="Nombre"
                 register={register}
                 rules={{ required: "El nombre es obligatorio" }}
+                errors={errors}
+              />
+              <FormGroup
+                id="lastName"
+                label="Apellido"
+                register={register}
+                rules={{ required: "El apellido es obligatorio" }}
                 errors={errors}
               />
               <FormGroup

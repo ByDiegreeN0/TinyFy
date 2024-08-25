@@ -56,19 +56,20 @@
 .highlight {
   font-size: 6rem; 
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.393); /* Blanco opaco */
+  color: rgba(255, 255, 255, 0.393); 
   position: absolute;
-  top: -20px; /* Ajusta la posición según necesites */
+  top: -20px;
   left: 0;
   width: 100%;
-  z-index: 1; /* Asegura que esté detrás del título */
+  z-index: 1; 
 }
 
 .title {
-  font-size: 2.5rem; /* Texto más pequeño */
+  font-size: 2.5rem; 
   font-weight: bold;
   margin: 30px 0;
   color:var(--color-background);
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
   position: relative;
   left: 20px;
   z-index: 2; 
@@ -76,7 +77,7 @@
 
 .description_p {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.9); /* Un blanco más visible */
+  color: rgba(255, 255, 255, 0.9); 
   margin: 20px 0;
 }
 
@@ -93,19 +94,10 @@
   font-size: 1rem;
   text-decoration: none;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.button.primary {
-  background-color: var(--color-primary);
+  background-color: transparent;
   color: var(--color-background);
-}
-
-.button.secondary {
-  background-color: var(--color-background);
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  transition: background 600ms ease;
+  border: 1px solid var(--color-background);
+  transition: background-color 0.3s ease;
 }
 
 .button.primary:hover,
@@ -157,6 +149,8 @@
   width: 400px;
   height: 500px;
   border-radius: 1rem;
+  background-position: center;
+  background-size: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 600ms ease;
 }
@@ -171,12 +165,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: inherit;
   background-position: center;
   background-size: center;
-  filter: blur(10px);
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
   opacity: 0.7;
-  z-index: -1; /* Asegura que el pseudo-elemento esté detrás del contenido */
+  z-index: -1;
 }
 
 .card:first-child {

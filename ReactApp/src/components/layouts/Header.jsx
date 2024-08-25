@@ -31,10 +31,10 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
   }, [scrolled]);
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('isAuthenticated');
+    localStorage.removeItem("isAuthenticated");
+    sessionStorage.removeItem("isAuthenticated");
     onLogout();
-    navigate('/');
+    navigate("/");
   };
 
   // Header para usuarios no autenticados
@@ -44,18 +44,25 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
       setMenuOpen(!menuOpen);
     };
 
-    // Verificar si la ruta es la específica para Home
-    const esHome = location.pathname === '/';
-    const navClass = esHome ? 'HomeNav' : 'Nav';
+    const esHome = location.pathname === "/";
+    const navClass = esHome ? "HomeNav" : "Nav";
 
     return (
-      <nav className={`${navClass} Unauthenticated ${scrolled ? "scrolled" : ""}`}>
+      <nav
+        className={`${navClass} Unauthenticated ${scrolled ? "scrolled" : ""}`}
+      >
         <Link to="/" className="Nav-Logo"></Link>
         <button className="Menu-Button" onClick={toggleMenu}>
-          <div className={`menuBarra ${menuOpen ? 'open' : ''}`}>
-            <span className={`fila1 ${menuOpen ? 'fila1Animation' : ''}`}></span>
-            <span className={`fila2 ${menuOpen ? 'fila2Animation' : ''}`}></span>
-            <span className={`fila3 ${menuOpen ? 'fila3Animation' : ''}`}></span>
+          <div className={`menuBarra ${menuOpen ? "open" : ""}`}>
+            <span
+              className={`fila1 ${menuOpen ? "fila1Animation" : ""}`}
+            ></span>
+            <span
+              className={`fila2 ${menuOpen ? "fila2Animation" : ""}`}
+            ></span>
+            <span
+              className={`fila3 ${menuOpen ? "fila3Animation" : ""}`}
+            ></span>
           </div>
         </button>
         <ul className={`Nav-List ${menuOpen ? "open" : ""}`}>
@@ -65,12 +72,20 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
             </Link>
           </li>
           <li className="Nav-Item">
-            <Link to="/Signin" onClick={toggleMenu} className="transitionBorder">
+            <Link
+              to="/Signin"
+              onClick={toggleMenu}
+              className="transitionBorder"
+            >
               Sign in
             </Link>
           </li>
           <li className="Nav-Item">
-            <Link to="/Signup" onClick={toggleMenu} className="transitionBorder">
+            <Link
+              to="/Signup"
+              onClick={toggleMenu}
+              className="transitionBorder"
+            >
               Sign up
             </Link>
           </li>
@@ -84,43 +99,51 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-      <nav 
+      <nav
         className={`HeaderDash ${isExpanded ? "expanded" : ""}`}
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
         <Link to="/edit-profile" className="PefilUsuario">
-          <img 
-            src={user?.profilePicture || defaultAvatar} 
-            alt={`${user?.name || 'Usuario'}'s profile picture`} 
+          <img
+            src={user?.profilePicture || defaultAvatar}
+            alt={`${user?.name || "Usuario"}'s profile picture`}
           />
           <h1 className="title-nav">{user?.name || "Usuario"}</h1>
         </Link>
         <div className="container-links">
-          <Link 
-            to="/dashboardlinks" 
-            className={`Nav-Link ${location.pathname === '/dashboardlinks' ? 'active' : ''}`}
+          <Link
+            to="/dashboardlinks"
+            className={`Nav-Link ${
+              location.pathname === "/dashboardlinks" ? "active" : ""
+            }`}
           >
             <img src={link} alt="Links" className="Nav-Ico" />
             <div className="text-nav">Links</div>
           </Link>
-          <Link 
-            to="/dashboardreferrals" 
-            className={`Nav-Link ${location.pathname === '/dashboardreferrals' ? 'active' : ''}`}
+          <Link
+            to="/dashboardreferrals"
+            className={`Nav-Link ${
+              location.pathname === "/dashboardreferrals" ? "active" : ""
+            }`}
           >
             <img src={referrals} alt="Referrals" className="Nav-Ico" />
             <div className="text-nav">Referrals</div>
           </Link>
-          <Link 
-            to="/dashboardpayouts" 
-            className={`Nav-Link ${location.pathname === '/dashboardpayouts' ? 'active' : ''}`}
+          <Link
+            to="/dashboardpayouts"
+            className={`Nav-Link ${
+              location.pathname === "/dashboardpayouts" ? "active" : ""
+            }`}
           >
             <img src={payouts} alt="Payouts" className="Nav-Ico" />
             <div className="text-nav">Payouts</div>
           </Link>
-          <Link 
-            to="/dashboardsupport" 
-            className={`Nav-Link ${location.pathname === '/dashboardsupport' ? 'active' : ''}`}
+          <Link
+            to="/dashboardsupport"
+            className={`Nav-Link ${
+              location.pathname === "/dashboardsupport" ? "active" : ""
+            }`}
           >
             <img src={support} alt="Support" className="Nav-Ico" />
             <div className="text-nav">Support</div>
@@ -128,7 +151,7 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
         </div>
         <button onClick={handleLogout} className="Logout-Button">
           <img src={logout} alt="Logout" className="Nav-Ico" />
-          <div className="text-nav">Logout</div> 
+          <div className="text-nav">Logout</div>
         </button>
       </nav>
     );
@@ -142,8 +165,8 @@ Header.propTypes = {
   onLogout: PropTypes.func.isRequired,
   user: PropTypes.shape({
     name: PropTypes.string,
-    profilePicture: PropTypes.string
-  })
+    profilePicture: PropTypes.string,
+  }),
 };
 
 export default Header;

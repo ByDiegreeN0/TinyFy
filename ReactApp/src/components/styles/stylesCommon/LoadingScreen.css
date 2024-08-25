@@ -1,126 +1,56 @@
 /* Estilo para la pantalla de carga */
 .loading-screen {
-  display: flex; /* Establece un contenedor flex */
-  position: relative; /* Posición relativa para ajustar elementos posicionados dentro */
-  align-items: center; /* Centra los elementos verticalmente */
-  place-content: center; /* Centra los elementos horizontal y verticalmente */
-  justify-content: center; /* Centra los elementos horizontalmente */
-  height: 100vh; /* Altura del 100% del viewport */
-  width: 100vw; /* Ancho del 100% del viewport */
-  background: var(--color-background); /* Color de fondo utilizando una variable CSS */
-  transition: opacity 500ms ease-in-out; /* Transición suave de opacidad */
-  opacity: 0; /* Inicialmente invisible */
-  z-index: 99999; /* Coloca la pantalla de carga en la capa más alta */
+  display: flex;
+  position: absolute;
+  top: 0;
+  align-items: center;
+  place-content: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background: var(--color-background);
+  transition: opacity 500ms ease-in-out;
+  opacity: 0;
+  z-index: 9999999999999999999999;
 }
 
 /* Clase para mostrar la pantalla de carga */
 .loading {
-  opacity: 1; /* Hace visible la pantalla de carga */
+  opacity: 1;
 }
 
 /* Clase para ocultar la pantalla de carga */
 .loaded {
-  opacity: 0; /* Hace invisible la pantalla de carga */
+  opacity: 0;
 }
 
 /* Estilo común para el contenido de carga y el contenido cargado */
 .loading-content,
 .loaded-content {
-  display: flex; /* Establece un contenedor flex */
-  flex-direction: column; /* Organiza los elementos en una columna */
-  align-items: center; /* Centra los elementos horizontalmente */
-  text-align: center; /* Centra el texto */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 /* Contenedor del logotipo */
 .logo-container {
-  margin-bottom: 20px; /* Espacio debajo del logotipo */
+  margin-bottom: 20px;
 }
 
 /* Estilo para la imagen del logotipo */
-.logo-container img {
-  width: 120px; /* Ancho del logotipo */
-  height: 120px; /* Altura del logotipo */
-  animation: logo-fade-in 500ms ease-in-out; /* Animación de aparición del logotipo */
-}
-
-/* Definición de la animación de aparición del logotipo */
-@keyframes logo-fade-in {
-  from {
-    opacity: 0; /* Inicialmente invisible */
-    transform: scale(0.5); /* Escalado al 50% */
-  }
-  to {
-    opacity: 1; /* Totalmente visible */
-    transform: scale(1); /* Escalado al 100% */
-  }
-}
-
-/* Contenedor de la animación de carga */
-.loading-animation {
-  margin-bottom: 20px; /* Espacio debajo de la animación de carga */
-}
-
-/* Estilo para el spinner */
-.spinner {
-  width: 50px; /* Ancho del spinner */
-  height: 50px; /* Altura del spinner */
-  border: 5px solid var(--color-intermediate-two); /* Borde del spinner */
-  border-top: 5px solid var(--color-primary); /* Borde superior del spinner */
-  border-radius: 50%; /* Forma circular */
-  animation: spin 500ms linear infinite, spinner-fade-in 500ms ease-in-out; /* Animaciones de giro y aparición del spinner */
-}
-
-/* Definición de la animación de giro del spinner */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg); /* Rotación inicial */
-  }
-  100% {
-    transform: rotate(360deg); /* Rotación completa */
-  }
-}
-
-/* Definición de la animación de aparición del spinner */
-@keyframes spinner-fade-in {
-  from {
-    opacity: 0; /* Inicialmente invisible */
-    transform: scale(0.5); /* Escalado al 50% */
-  }
-  to {
-    opacity: 1; /* Totalmente visible */
-    transform: scale(1); /* Escalado al 100% */
-  }
-}
-
-/* Estilo para el texto de carga */
-.loading-text {
-  font-size: 18px; /* Tamaño de fuente */
-  color: var(--color-secondary); /* Color del texto */
-  animation: text-fade-in 500ms ease-in-out; /* Animación de aparición del texto */
-}
-
-/* Definición de la animación de aparición del texto */
-@keyframes text-fade-in {
-  from {
-    opacity: 0; /* Inicialmente invisible */
-  }
-  to {
-    opacity: 1; /* Totalmente visible */
-  }
+.logo-container object {
+  width: 120px;
+  height: 120px;
 }
 
 /* Clase específica para el contenido cargado */
-.loaded-content {
-  animation: content-fade-in 500ms ease-in-out; /* Animación de aparición del contenido cargado */
+.loaded-content h1 {
+  font-size: 24px;
+  color: var(--color-primary);
 }
 
-/* Definición de la animación de aparición del contenido cargado */
-@keyframes content-fade-in {
-  from {
-    transform: translateX(-200px); /* Desplazamiento vertical inicial */
-  }
-  to {
-    transform: translateX(0); /* Sin desplazamiento vertical */
-  }
+.loaded-content p {
+  font-size: 18px;
+  color: var(--color-secondary);
 }
