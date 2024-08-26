@@ -7,8 +7,9 @@ import payouts from "../../assets/Svg/Nav/payouts.svg";
 import support from "../../assets/Svg/Nav/support.svg";
 import logout from "../../assets/Svg/Nav/logout.svg";
 import defaultAvatar from "../../assets/Img/AvatarUser.jpg";
-import "../styles/stylesLayouts/Header.css";
+import BotonLinkIcon from "../../assets/Svg/Icon/BotonLink.svg";
 import "../styles/stylesLayouts/HeaderDash.css";
+import "../styles/stylesLayouts/Header.css";
 
 const Header = ({ isAuthenticated, onLogout, user }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -97,63 +98,104 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
   // Header para usuarios autenticados
   const AuthenticatedHeader = () => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    const BotonLink = () => {
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        // Handle form submission here
+        setShowModal(false);
+      };
+
+      return (
+        <>
+          <div className="BotonLink" onClick={() => setShowModal(true)}>
+            <img src={BotonLinkIcon} alt="Boton de Link" />
+          </div>
+          {showModal && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Acortar Nuevo Link</h2>
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="name">Link Name</label>
+                    <input type="text" id="name" name="name" required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="url">Link URL</label>
+                    <input type="url" id="url" name="url" required />
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit">Crear</button>
+                    <button type="button" onClick={() => setShowModal(false)}>Cancelar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    };
 
     return (
-      <nav
-        className={`HeaderDash ${isExpanded ? "expanded" : ""}`}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
-      >
-        <Link to="/edit-profile" className="PefilUsuario">
-          <img
-            src={user?.profilePicture || defaultAvatar}
-            alt={`${user?.name || "Usuario"}'s profile picture`}
-          />
-          <h1 className="title-nav">{user?.name || "Usuario"}</h1>
-        </Link>
-        <div className="container-links">
-          <Link
-            to="/dashboardlinks"
-            className={`Nav-Link ${
-              location.pathname === "/dashboardlinks" ? "active" : ""
-            }`}
-          >
-            <img src={link} alt="Links" className="Nav-Ico" />
-            <div className="text-nav">Links</div>
+      <>
+        <nav
+          className={`HeaderDash ${isExpanded ? "expanded" : ""}`}
+          onMouseEnter={() => setIsExpanded(true)}
+          onMouseLeave={() => setIsExpanded(false)}
+        >
+          <Link to="/edit-profile" className="PefilUsuario">
+            <img
+              src={user?.profilePicture || defaultAvatar}
+              alt={`${user?.name || "Usuario"}'s profile picture`}
+            />
+            <h1 className="title-nav">{user?.name || "Usuario"}</h1>
           </Link>
-          <Link
-            to="/dashboardreferrals"
-            className={`Nav-Link ${
-              location.pathname === "/dashboardreferrals" ? "active" : ""
-            }`}
-          >
-            <img src={referrals} alt="Referrals" className="Nav-Ico" />
-            <div className="text-nav">Referrals</div>
-          </Link>
-          <Link
-            to="/dashboardpayouts"
-            className={`Nav-Link ${
-              location.pathname === "/dashboardpayouts" ? "active" : ""
-            }`}
-          >
-            <img src={payouts} alt="Payouts" className="Nav-Ico" />
-            <div className="text-nav">Payouts</div>
-          </Link>
-          <Link
-            to="/dashboardsupport"
-            className={`Nav-Link ${
-              location.pathname === "/dashboardsupport" ? "active" : ""
-            }`}
-          >
-            <img src={support} alt="Support" className="Nav-Ico" />
-            <div className="text-nav">Support</div>
-          </Link>
-        </div>
-        <button onClick={handleLogout} className="Logout-Button">
-          <img src={logout} alt="Logout" className="Nav-Ico" />
-          <div className="text-nav">Logout</div>
-        </button>
-      </nav>
+          <div className="container-links">
+            <Link
+              to="/dashboardlinks"
+              className={`Nav-Link ${
+                location.pathname === "/dashboardlinks" ? "active" : ""
+              }`}
+            >
+              <img src={link} alt="Links" className="Nav-Ico" />
+              <div className="text-nav">Links</div>
+            </Link>
+            <Link
+              to="/dashboardreferrals"
+              className={`Nav-Link ${
+                location.pathname === "/dashboardreferrals" ? "active" : ""
+              }`}
+            >
+              <img src={referrals} alt="Referrals" className="Nav-Ico" />
+              <div className="text-nav">Referrals</div>
+            </Link>
+            <Link
+              to="/dashboardpayouts"
+              className={`Nav-Link ${
+                location.pathname === "/dashboardpayouts" ? "active" : ""
+              }`}
+            >
+              <img src={payouts} alt="Payouts" className="Nav-Ico" />
+              <div className="text-nav">Payouts</div>
+            </Link>
+            <Link
+              to="/dashboardsupport"
+              className={`Nav-Link ${
+                location.pathname === "/dashboardsupport" ? "active" : ""
+              }`}
+            >
+              <img src={support} alt="Support" className="Nav-Ico" />
+              <div className="text-nav">Support</div>
+            </Link>
+          </div>
+          <button onClick={handleLogout} className="Logout-Button">
+            <img src={logout} alt="Logout" className="Nav-Ico" />
+            <div className="text-nav">Logout</div>
+          </button>
+        </nav>
+        <BotonLink />
+      </>
     );
   };
 

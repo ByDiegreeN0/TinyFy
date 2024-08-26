@@ -19,13 +19,20 @@
   animation: fadeIn 0.5s ease-out forwards;
 }
 
-.dashboard-grid {
+.cards-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   max-width: 1000px;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
-.dashboard-card {
+.cardLinks {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height: 100px;
   background-color: var(--color-background);
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
@@ -33,25 +40,45 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.dashboard-card:hover {
-  transform: translateY(-5px);
+.cardLinks:hover {
+  transform: translateY(-5px) scale(1.05);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
+.cardLinks h3 {
   background-color: var(--color-primary);
-  padding: 1.5rem;
-}
-
-.card-title {
+  padding: .5rem;
   color: var(--color-background);
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   margin: 0;
-  font-weight: 300;
+  font-weight: bold;
 }
 
-.card-content {
-  padding: 1.5rem;
+.cardLinks p {
+  padding: 1rem;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--color-title);
+  text-align: center;
+}
+
+.link-form {
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  background-color: var(--color-background);
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
+}
+
+.link-form h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--color-title);
+  font-weight: 300;
+  font-size: 2rem;
 }
 
 .link-management {
@@ -62,6 +89,7 @@
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   animation: slideUp 0.8s ease-out;
+  margin-top: 2rem;
 }
 
 @keyframes slideUp {
@@ -83,7 +111,7 @@
 }
 
 .shorten-link-btn:hover {
-  background-color: var(--color-title);
+  background-color: var(--color-intermediate-one);
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
@@ -128,8 +156,36 @@
 }
 
 .link-table button:hover {
-  background-color: var(--color-title);
+  background-color: var(--color-intermediate-one);
   transform: translateY(-2px);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-background);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: var(--color-intermediate-one);
+  transform: translateY(-2px);
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .modal {
@@ -216,7 +272,7 @@
 }
 
 .form-actions button[type="submit"]:hover {
-  background-color: var(--color-title);
+  background-color: var(--color-intermediate-one);
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
@@ -227,7 +283,79 @@
 }
 
 .form-actions button[type="button"]:hover {
-  background-color: var(--color-title);
+  background-color: var(--color-intermediate-one);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.link-form-container {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 2rem;
+  background-color: var(--color-background);
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  animation: slideUp 0.8s ease-out;
+}
+
+.link-form-header {
+  background-color: var(--color-primary);
+  padding: 1.5rem;
+}
+
+.link-form-title {
+  color: var(--color-background);
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 300;
+}
+
+.link-form-content {
+  padding: 2rem;
+}
+
+.link-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.link-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-title);
+  font-weight: 500;
+}
+
+.link-form .form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--color-inputs);
+  transition: border-color 0.3s ease;
+}
+
+.link-form .form-group input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.link-form-submit {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  color: var(--color-background);
+  background-color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.link-form-submit:hover {
+  background-color: var(--color-intermediate-one);
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
@@ -237,6 +365,16 @@
     padding: 1rem;
     margin-left: 0;
     width: 100vw;
+  }
+
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cardLinks {
+    width: 90%;
+    margin-bottom: 1rem;
   }
 
   .link-management {
