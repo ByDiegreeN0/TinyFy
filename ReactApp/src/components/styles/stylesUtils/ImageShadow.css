@@ -1,0 +1,16 @@
+.logoShadow {
+    width: 100px;
+    height: 100px;
+}
+
+.logoShadow img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 600ms ease,
+                filter 1s ease-out;
+}
+.logoShadow img:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 0.20rem #333);
+}

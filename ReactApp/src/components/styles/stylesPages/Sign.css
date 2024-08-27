@@ -1,0 +1,190 @@
+ /* Estilos de la página de login */
+.Sing-usuario {
+  display: flex;
+  width: 100vw;
+  height: calc(100vh - 150px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+}
+/* Grid y disposición de elementos */
+.GridArea {
+  display: grid;
+  width: 100%;
+  max-width: 1000px;
+  height: 600px;
+  grid-template-areas:
+    "welcome login"
+    "welcome login"
+    "welcome login";
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+}
+
+/* Estilos para la sección de bienvenida */
+.Welcome {
+  grid-area: welcome;
+  padding: 1rem;
+}
+
+
+/* Tipografía y estilos de texto */
+.Info-Title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Enlaces y estilos de texto */
+.Welcome-Text,
+.Redirect-Text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  color: var(--color-title);
+  text-decoration: none;
+}
+
+.Link-Forms {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+/* Formulario de inicio de sesión */
+.Forms {
+  grid-area: login;
+  padding: 1rem;
+  border-radius: 10px;
+  background: var(--color-background);
+}
+
+/* Estilos para títulos de secciones */
+.Forms h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Estilos para grupos de campos */
+.Form-Group {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+/* Estilos para etiquetas de campos */
+.Label-Forms {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: var(--color-title);
+}
+
+/* Estilos para campos de entrada */
+.Input-Forms {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  background: var(--color-inputs);
+  transition: background 800ms cubic-bezier(0.7, 0.27, 0.51, 1.06);
+}
+
+.Input-Forms:focus {
+  outline: none;
+  background: linear-gradient(
+    to top,
+    var(--color-inputs) 0%,
+    var(--color-background) 100%
+  );
+}
+
+.Input-Forms.error {
+  outline: 1px solid var(--color-error);
+}
+
+/* Estilos para mensajes de error */
+.Error-Container {
+  height: 10px;
+  /* Ajusta esta altura según sea necesario */
+}
+
+.Error-Message {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin-top: 5px;
+  position: absolute;
+}
+
+/* Estilos para botones */
+.Button-Forms {
+  width: 100%;
+  height: 50px;
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 5px;
+  background: var(--color-primary);
+  color: var(--color-background);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Button-Forms:hover {
+  background-color: var(--color-title);
+}
+.Redirect-Boton {
+  display: none;
+}
+
+.Dialog-Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.Dialog-Content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: var(--color-background);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.Dialog-Actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+.Button-Forms {
+  width: 100%;
+  height: 50px;
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 5px;
+  background: var(--color-primary);
+  color: var(--color-background);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+@media screen and (max-width: 768px) {
+  .Welcome {
+    display: none;
+  }
+  .GridArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 120px);
+    flex-direction: column;
+    z-index: 500;
+    box-shadow: none;
+  }
+}
