@@ -1,0 +1,20 @@
+.transitionBorder {
+    text-decoration: none;
+    position: relative;
+}
+
+.transitionBorder::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0; /* Adjust as needed */
+    width: 0;
+    height: 2px; /* Height of the border */
+    background-color: var(--color-primary);
+    transition: width 800ms ease;
+    transform: translateX(-50%);
+}
+
+.transitionBorder:hover::after {
+    width: 100%;
+}
