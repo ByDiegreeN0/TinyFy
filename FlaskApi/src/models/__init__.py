@@ -1,9 +1,7 @@
-from .UserReferralLinkModel import UserReferralLink 
 from .RolesModel import Roles
 from .User import User
 from .BannedAccountsModel import BannedAccount
 from .MessagesModel import Messages
-from .ReferralsModel import Referrals
 from .RestrictedUserModel import RestrictedAccount
 from .SupportTicketModel import SupportTicket
 from .WarnedAccountsModel import WarnedAccount
@@ -14,3 +12,4 @@ from .LinksModel import Links
 from .warningsModel import Warnings
 from .UserConfigModel import userConfig
 from .PermissionModel import Permissions
+from .CPMModel import CPM

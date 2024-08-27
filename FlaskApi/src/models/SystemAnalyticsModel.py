@@ -1,4 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
 from models.User import db  
 
 class SystemAnalytics(db.Model):

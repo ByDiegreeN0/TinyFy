@@ -1,4 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
 from models.User import db  
 
 
@@ -8,12 +7,15 @@ class CPM(db.Model):
 
     cpmId = db.Column(db.Integer, primary_key = True)
     cpm = db.Column(db.Integer)
-    CreatedAt = db.Column(db.DateTime, default=db.func.now())
+    cpmDate = db.Column(db.DateTime, default=db.func.now())
     
-    def __init__(self, cpmId, cpm, CreatedAt):
+    def __init__(self, cpmId, cpm, cpmDate):
         
         self.cpmId = cpmId
         self.cpm = cpm
+
+        if cpmDate:
+            self.CreatedAt = cpmDate
         
         
     
