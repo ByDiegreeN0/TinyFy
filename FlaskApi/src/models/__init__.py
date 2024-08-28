@@ -10,6 +10,6 @@ from .PayoutLogModel import PayoutLog
 from .PayoutDataModel import Payout_Data
 from .LinksModel import Links
 from .warningsModel import Warnings
-from .UserConfigModel import userConfig
+from .UserConfigModel import UserConfig
 from .PermissionModel import Permissions
 from .CPMModel import CPM
