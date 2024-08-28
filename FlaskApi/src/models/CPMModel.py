@@ -7,7 +7,8 @@ class CPM(db.Model):
     _cpm = db.Column('cpm', db.Integer)
     _cpmDate = db.Column('cpmDate', db.DateTime, default=db.func.now())
 
-    def __init__(self, cpm, cpmDate=None):
+    def __init__(self, cpmId, cpm, cpmDate=None):
+        self._cpmId = cpmId
         self._cpm = cpm
         if cpmDate:
             self._cpmDate = cpmDate
