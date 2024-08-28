@@ -51,7 +51,7 @@ const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
-const Signin = ({ onLogin }) => {
+const Signin = ({ onLogin,title, description, logoSrc }) => {
   const {
     register,
     handleSubmit,
@@ -80,16 +80,20 @@ const Signin = ({ onLogin }) => {
   return (
     <div className="Sing-usuario animationFade">
       <div className="GridArea">
-        <div className="Welcome">
+        <div className="Welcome" title={title} description={description} logoSrc={logoSrc}>
           <h1 className="Info-Title">Bienvenido</h1>
           <p className="Welcome-Text">
-            Bienvenidos al acortador de links TinyFy. Si ya tienes una
+            Bienvenidos al acortador de links {title}. Si ya tienes una
             cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
             una para comenzar.
           </p>
           <Link className="Redirect-Text" to="../Signup">
             ¿No tienes cuenta?{" "}
             <span className="Link-Forms transitionBorder">Regístrate</span>
+          </Link> <br /> <br />
+          <Link className="Redirect-Text" to="../PasswordRecovery">
+            ¿Olvidaste tu contraseña?{" "}
+            <span className="Link-Forms transitionBorder">Restablecer</span>
           </Link>
         </div>
         <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
@@ -138,6 +142,9 @@ const Signin = ({ onLogin }) => {
 
 Signin.propTypes = {
   onLogin: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  logoSrc: PropTypes.string.isRequired,
 };
 
 export default Signin;

@@ -51,7 +51,13 @@ const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
-const Signup = ({ onRegister }) => {
+CustomDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+};
+
+const Signup = ({ onRegister, title, description}) => {
   const {
     register,
     handleSubmit,
@@ -72,8 +78,7 @@ const Signup = ({ onRegister }) => {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
         console.log(data);
-        // Aquí simularemos un registro exitoso
-        // En una aplicación real, aquí harías una llamada a tu API de registro
+        // Simulación de un registro exitoso
         setShowDialog(true);
       }
     }
@@ -87,20 +92,18 @@ const Signup = ({ onRegister }) => {
     }
     setShowDialog(false);
     onRegister();
-    navigate("/dashboardlinks");  // Cambiado de "/dashboard" a "/dashboardlinks"
+    navigate("/dashboardlinks");  
   };
 
   return (
     <div className="Sing-usuario">
       <div className="GridArea animationFade">
         <div className="Welcome">
-          <h2 className="Info-Title">Registro de Usuario</h2>
+          <h2 className="Info-Title">Registro en {title}</h2>
           <div className="Welcome-Text">
-            Bienvenido al acortador de links TinyFy. Si ya tienes una
-            cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
-            una para comenzar.
+            {description} Si ya tienes una cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea una para comenzar.
           </div>
-          {step === 1 && (
+          {(step === 1 || step === 2) && (
             <p className="Redirect-Text">
               ¿Ya tienes una cuenta?{" "}
               <Link className="Link-Forms transitionBorder" to="../Signin">
@@ -193,6 +196,9 @@ const Signup = ({ onRegister }) => {
 
 Signup.propTypes = {
   onRegister: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  logoSrc: PropTypes.string.isRequired,
 };
 
 export default Signup;

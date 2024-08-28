@@ -1,4 +1,4 @@
- /* Estilos de la página de login */
+
 .Sing-usuario {
   display: flex;
   width: 100vw;
@@ -8,7 +8,7 @@
   justify-content: center;
   background-color: var(--color-background);
 }
-/* Grid y disposición de elementos */
+
 .GridArea {
   display: grid;
   width: 100%;
@@ -24,21 +24,17 @@
   padding: 1rem;
 }
 
-/* Estilos para la sección de bienvenida */
 .Welcome {
   grid-area: welcome;
   padding: 1rem;
 }
 
-
-/* Tipografía y estilos de texto */
 .Info-Title {
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-/* Enlaces y estilos de texto */
 .Welcome-Text,
 .Redirect-Text {
   font-size: 1.5rem;
@@ -46,6 +42,7 @@
   margin-bottom: 2rem;
   color: var(--color-title);
   text-decoration: none;
+  gap: 20px;
 }
 
 .Link-Forms {
@@ -53,7 +50,6 @@
   color: var(--color-primary);
 }
 
-/* Formulario de inicio de sesión */
 .Forms {
   grid-area: login;
   padding: 1rem;
@@ -61,7 +57,6 @@
   background: var(--color-background);
 }
 
-/* Estilos para títulos de secciones */
 .Forms h2 {
   font-size: 2.5rem;
   font-weight: bold;
@@ -105,10 +100,8 @@
   outline: 1px solid var(--color-error);
 }
 
-/* Estilos para mensajes de error */
 .Error-Container {
   height: 10px;
-  /* Ajusta esta altura según sea necesario */
 }
 
 .Error-Message {

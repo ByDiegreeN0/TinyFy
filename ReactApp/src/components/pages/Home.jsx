@@ -8,15 +8,14 @@ import "../styles/stylesPages/Home.css";
 
 const HomeContent = ({ title, description, logoSrc }) => (
   <div className="home-content shapedividers_com-3875">
-  <div className="description animationFade">
-    <h1 className="highlight">Bienvenidos</h1> 
-    <h1 className="title">{title}</h1> 
-    <p className="description_p">{description}</p>
-    <BotonsHome />
+    <div className="description animationFade">
+      <h1 className="highlight">Bienvenidos</h1>
+      <h1 className="title">{title}</h1>
+      <p className="description_p">{description}</p>
+      <BotonsHome />
+    </div>
+    <img src={logoSrc} alt="Logo" className="home-logo animationFade" />
   </div>
-  <img src={logoSrc} alt="Logo" className="home-logo animationFade" />
-</div>
-
 );
 
 HomeContent.propTypes = {
@@ -36,7 +35,7 @@ const BotonsHome = () => (
   </div>
 );
 
-const Features = () => (
+const Features = ({ title }) => (
   <div className="features shapedividers_com-1036">
     <h2 className="title-features">Características</h2>
     <div className="container-caracteristicas animationFlip">
@@ -44,7 +43,7 @@ const Features = () => (
         <div className="card-content">
           <h3>Acortamiento rápido y fácil de URLs</h3>
           <p className="paragraph-features animationFade">
-            TinyFy permite acortar URLs de forma rápida y sencilla. Con una
+            {title} permite acortar URLs de forma rápida y sencilla. Con una
             interfaz intuitiva, cualquier usuario puede transformar enlaces
             largos en URLs cortas y manejables en segundos, perfectas para
             compartir en redes sociales y correos electrónicos.
@@ -67,7 +66,7 @@ const Features = () => (
         <div className="card-content">
           <h3>Seguridad y privacidad de datos</h3>
           <p className="paragraph-features animationFade">
-            TinyFy prioriza la seguridad y privacidad de tus datos con medidas
+            {title} prioriza la seguridad y privacidad de tus datos con medidas
             avanzadas de encriptación y cumplimiento de normativas
             internacionales. Garantizamos que toda la información personal se
             maneje de manera segura y responsable, protegiéndola contra accesos
@@ -81,12 +80,13 @@ const Features = () => (
 
 const Home = () => {
   const title = "TinyFy";
-  const description = "TinyFy es un acortador de URLs innovador que integra estratégicamente anuncios publicitarios. Permite a los usuarios generar enlaces cortos personalizados que muestran anuncios relevantes antes de redirigir al destino final. Los ingresos por publicidad se comparten con los usuarios, incentivando su uso. Con un enfoque en la seguridad, privacidad y desempeño óptimo, TinyFy facilita la gestión eficiente de enlaces en plataformas digitales.";
+  const description =
+    "TinyFy es un acortador de URLs innovador que integra estratégicamente anuncios publicitarios. Permite a los usuarios generar enlaces cortos personalizados que muestran anuncios relevantes antes de redirigir al destino final. Los ingresos por publicidad se comparten con los usuarios, incentivando su uso. Con un enfoque en la seguridad, privacidad y desempeño óptimo, TinyFy facilita la gestión eficiente de enlaces en plataformas digitales.";
 
   return (
     <div className="home-container">
       <HomeContent title={title} description={description} logoSrc={logo} />
-      <Features />
+      <Features title={title}/>
       <Footer />
     </div>
   );
