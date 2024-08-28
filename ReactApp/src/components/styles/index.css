@@ -9,7 +9,7 @@
   --color-background: #fff;
   --color-inputs: #f0f0f0;
   --color-error: #ff0000;
-  --font-family-primary: Arial, sans-serif, "Robot", "Roboto", "Helvetica Neue", "Helvetica", ;
+  --font-family-primary: "Roboto", "Helvetica Neue", "Helvetica", ;
 }
 
 * {

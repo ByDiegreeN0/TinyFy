@@ -8,11 +8,11 @@ import DashboardLinks from './components/pages/DashboardLinks';
 import DashboardReferrals from './components/pages/DashboardReferrals';
 import DashboardPayouts from './components/pages/DashboardPayouts';
 import DashboardSupport from './components/pages/DashboardSupport';
-import PageLoader from './components/Common/PageLoader';
+import PageLoader from './components/Common/LoadingScreen';
 import TerminosYCondiciones from './components/Common/TerminosCondiciones';
 import UserEditForm from './components/pages/UserEditForm';
 import PasswordRecovery from './components/pages/PasswordRecovery';
-import logo from './assets/Svg/Logos/TInyFyLogoNombreBlanco.svg'; // Importa el logo correctamente
+import logo from './assets/Svg/Logos/TInyFyLogoNombreBlanco.svg'; 
 import './components/styles/index.css';
 
 const App = () => {
@@ -25,9 +25,13 @@ const App = () => {
     const description = "TinyFy es un acortador de URLs innovador que integra estratégicamente anuncios publicitarios. Permite a los usuarios generar enlaces cortos personalizados que muestran anuncios relevantes antes de redirigir al destino final. Los ingresos por publicidad se comparten con los usuarios, incentivando su uso. Con un enfoque en la seguridad, privacidad y desempeño óptimo, TinyFy facilita la gestión eficiente de enlaces en plataformas digitales.";
 
     useEffect(() => {
-        const checkAuthStatus = () => {
+        const checkAuthStatus = async () => {
             const storedAuth = localStorage.getItem('isAuthenticated') === 'true' || sessionStorage.getItem('isAuthenticated') === 'true';
             setIsAuthenticated(storedAuth);
+            
+            // Simular una carga mínima para asegurar que la pantalla de carga sea visible
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
             setIsLoading(false);
 
             if (storedAuth && location.pathname === '/') {
@@ -64,6 +68,31 @@ const App = () => {
         }
     };
 
+    const AuthenticatedRoute = ({ children }) => {
+        const [isComponentLoading, setIsComponentLoading] = useState(true);
+
+        useEffect(() => {
+            const loadComponent = async () => {
+                setIsComponentLoading(true);
+                // Simular una carga mínima para asegurar que la pantalla de carga sea visible
+                await new Promise(resolve => setTimeout(resolve, 500));
+                setIsComponentLoading(false);
+            };
+
+            loadComponent();
+        }, []);
+
+        if (!isAuthenticated) {
+            return <Navigate to="/Signin" />;
+        }
+
+        return (
+            <>
+                {isComponentLoading ? <PageLoader /> : children}
+            </>
+        );
+    };
+    
     if (isLoading) {
         return <PageLoader />;
     }
@@ -90,23 +119,23 @@ const App = () => {
                 />
                 <Route 
                     path="/dashboardlinks"   
-                    element={isAuthenticated ? <DashboardLinks title={title} /> : <Navigate to="/Signin" />} 
+                    element={<AuthenticatedRoute><DashboardLinks title={title} /></AuthenticatedRoute>} 
                 />
                 <Route 
                     path="/dashboardreferrals"   
-                    element={isAuthenticated ? <DashboardReferrals /> : <Navigate to="/Signin" />} 
+                    element={<AuthenticatedRoute><DashboardReferrals /></AuthenticatedRoute>} 
                 />
                 <Route 
                     path="/dashboardpayouts"   
-                    element={isAuthenticated ? <DashboardPayouts /> : <Navigate to="/Signin" />} 
+                    element={<AuthenticatedRoute><DashboardPayouts /></AuthenticatedRoute>} 
                 />
                 <Route 
                     path="/dashboardsupport"   
-                    element={isAuthenticated ? <DashboardSupport /> : <Navigate to="/Signin" />} 
+                    element={<AuthenticatedRoute><DashboardSupport /></AuthenticatedRoute>} 
                 />
                 <Route 
                     path="/edit-profile"   
-                    element={isAuthenticated ? <UserEditForm /> : <Navigate to="/Signin" />} 
+                    element={<AuthenticatedRoute><UserEditForm /></AuthenticatedRoute>} 
                 />
                 <Route 
                     path='/passwordRecovery'
