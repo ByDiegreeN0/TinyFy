@@ -40,14 +40,13 @@ const PasswordRecovery = () => {
     // Simular verificación de correo en la base de datos
     const isRegistered = await checkEmailExists(data.email);
     if (isRegistered) {
-      // Simular envío de código de recuperación
       await sendRecoveryCode(data.email);
       setEmail(data.email);
       setStep(2);
     } else {
       setError("email", {
         type: "manual",
-        message: "Este correo electrónico no está registrado.",
+        message: "This email is not registered.",
       });
     }
   };
@@ -57,62 +56,65 @@ const PasswordRecovery = () => {
     const isCodeValid = await verifyRecoveryCode(email, data.code);
     if (isCodeValid) {
       // Redirigir al usuario a Sign In
-      navigate("/Signin", { state: { message: "Contraseña restablecida con éxito. Por favor, inicia sesión." } });
+      navigate("/Signin", {
+        state: { message: "Password reset successfully. Please log in." },
+      });
     } else {
       setError("code", {
         type: "manual",
-        message: "Código inválido. Por favor, intenta de nuevo.",
+        message: "Invalid code. Please try again.",
       });
     }
   };
 
-  // Funciones simuladas para operaciones del backend
   const checkEmailExists = async (email) => {
-    // Simular verificación en la base de datos
-    return new Promise(resolve => setTimeout(() => resolve(true), 1000));
+    return new Promise((resolve) => setTimeout(() => resolve(true), 1000));
   };
 
   const sendRecoveryCode = async (email) => {
-    // Simular envío de correo con código
     console.log(`Código de recuperación enviado a ${email}`);
-    return new Promise(resolve => setTimeout(resolve, 1000));
+    return new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
   const verifyRecoveryCode = async (email, code) => {
-    // Simular verificación del código
-    return new Promise(resolve => setTimeout(() => resolve(true), 1000));
+    return new Promise((resolve) => setTimeout(() => resolve(true), 1000));
   };
 
   return (
     <div className="Sing-usuario">
       <div className="GridArea animationFade">
         <div className="Welcome">
-          <h2 className="Info-Title">Recuperación de Cuenta</h2>
+          <h2 className="Info-Title">Account Recovery</h2>
           <div className="Welcome-Text">
             {step === 1
-              ? "¿Olvidaste tu contraseña? No te preocupes, te ayudaremos a recuperar el acceso a tu cuenta. Ingresa tu correo electrónico para recibir un código de recuperación."
-              : "Hemos enviado un código de recuperación a tu correo electrónico. Por favor, revisa tu bandeja de entrada e ingresa el código a continuación."}
+              ? "Forgot your password? Don't worry, we will help you regain access to your account. Enter your email to receive a recovery code."
+              : "We have sent a recovery code to your email. Please check your inbox and enter the code below."}
           </div>
           <p className="Redirect-Text">
-            ¿Recordaste tu contraseña?{" "}
+            Did you remember your password?{" "}
             <Link className="Link-Forms transitionBorder" to="../Signin">
-              Inicia sesión aquí
+              Log in here
             </Link>
           </p>
         </div>
-        <form className="Forms" onSubmit={handleSubmit(step === 1 ? onSubmitEmail : onSubmitCode)}>
-          <h2 className="Info-Title">{step === 1 ? "Recuperar Cuenta" : "Verificar Código"}</h2>
+        <form
+          className="Forms"
+          onSubmit={handleSubmit(step === 1 ? onSubmitEmail : onSubmitCode)}
+        >
+          <h2 className="Info-Title">
+            {step === 1 ? "Recover Account" : "Verify Code"}
+          </h2>
           {step === 1 ? (
             <FormGroup
               id="email"
-              label="Correo Electrónico"
+              label="Email"
               type="email"
               register={register}
               rules={{
-                required: "El correo electrónico es obligatorio",
+                required: "Email is required",
                 pattern: {
                   value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
-                  message: "El correo electrónico no es válido",
+                  message: "The email is not valid",
                 },
               }}
               errors={errors}
@@ -120,20 +122,20 @@ const PasswordRecovery = () => {
           ) : (
             <FormGroup
               id="code"
-              label="Código de Recuperación"
+              label="Recovery Code"
               register={register}
               rules={{
-                required: "El código de recuperación es obligatorio",
+                required: "Recovery code is required",
                 minLength: {
                   value: 6,
-                  message: "El código debe tener al menos 6 caracteres",
+                  message: "The code must be at least 6 characters",
                 },
               }}
               errors={errors}
             />
           )}
           <button className="Button-Forms" type="submit">
-            {step === 1 ? "Enviar Código" : "Verificar Código"}
+            {step === 1 ? "Send Code" : "Verify Code"}
           </button>
         </form>
       </div>

@@ -40,11 +40,15 @@ const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
   return (
     <div className="Dialog-Overlay">
       <div className="Dialog-Content">
-        <h2>Mantener sesión</h2>
-        <p>¿Desea mantener la sesión iniciada?</p>
+        <h2>Keep session</h2>
+        <p>Do you want to stay logged in?</p>
         <div className="Dialog-Actions">
-          <button className="Button-Forms" onClick={() => onConfirm(true)}>Sí</button>
-          <button className="Button-Forms" onClick={() => onConfirm(false)}>No</button>
+          <button className="Button-Forms" onClick={() => onConfirm(true)}>
+            Sí
+          </button>
+          <button className="Button-Forms" onClick={() => onConfirm(false)}>
+            No
+          </button>
         </div>
       </div>
     </div>
@@ -57,7 +61,7 @@ CustomDialog.propTypes = {
   onConfirm: PropTypes.func.isRequired,
 };
 
-const Signup = ({ onRegister, title, description}) => {
+const Signup = ({ onRegister, title, description }) => {
   const {
     register,
     handleSubmit,
@@ -92,54 +96,55 @@ const Signup = ({ onRegister, title, description}) => {
     }
     setShowDialog(false);
     onRegister();
-    navigate("/dashboardlinks");  
+    navigate("/dashboardlinks");
   };
 
   return (
     <div className="Sing-usuario">
       <div className="GridArea animationFade">
         <div className="Welcome">
-          <h2 className="Info-Title">Registro en {title}</h2>
+          <h2 className="Info-Title">Sign Up in TinyFy</h2>
           <div className="Welcome-Text">
-            {description} Si ya tienes una cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea una para comenzar.
+            If you already have an account, log in to continue. If you don't
+            have an account, create one to get started.
           </div>
           {(step === 1 || step === 2) && (
             <p className="Redirect-Text">
-              ¿Ya tienes una cuenta?{" "}
+              Do you already have an account?{" "}
               <Link className="Link-Forms transitionBorder" to="../Signin">
-                Inicia sesión aquí
+                Sign In here
               </Link>
             </p>
           )}
         </div>
         <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
-          <h2 className="Info-Title">Registrarse</h2>
+          <h2 className="Info-Title">Sign Up</h2>
           {step === 1 && (
             <>
               <FormGroup
                 id="firstName"
-                label="Nombre"
+                label="Name"
                 register={register}
-                rules={{ required: "El nombre es obligatorio" }}
+                rules={{ required: "The name is required" }}
                 errors={errors}
               />
               <FormGroup
                 id="lastName"
-                label="Apellido"
+                label="Last name"
                 register={register}
-                rules={{ required: "El apellido es obligatorio" }}
+                rules={{ required: "Last name is required" }}
                 errors={errors}
               />
               <FormGroup
                 id="email"
-                label="Correo Electrónico"
+                label="Email"
                 type="email"
                 register={register}
                 rules={{
-                  required: "El correo electrónico es obligatorio",
+                  required: "Email is required",
                   pattern: {
                     value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
-                    message: "El correo electrónico no es válido",
+                    message: "The email is not valid",
                   },
                 }}
                 errors={errors}
@@ -154,27 +159,27 @@ const Signup = ({ onRegister, title, description}) => {
             <>
               <FormGroup
                 id="password"
-                label="Contraseña"
+                label="Password"
                 type="password"
                 register={register}
                 rules={{
-                  required: "La contraseña es obligatoria",
+                  required: "Password is required",
                   minLength: {
                     value: 6,
-                    message: "La contraseña debe tener al menos 6 caracteres",
+                    message: "Password must be at least 6 characters",
                   },
                 }}
                 errors={errors}
               />
               <FormGroup
                 id="passwordConfirm"
-                label="Confirmar Contraseña"
+                label="Confirm Password"
                 type="password"
                 register={register}
                 rules={{
-                  required: "La confirmación de la contraseña es obligatoria",
+                  required: "Password confirmation is mandatory",
                   validate: (value) =>
-                    value === password || "Las contraseñas no coinciden",
+                    value === password || "Passwords do not match",
                 }}
                 errors={errors}
               />
@@ -185,7 +190,7 @@ const Signup = ({ onRegister, title, description}) => {
           )}
         </form>
       </div>
-      <CustomDialog 
+      <CustomDialog
         isOpen={showDialog}
         onClose={() => setShowDialog(false)}
         onConfirm={handleKeepSession}

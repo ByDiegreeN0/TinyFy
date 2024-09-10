@@ -115,7 +115,7 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
           {showModal && (
             <div className="modal">
               <div className="modal-content">
-                <h2>Acortar Nuevo Link</h2>
+                <h2>Shorten New Link</h2>
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label htmlFor="name">Link Name</label>
@@ -126,8 +126,10 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
                     <input type="url" id="url" name="url" required />
                   </div>
                   <div className="form-actions">
-                    <button type="submit">Crear</button>
-                    <button type="button" onClick={() => setShowModal(false)}>Cancelar</button>
+                    <button type="submit">Create</button>
+                    <button type="button" onClick={() => setShowModal(false)}>
+                      Cancel
+                    </button>
                   </div>
                 </form>
               </div>

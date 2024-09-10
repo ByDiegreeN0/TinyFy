@@ -40,18 +40,22 @@ const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
   return (
     <div className="Dialog-Overlay">
       <div className="Dialog-Content">
-        <h2>Mantener sesión</h2>
-        <p>¿Desea mantener la sesión iniciada?</p>
+        <h2>Keep session</h2>
+        <p>Do you want to stay logged in?</p>
         <div className="Dialog-Actions">
-          <button className="Button-Forms" onClick={() => onConfirm(true)}>Sí</button>
-          <button className="Button-Forms" onClick={() => onConfirm(false)}>No</button>
+          <button className="Button-Forms" onClick={() => onConfirm(true)}>
+            Yes
+          </button>
+          <button className="Button-Forms" onClick={() => onConfirm(false)}>
+            No
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-const Signin = ({ onLogin,title, description, logoSrc }) => {
+const Signin = ({ onLogin, title, description, logoSrc }) => {
   const {
     register,
     handleSubmit,
@@ -62,7 +66,6 @@ const Signin = ({ onLogin,title, description, logoSrc }) => {
 
   const onSubmit = (data) => {
     console.log(data);
-    // En una aplicación real, aquí harías una llamada a tu API de autenticación
     setShowDialog(true);
   };
 
@@ -80,58 +83,64 @@ const Signin = ({ onLogin,title, description, logoSrc }) => {
   return (
     <div className="Sing-usuario animationFade">
       <div className="GridArea">
-        <div className="Welcome" title={title} description={description} logoSrc={logoSrc}>
-          <h1 className="Info-Title">Bienvenido</h1>
+        <div
+          className="Welcome"
+          title={title}
+          description={description}
+          logoSrc={logoSrc}
+        >
+          <h1 className="Info-Title">Welcome</h1>
           <p className="Welcome-Text">
-            Bienvenidos al acortador de links {title}. Si ya tienes una
-            cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
-            una para comenzar.
+            Welcome to the link shortener{title}. If you already have one
+            account, log in to continue. If you don't have an account, create
+            one to start.
           </p>
           <Link className="Redirect-Text" to="../Signup">
-            ¿No tienes cuenta?{" "}
-            <span className="Link-Forms transitionBorder">Regístrate</span>
-          </Link> <br /> <br />
+            Don't have an account?{" "}
+            <span className="Link-Forms transitionBorder">Sign up</span>
+          </Link>{" "}
+          <br /> <br />
           <Link className="Redirect-Text" to="../PasswordRecovery">
-            ¿Olvidaste tu contraseña?{" "}
-            <span className="Link-Forms transitionBorder">Restablecer</span>
+            Forgot your password?{" "}
+            <span className="Link-Forms transitionBorder">Restore</span>
           </Link>
         </div>
         <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
-          <h2 className="Info-Title">Inicio de Sesión</h2>
+          <h2 className="Info-Title">Sign In</h2>
           <FormGroup
             id="email"
-            label="Correo Electrónico"
+            label="Email"
             type="email"
             register={register}
             rules={{
-              required: "El correo electrónico es obligatorio",
+              required: "Email is required",
               pattern: {
                 value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
-                message: "El correo electrónico no es válido",
+                message: "The email is not valid",
               },
             }}
             errors={errors}
           />
           <FormGroup
             id="password"
-            label="Contraseña"
+            label="Password"
             type="password"
             register={register}
             rules={{
-              required: "La contraseña es obligatoria",
+              required: "Password is required",
               minLength: {
                 value: 6,
-                message: "La contraseña debe tener al menos 6 caracteres",
+                message: "Password must be at least 6 characters",
               },
             }}
             errors={errors}
           />
           <button className="Button-Forms" type="submit">
-            Iniciar Sesión
+            Sign In
           </button>
         </form>
       </div>
-      <CustomDialog 
+      <CustomDialog
         isOpen={showDialog}
         onClose={() => setShowDialog(false)}
         onConfirm={handleKeepSession}
