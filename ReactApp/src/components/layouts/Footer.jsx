@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Svg/Logos/TInyFyLogoNombreBlanco.svg";
 import "../styles/stylesLayouts/Footer.css";
+import "../styles/stylesUtils/shape-divider1036.css"
 
 const Footer = () => {
   return (

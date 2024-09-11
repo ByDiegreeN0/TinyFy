@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Svg/Logos/TInyFyLogoNombreBlanco.svg";
 import Footer from "../layouts/Footer";
-import "../styles/stylesUtils/shape-divider1036.css";
 import "../styles/stylesUtils/shapedividers_com-3875.css";
 import "../styles/stylesPages/Home.css";
 

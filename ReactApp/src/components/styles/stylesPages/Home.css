@@ -219,6 +219,8 @@
 .card:hover .paragraph-features {
   display: inherit;
 }
+
+
 /* Media query para pantallas más pequeñas */
 @media screen and (max-width: 768px) {
   .home-content {
@@ -228,14 +230,53 @@
 
   .home-logo {
     display: none;
-    /* Ocultar el logo en pantallas más pequeñas */
   }
+
   .container-caracteristicas {
     flex-direction: column;
   }
-  .card {
+
+  .highlight {
+    font-size: 75px;
+  }
+
+  .description_p {
+    font-size: 28px;
+    margin: 10px 0;
+  }
+
+  .button {
     width: 100%;
-    height: auto;
+    font-size: 30px;
+    margin: .5rem;
+    text-align: center;
+    height: 50px;
+  }
+
+  .container-caracteristicas {
+    height: max-content;
+    z-index: 10;
+  }
+
+  .card {
+    width: 500px;
     border-radius: 1rem;
+    margin: 5rem 0;
+  }
+
+  .card-content {
+    padding: 20px;
+  }
+
+  .card-content h3 {
+    font-size: 26px;
+    margin: 2rem 1rem;
+
+  }
+
+  .paragraph-features {
+    font-size: 20px;
+    padding: 0 3rem;
+
   }
 }
