@@ -8,11 +8,8 @@ from models.SupportTicketModel import SupportTicket
 @app.route('/tickets', methods=['POST'])
 def create_ticket():
     data = request.json
-    new_ticket = Ticket(
-        Title=data['Title'],
-        Description=data['Description'],
-        CreatedAt=data.get('CreatedAt'),
-        UpdatedAt=data.get('UpdatedAt'),
+    new_ticket = SupportTicket(
+        UserId=data.get('UserId'),
         Status=data.get('Status')
     )
     new_ticket.UserId = data.get('UserId', None)
@@ -26,12 +23,10 @@ def get_tickets():
     tickets = SupportTicket.query.all()
     return jsonify([{
         'TicketId': t.TicketId,
-        'Title': t.Title,
-        'Description': t.Description,
-        'CreatedAt': t.CreatedAt,
-        'UpdatedAt': t.UpdatedAt,
         'Status': t.Status,
-        'UserId': t.UserId
+        'UserId': t.UserId,
+        'CreatedAt': t.CreatedAt,
+
     } for t in tickets])
 
 @app.route('/tickets/<int:ticket_id>', methods=['GET'])
@@ -39,12 +34,9 @@ def get_ticket(ticket_id):
     ticket = SupportTicket.query.get_or_404(ticket_id)
     return jsonify({
         'TicketId': ticket.TicketId,
-        'Title': ticket.Title,
-        'Description': ticket.Description,
-        'CreatedAt': ticket.CreatedAt,
-        'UpdatedAt': ticket.UpdatedAt,
         'Status': ticket.Status,
-        'UserId': ticket.UserId
+        'UserId': ticket.UserId,
+        'CreatedAt': ticket.CreatedAt,
     })
 
 # Update
@@ -52,10 +44,7 @@ def get_ticket(ticket_id):
 def update_ticket(ticket_id):
     ticket = SupportTicket.query.get_or_404(ticket_id)
     data = request.json
-    ticket.Title = data.get('Title', ticket.Title)
-    ticket.Description = data.get('Description', ticket.Description)
     ticket.CreatedAt = data.get('CreatedAt', ticket.CreatedAt)
-    ticket.UpdatedAt = data.get('UpdatedAt', ticket.UpdatedAt)
     ticket.Status = data.get('Status', ticket.Status)
     ticket.UserId = data.get('UserId', ticket.UserId)
     db.session.commit()
