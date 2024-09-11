@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
 from app import app
 from models.User import db
 
