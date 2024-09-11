@@ -38,7 +38,6 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     navigate("/");
   };
 
-  // Header para usuarios no autenticados
   const UnauthenticatedHeader = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const toggleMenu = () => {
@@ -95,7 +94,6 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     );
   };
 
-  // Header para usuarios autenticados
   const AuthenticatedHeader = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -103,7 +101,6 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     const BotonLink = () => {
       const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission here
         setShowModal(false);
       };
 
@@ -150,6 +147,7 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
             <img
               src={user?.profilePicture || defaultAvatar}
               alt={`${user?.name || "Usuario"}'s profile picture`}
+              className="UserProfilePicture"
             />
             <h1 className="title-nav">{user?.name || "Usuario"}</h1>
           </Link>

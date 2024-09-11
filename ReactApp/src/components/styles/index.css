@@ -36,15 +36,9 @@ body {
   border: 3px solid transparent; /* Añade un borde transparente */
   background-clip: content-box; /* Ajusta el recorte de fondo */
   opacity: 0.2; /* Establece una opacidad inicial */
-  transition: opacity 0.3s ease; /* Añade una transición suave para la opacidad */
+  transition: opacity 0.3s ease;
 }
 
-/* Personaliza el track de la barra de scroll */
 ::-webkit-scrollbar-track {
   display: none;
-}
-
-/* Cambia la opacidad del thumb al pasar el mouse */
-::-webkit-scrollbar-thumb:hover {
-  opacity: 1; 
 }
