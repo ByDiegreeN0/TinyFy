@@ -5,6 +5,7 @@ import SignUp from './components/pages/Signup';
 import Header from './components/layouts/Header';
 import Home from './components/pages/Home';
 import DashboardLinks from './components/pages/DashboardLinks';
+import DashboardEstadisticas from './components/pages/DashboardEstadisticas';
 import DashboardReferrals from './components/pages/DashboardReferrals';
 import DashboardPayouts from './components/pages/DashboardPayouts';
 import DashboardSupport from './components/pages/DashboardSupport';
@@ -120,6 +121,10 @@ const App = () => {
                 <Route 
                     path="/dashboardlinks"   
                     element={<AuthenticatedRoute><DashboardLinks title={title} /></AuthenticatedRoute>} 
+                />
+                <Route 
+                    path="/dashboardestadisticas"   
+                    element={<AuthenticatedRoute><DashboardEstadisticas /></AuthenticatedRoute>} 
                 />
                 <Route 
                     path="/dashboardreferrals"   

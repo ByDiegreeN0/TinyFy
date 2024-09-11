@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import link from "../../assets/Svg/Nav/Link.svg";
+import Estadisticas from "../../assets/Svg/Nav/Estadisticas.svg";
 import referrals from "../../assets/Svg/Nav/Referrals.svg";
 import payouts from "../../assets/Svg/Nav/payouts.svg";
 import support from "../../assets/Svg/Nav/support.svg";
@@ -160,6 +161,15 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
             >
               <img src={link} alt="Links" className="Nav-Ico" />
               <div className="text-nav">Links</div>
+            </Link>
+            <Link
+              to="/dashboardestadisticas"
+              className={`Nav-Link ${
+                location.pathname === "/dashboardestadisticas" ? "active" : ""
+              }`}
+            >
+              <img src={Estadisticas} alt="Links" className="Nav-Ico" />
+              <div className="text-nav">Statistics</div>
             </Link>
             <Link
               to="/dashboardreferrals"

@@ -37,7 +37,7 @@ const BotonsHome = () => (
 
 const Features = ({ title }) => (
   <div className="features shapedividers_com-1036">
-    <h2 className="title-features">Characteristics</h2>
+    <h2 className="title-features">Features</h2>
     <div className="container-caracteristicas animationFlip">
       <div className="card">
         <div className="card-content">

@@ -9,7 +9,7 @@
   --color-background: #fff;
   --color-inputs: #f0f0f0;
   --color-error: #ff0000;
-  --font-family-primary: "Roboto", "Helvetica Neue", "Helvetica", ;
+  --font-family-primary: "Roboto", sans-serif;
 }
 
 * {
@@ -23,19 +23,18 @@ body {
   display: inline-flex;
 }
 
-/* Personaliza la barra de scroll en navegadores basados en WebKit (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 12px; /* Ancho de la barra de scroll vertical */
-  height: 12px; /* Altura de la barra de scroll horizontal */
+  width: 12px; 
+  height: 12px; 
 }
 
-/* Personaliza la parte de la barra de scroll */
+
 ::-webkit-scrollbar-thumb {
-  background-color: #333; /* Color de la barra */
-  border-radius: 6px; /* Bordes redondeados */
-  border: 3px solid transparent; /* Añade un borde transparente */
-  background-clip: content-box; /* Ajusta el recorte de fondo */
-  opacity: 0.2; /* Establece una opacidad inicial */
+  background-color: #333; 
+  border-radius: 6px; 
+  border: 3px solid transparent; 
+  background-clip: content-box; 
+  opacity: 0.2; 
   transition: opacity 0.3s ease;
 }
 
