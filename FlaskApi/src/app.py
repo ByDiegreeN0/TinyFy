@@ -9,6 +9,8 @@ from models import *
 app = Flask(__name__)
 app.config.from_object(config['development'])
 
+app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+
 # Inicializa JWT
 jwt = JWTManager(app)
 

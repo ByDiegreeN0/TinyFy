@@ -1,4 +1,6 @@
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+
 from app import app
 from models.User import db
 
@@ -6,6 +8,8 @@ from models.SupportTicketModel import SupportTicket
 
 # Create
 @app.route('/tickets', methods=['POST'])
+@jwt_required() # con este metodo se protege la ruta
+
 def create_ticket():
     data = request.json
     new_ticket = SupportTicket(
@@ -19,6 +23,8 @@ def create_ticket():
 
 # Read
 @app.route('/tickets', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_tickets():
     tickets = SupportTicket.query.all()
     return jsonify([{
@@ -30,6 +36,8 @@ def get_tickets():
     } for t in tickets])
 
 @app.route('/tickets/<int:ticket_id>', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_ticket(ticket_id):
     ticket = SupportTicket.query.get_or_404(ticket_id)
     return jsonify({
@@ -41,6 +49,8 @@ def get_ticket(ticket_id):
 
 # Update
 @app.route('/tickets/<int:ticket_id>', methods=['PUT'])
+@jwt_required() # con este metodo se protege la ruta
+
 def update_ticket(ticket_id):
     ticket = SupportTicket.query.get_or_404(ticket_id)
     data = request.json
@@ -52,6 +62,8 @@ def update_ticket(ticket_id):
 
 # Delete
 @app.route('/tickets/<int:ticket_id>', methods=['DELETE'])
+@jwt_required() # con este metodo se protege la ruta
+
 def delete_ticket(ticket_id):
     ticket = SupportTicket.query.get_or_404(ticket_id)
     db.session.delete(ticket)
