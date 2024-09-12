@@ -1,29 +1,39 @@
 footer {
     display: flex;
     width: 100vw;
-    height: 35vh;
+    height: auto; /* Changed to auto for better responsiveness */
+    flex-direction: column; /* Stack children vertically */
     justify-content: center;
     align-items: center;
     background-color: var(--color-tertiary);
+    position: relative; /* Changed to relative */
+    padding: 20px; /* Added padding for better spacing */
+    box-sizing: border-box; /* Ensure padding is included in width/height */
 }
-.Derechos {
+
+.footer-content {
+    display: flex;
+    flex-direction: row; /* Align items horizontally */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Optional: set a max-width for better layout control */
+    flex-wrap: wrap; /* Wrap items on smaller screens */
+}
+
+.derechos {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 90%;
     color: var(--color-background);
-}   
-
-.Footer-Logo {
-    width: 100px;
-    height: 100px;
-    align-self: center;
-    text-align: center;
+    margin-bottom: 20px; /* Added margin for spacing */
 }
 
-.Name-Footer {
-    text-shadow: 0 0 10px var(--color-intermediate-two);
+.footer-logo {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px; /* Added margin for spacing */
 }
 
 .info-footer {
@@ -31,23 +41,28 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 90%;
     color: var(--color-background);
     margin: 0 30px;
     list-style: none;
 }
+
 .info-footer a {
     color: var(--color-background);
     text-decoration: none;
 }
+
+.info-footer ul {
+    padding: 0; /* Remove default padding */
+}
+
+.info-footer ul li {
+    margin: 5px 0; /* Add margin between links */
+}
+
 .social-links {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: var(--color-background);
-}
-.useful-links ul {
-    color: var(--color-background);
-    list-style: none;
 }
