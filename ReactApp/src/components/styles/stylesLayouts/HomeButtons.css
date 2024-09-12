@@ -1,0 +1,28 @@
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px;
+  }
+  
+  .button {
+    text-align: center;
+    width: 170px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: var(--color-background);
+    border: 1px solid var(--color-background);
+    transition: background-color 0.3s ease;
+  }
+  
+  .button.primary:hover,
+  .button.secondary:hover {
+    opacity: 0.8;
+  }
+
+
+  

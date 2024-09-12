@@ -1,0 +1,153 @@
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--color-background);
+    width: 100%;
+}
+
+.home-content {
+    display: grid;
+    text-align: center;
+    width: 100%;
+    padding: 50px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    background: linear-gradient(351deg,
+            rgba(174, 211, 255, 1) 0%,
+            rgba(96, 169, 255, 1) 25%,
+            rgba(0, 117, 255, 1) 50%,
+            rgba(55, 146, 255, 1) 75%,
+            rgba(132, 188, 255, 1) 100%);
+    height: auto;
+}
+
+.description {
+    font-size: 1rem;
+    color: white;
+    text-align: left;
+    grid-column: 1 / span 2;
+    margin: 50px;
+    position: relative;
+}
+
+.highlight {
+    font-size: 6rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.393);
+    margin-top: -20px;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 30px 0;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    color: var(--color-background);
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+}
+
+.description_p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 50px 0;
+}
+
+
+
+.home-logo {
+    max-width: 500px;
+    width: 100%;
+    justify-self: center;
+    align-self: center;
+    grid-column: 3 / span 2;
+}
+
+/* Media queries para pantallas medianas */
+@media screen and (max-width: 1024px) {
+    .home-content {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .card {
+      max-width: 350px;
+    }
+  
+    .home-logo {
+      display: none;
+    }
+  
+    .highlight {
+      font-size: 3rem; 
+    }
+  }
+  
+  /* Media queries para pantallas pequeñas */
+  @media screen and (max-width: 768px) {
+    .home-content {
+      grid-template-columns: 1fr; 
+      margin: auto;
+    }
+  
+    .home-logo {
+      display: none;
+    }
+  
+    .container-caracteristicas {
+      flex-direction: column;
+    }
+  
+    .highlight {
+      font-size: 3rem;
+    }
+  
+    .description_p {
+      font-size: 1rem;
+    }
+  
+    .button {
+      width: 100%;
+      font-size: 1rem;
+      height: 50px;
+    }
+  
+    .card {
+      width: 90%; 
+      margin: 2rem 0;
+    }
+  
+    .card-content h3 {
+      font-size: 1.5rem;
+    }
+  
+    .paragraph-features {
+      font-size: 1rem;
+    }
+  }
+  
+  /* Media queries para pantallas muy pequeñas */
+  @media screen and (max-width: 480px) {
+    .title {
+      font-size: 1.8rem; 
+    }
+  
+    .highlight {
+      font-size: 2.5rem; 
+    }
+  
+    .card {
+      width: 100%;
+    }
+  
+    .container-caracteristicas {
+      flex-direction: column;
+      padding: 0;
+    }
+  
+    .title-features {
+      font-size: 3rem;
+    }
+  }

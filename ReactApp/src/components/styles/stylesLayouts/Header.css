@@ -7,7 +7,7 @@
   align-items: center;
   padding: 0.5rem;
   background-color: transparent;
-  z-index: 99999999999999;
+  z-index: 99;
 }
 
 .HomeNav .Nav-Logo {
@@ -143,7 +143,7 @@
 @media screen and (max-width: 768px) {
   .Nav {
     display: flex;
-    position: sticky;
+    position: fixed;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
