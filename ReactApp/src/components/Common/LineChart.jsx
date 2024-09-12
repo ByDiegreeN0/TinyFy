@@ -1,44 +1,74 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
 
-
-ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const LineChart = () => {
-
   const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
     datasets: [
       {
-        label: 'Ventas 2024',
-        data: [65, 59, 80, 81, 56, 55, 40],
+        label: 'Enlace 1 (Blog)',
+        data: [120, 190, 300, 250, 200, 400, 380],
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: true, 
-        tension: 0.1 
+        fill: false,
+        tension: 0.4
       },
       {
-        label: 'Ventas 2023',
-        data: [28, 48, 40, 19, 86, 27, 90],
+        label: 'Enlace 2 (Producto)',
+        data: [80, 100, 150, 220, 280, 320, 290],
         borderColor: 'rgba(255, 99, 132, 1)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        fill: true, 
-        tension: 0.1 
+        fill: false,
+        tension: 0.4
+      },
+      {
+        label: 'Enlace 3 (Social Media)',
+        data: [50, 80, 120, 180, 240, 260, 300],
+        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        fill: false,
+        tension: 0.4
       }
     ]
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
       },
+      title: {
+        display: true,
+        text: 'Estadísticas de Clics por Enlace Acortado'
+      },
       tooltip: {
+        mode: 'index',
+        intersect: false,
         callbacks: {
-          label: function(tooltipItem) {
-            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+          label: function(context) {
+            return `${context.dataset.label}: ${context.parsed.y} clics`;
           }
         }
       }
@@ -47,19 +77,25 @@ const LineChart = () => {
       x: {
         title: {
           display: true,
-          text: 'Meses'
+          text: 'Día de la semana'
         }
       },
       y: {
         title: {
           display: true,
-          text: 'Ventas'
-        }
+          text: 'Número de clics'
+        },
+        beginAtZero: true
       }
+    },
+    interaction: {
+      mode: 'nearest',
+      axis: 'x',
+      intersect: false
     }
   };
 
-  return <Line data={data} options={options} />
+  return <Line data={data} options={options} />;
 };
 
 export default LineChart;

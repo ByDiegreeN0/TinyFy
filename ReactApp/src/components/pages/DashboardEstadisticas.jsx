@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BarChart from "../Common/BarChart";
 import PieChart from "../Common/PieChart";
+import LineChart from "../Common/LineChart"
 import "../styles/stylesPages/DashboardEstadisticas.css";
 
 const DashboardEstadisticas = () => {
@@ -22,7 +23,8 @@ const DashboardEstadisticas = () => {
         <BarChart />
       </div>
       <div className="container-charts">
-        <div className="Charts Grafica-line">
+        <div className="Charts Grafica-line" style={{ width: '100%', height: '400px' }}>
+          <LineChart />
         </div>
         <div className="Charts Grafica-Pie">
           <PieChart />
