@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trash2 } from "lucide-react";
+import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import "../styles/stylesPages/DashboardLinks.css";
 
 export default function DashboardLinks() {
@@ -14,6 +14,7 @@ export default function DashboardLinks() {
     { id: 2, name: "Example 2", shortUrl: "ex2.com", targetUrl: "https://example2.com", views: 200, createdAt: "2023-07-30" },
   ]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [expandedCard, setExpandedCard] = useState(null);
   const linksPerPage = 10;
 
   useEffect(() => {
@@ -56,13 +57,17 @@ export default function DashboardLinks() {
     const currentDate = new Date();
     return createdDate.getMonth() === currentDate.getMonth() && createdDate.getFullYear() === currentDate.getFullYear();
   }).length;
-  const totalIncome = links.reduce((sum, link) => sum + link.views, 0) * 0.01; 
+  const totalIncome = links.reduce((sum, link) => sum + link.views, 0) * 0.01;
 
   const indexOfLastLink = currentPage * linksPerPage;
   const indexOfFirstLink = indexOfLastLink - linksPerPage;
   const currentLinks = links.slice(indexOfFirstLink, indexOfLastLink);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const toggleDetails = (id) => {
+    setExpandedCard(expandedCard === id ? null : id);
+  };
 
   return (
     <motion.div
@@ -86,7 +91,7 @@ export default function DashboardLinks() {
           <p>${totalIncome.toFixed(2)}</p>
         </motion.div>
       </div>
-      
+
       {links.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -155,6 +160,49 @@ export default function DashboardLinks() {
               </AnimatePresence>
             </tbody>
           </table>
+          <div className="mobile-link-list">
+            <AnimatePresence>
+              {currentLinks.map(link => (
+                <motion.div
+                  key={link.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="mobile-link-card"
+                >
+                  <div className="mobile-link-header" onClick={() => toggleDetails(link.id)}>
+                    <span className="mobile-link-name">{link.name}</span>
+                    {expandedCard === link.id ? <ChevronUp className="icon" /> : <ChevronDown className="icon" />}
+                  </div>
+                  {expandedCard === link.id && (
+                    <div className="mobile-link-details">
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Short URL:</span>
+                        <span className="mobile-link-value">{link.shortUrl}</span>
+                      </div>
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Target URL:</span>
+                        <span className="mobile-link-value">{link.targetUrl}</span>
+                      </div>
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Views:</span>
+                        <span className="mobile-link-value">{link.views}</span>
+                      </div>
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Created At:</span>
+                        <span className="mobile-link-value">{link.createdAt}</span>
+                      </div>
+                      <button className="btn-delete" onClick={() => handleDelete(link.id)}>
+                        <Trash2 className="icon" />
+                        Eliminar
+                      </button>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
           <div className="pagination">
             <button
               onClick={() => paginate(currentPage - 1)}
@@ -177,6 +225,7 @@ export default function DashboardLinks() {
       {showModal && (
         <div className="modal">
           <div className="modal-content">
+            <button className="modal-close" onClick={() => setShowModal(false)}>&times;</button>
             <h2>Shorten New Link</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
