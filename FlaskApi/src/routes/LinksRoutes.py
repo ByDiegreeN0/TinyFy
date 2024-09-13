@@ -1,27 +1,26 @@
 from flask import request, jsonify
 from app import app
 from models.User import db
-
 from models.LinksModel import Links
 
-# Create
+# Crear un nuevo enlace
 @app.route('/links', methods=['POST'])
 def create_link():
     data = request.json
     new_link = Links(
+        LinkName=data['LinkName'],
         LinkUrl=data['LinkUrl'],
+        LinkShortUrl=data.get('LinkShortUrl'),
         ClickCount=data['ClickCount'],
-        DailyViewCount=data['DailyViewCount'],
-        MonthlyViewCount=data['MonthlyViewCount'],
-        YearlyViewCount=data['YearlyViewCount'],
-        CreatedAt=data.get('CreatedAt')
+        Earnings=data.get('Earnings', 0),
+        CreatedAt=data.get('CreatedAt'),
+        userId=data.get('userId')
     )
-    new_link.userId = data.get('userId', None)
     db.session.add(new_link)
     db.session.commit()
     return jsonify({'message': 'Link created successfully'}), 201
 
-# Read
+# Obtener todos los enlaces
 @app.route('/links', methods=['GET'])
 def get_links():
     links = Links.query.all()
@@ -36,6 +35,7 @@ def get_links():
         'userId': l.userId
     } for l in links])
 
+# Obtener un enlace por ID
 @app.route('/links/<int:link_id>', methods=['GET'])
 def get_link(link_id):
     link = Links.query.get_or_404(link_id)
@@ -50,7 +50,7 @@ def get_link(link_id):
         'userId': link.userId
     })
 
-# Update
+# Actualizar un enlace por ID
 @app.route('/links/<int:link_id>', methods=['PUT'])
 def update_link(link_id):
     link = Links.query.get_or_404(link_id)
@@ -65,7 +65,7 @@ def update_link(link_id):
     db.session.commit()
     return jsonify({'message': 'Link updated successfully'})
 
-# Delete
+# Eliminar un enlace por ID
 @app.route('/links/<int:link_id>', methods=['DELETE'])
 def delete_link(link_id):
     link = Links.query.get_or_404(link_id)
