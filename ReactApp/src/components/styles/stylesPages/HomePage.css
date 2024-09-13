@@ -33,7 +33,7 @@
 }
 
 .highlight {
-    font-size: 6rem;
+    font-size: 5rem;
     font-weight: bold;
     color: rgba(255, 255, 255, 0.393);
     margin-top: -20px;
@@ -149,5 +149,11 @@
   
     .title-features {
       font-size: 3rem;
+    }
+  }
+
+  @media screen and (max-width: 419px){
+    .highlight {
+      font-size: 1.8rem;
     }
   }
