@@ -23,4 +23,4 @@ with app.app_context():
     db.create_all()  # Crea todas las tablas en el orden correcto
 
 if __name__ == "__main__":
-    app.run(port=8000)
+    app.run(port=5000)
