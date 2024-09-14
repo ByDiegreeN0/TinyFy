@@ -11,6 +11,7 @@ import defaultAvatar from "../../assets/Img/AvatarUser.jpg";
 import BotonLinkIcon from "../../assets/Svg/Icon/BotonLink.svg";
 import "../styles/stylesLayouts/HeaderDash.css";
 import "../styles/stylesLayouts/Header.css";
+import LoadingScreen from "C:/Users/CARLOS/Documentos/TinyFy/ReactApp/src/components/Common/LoadingScreen.jsx";
 
 const Header = ({ isAuthenticated, onLogout, user }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -98,11 +99,44 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
   const AuthenticatedHeader = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const BotonLink = () => {
-      const handleSubmit = (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
-        setShowModal(false);
+        setIsLoading(true);
+        const name = e.target.name.value;
+        const url = e.target.url.value;
+        const newLink = {
+          LinkUrl: url,
+          LinkName: name,
+          ClickCount: 0,
+          DailyViewCount: 0,
+          MonthlyViewCount: 0,
+          YearlyViewCount: 0,
+          CreatedAt: new Date().toISOString(),
+        };
+        try {
+          const response = await fetch("http://localhost:8000/links", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newLink),
+          });
+          if (response.ok) {
+            console.log("Enlace creado con éxito");
+            setShowModal(false);
+            // Redirigir al dashboard de enlaces y recargar la página
+            window.location.href = '/dashboardlinks';
+          } else {
+            console.error("Error al crear el enlace");
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.error("Error al crear el enlace:", error);
+          setIsLoading(false);
+        }
       };
 
       return (
@@ -205,6 +239,7 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
           </button>
         </nav>
         <BotonLink />
+        {isLoading && <LoadingScreen />}
       </>
     );
   };
