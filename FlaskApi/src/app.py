@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from config import config
-from models.User import db  # Asegúrate de que db esté correctamente importado
+from models.User import db  
 
 # Importa todos los modelos después de inicializar `db`
 from models import *
@@ -17,12 +17,20 @@ CORS(app)
 # Inicializa JWT
 jwt = JWTManager(app)
 
+
 # Inicializa SQLAlchemy
 db.init_app(app)
 
 # Importa rutas y servicios después de la configuración de `db`
 from routes import *
 from services import *
+
+# Aqui se coloca el codigo secreto para generar tokens
+app.config["JWT_SECRET_KEY"] = "vvn1IiwwBFj5v29ndpOH"  
+
+# Inicializa JWT
+jwt = JWTManager(app)
+
 
 with app.app_context():
     db.create_all()  # Crea todas las tablas en el orden correcto

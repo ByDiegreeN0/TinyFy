@@ -1,5 +1,5 @@
-from flask import Blueprint, request, jsonify
-from werkzeug.security import generate_password_hash
+from flask import Flask, request, jsonify
+import bcrypt
 from models.User import User, db
 from app import app
 
@@ -7,7 +7,7 @@ from app import app
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.json
-    hashed_password = generate_password_hash(data['password'])
+    hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
     new_user = User(username=data['username'], email=data['email'], password=hashed_password, RoleId=data['RoleId'])
     db.session.add(new_user)
     db.session.commit()
@@ -16,6 +16,7 @@ def create_user():
 # Read
 @app.route('/users', methods=['GET'])
 def get_users():
+    
     users = User.query.all()
     return jsonify([{'id': user.id, 'username': user.username, 'email': user.email} for user in users])
 
@@ -32,7 +33,7 @@ def update_user(user_id):
     user.username = data.get('username', user.username)
     user.email = data.get('email', user.email)
     if 'password' in data:
-        user.password = generate_password_hash(data['password'])
+        user.password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
     user.RoleId = data.get('RoleId', user.RoleId)
     db.session.commit()
     return jsonify({'message': 'User updated successfully'})
@@ -44,3 +45,6 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     return jsonify({'message': 'User deleted successfully'})
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,4 +1,6 @@
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+
 from models.User import db
 from app import app
 
@@ -6,6 +8,8 @@ from models.SystemAnalyticsModel import SystemAnalytics
 
 # Create
 @app.route('/system-analytics', methods=['POST'])
+@jwt_required() # con este metodo se protege la ruta
+
 def create_system_analytics():
     data = request.json
     new_analytics = SystemAnalytics(
@@ -19,6 +23,8 @@ def create_system_analytics():
 
 # Read
 @app.route('/system-analytics', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_system_analytics():
     analytics = SystemAnalytics.query.all()
     return jsonify([{
@@ -30,6 +36,8 @@ def get_system_analytics():
     } for a in analytics])
 
 @app.route('/system-analytics/<int:analytics_id>', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_system_analytics_by_id(analytics_id):
     analytics = SystemAnalytics.query.get_or_404(analytics_id)
     return jsonify({
@@ -42,6 +50,8 @@ def get_system_analytics_by_id(analytics_id):
 
 # Update
 @app.route('/system-analytics/<int:analytics_id>', methods=['PUT'])
+@jwt_required() # con este metodo se protege la ruta
+
 def update_system_analytics(analytics_id):
     analytics = SystemAnalytics.query.get_or_404(analytics_id)
     data = request.json
@@ -56,6 +66,8 @@ def update_system_analytics(analytics_id):
 
 # Delete
 @app.route('/system-analytics/<int:analytics_id>', methods=['DELETE'])
+@jwt_required() # con este metodo se protege la ruta
+
 def delete_system_analytics(analytics_id):
     analytics = SystemAnalytics.query.get_or_404(analytics_id)
     db.session.delete(analytics)
