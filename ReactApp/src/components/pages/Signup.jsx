@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/stylesUtils/TransitionBorder.css";
-import "../styles/stylesUtils/withFadeInOnScroll.css";
+import { motion } from "framer-motion";
 import "../styles/stylesPages/Sign.css";
+import LoadingScreen from "../Common/LoadingScreen";
 
-// Componente para renderizar un grupo de formulario con etiqueta y entrada.
+// FormGroup component definition
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
@@ -15,12 +15,12 @@ const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
     <input
       id={id}
       type={type}
-      className={`Input-Forms ${errors[id] ? "error" : ""}`} // Aplica clase de error si hay errores.
-      {...register(id, rules)} // Registra el campo en el formulario con las reglas de validación.
+      className={`Input-Forms ${errors[id] ? "error" : ""}`}
+      {...register(id, rules)}
     />
     <div className="Error-Container">
       {errors[id] && (
-        <span className="Error-Message">{errors[id].message}</span> // Muestra mensaje de error si existe.
+        <span className="Error-Message">{errors[id].message}</span>
       )}
     </div>
   </div>
@@ -35,37 +35,8 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
-// Componente para mostrar un diálogo modal para la confirmación de sesión.
-const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
-  if (!isOpen) return null; // No renderiza nada si el diálogo no está abierto.
-
-  return (
-    <div className="Dialog-Overlay">
-      <div className="Dialog-Content">
-        <h2>Keep session</h2>
-        <p>Do you want to stay logged in?</p>
-        <div className="Dialog-Actions">
-          <button className="Button-Forms" onClick={() => onConfirm(true)}>
-            Sí
-          </button>
-          <button className="Button-Forms" onClick={() => onConfirm(false)}>
-            No
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-CustomDialog.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-};
-
-// Componente principal de registro.
-const Signup = ({ onRegister, title, description }) => {
-  // Hook para manejar el formulario y su estado.
+// Main Signup component
+const Signup = ({ onRegister }) => {
   const {
     register,
     handleSubmit,
@@ -73,40 +44,64 @@ const Signup = ({ onRegister, title, description }) => {
     watch,
     trigger,
   } = useForm();
-  const [step, setStep] = useState(1); // Estado para rastrear el paso actual del formulario.
-  const [showDialog, setShowDialog] = useState(false); // Estado para controlar la visibilidad del diálogo de confirmación.
-  const password = watch("password"); // Observa el campo de contraseña para la validación de confirmación.
-  const navigate = useNavigate(); // Hook para navegación programática.
+  const [step, setStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const password = watch("password");
+  const navigate = useNavigate();
 
-  // Maneja el envío del formulario.
   const onSubmit = async (data) => {
     if (step === 1) {
-      const isValid = await trigger(["firstName", "lastName", "email"]); // Valida los campos del primer paso.
-      if (isValid) setStep(2); // Avanza al siguiente paso si los campos son válidos.
+      const isValid = await trigger(["firstName", "lastName", "email"]);
+      if (isValid) setStep(2);
     } else if (step === 2) {
-      const isValid = await trigger(["password", "passwordConfirm"]); // Valida los campos del segundo paso.
+      const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
-        console.log(data); // Imprime los datos del formulario en la consola.
-        // Simulación de un registro exitoso.
-        setShowDialog(true); // Muestra el diálogo de confirmación.
+        setIsLoading(true);
+        setApiError(null);
+        try {
+          const response = await fetch('http://localhost:8000/users', { // Actualiza el puerto si es necesario
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: `${data.firstName} ${data.lastName}`,
+              email: data.email,
+              password: data.password,
+              RoleId: 1
+            }),
+          });
+
+          const responseData = await response.json();
+
+          if (!response.ok) {
+            throw new Error(responseData.error || responseData.message || 'Falló el registro');
+          }
+
+          localStorage.setItem("isAuthenticated", "true");
+          onRegister();
+          navigate("/dashboardlinks"); // Ajusta la ruta según tu aplicación
+        } catch (error) {
+          console.error("Error durante el registro:", error);
+          setApiError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
       }
     }
   };
 
-  // Maneja la decisión del usuario en el diálogo de confirmación de sesión.
-  const handleKeepSession = (keep) => {
-    if (keep) {
-      localStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento local si se confirma.
-    } else {
-      sessionStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento de sesión si se niega.
-    }
-    setShowDialog(false); // Cierra el diálogo.
-    onRegister(); // Llama a la función de registro pasada como prop.
-    navigate("/dashboardlinks"); // Navega a la página de enlaces del panel de control.
-  };
-
+  // JSX for the component
   return (
-    <div className="Sing-usuario">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+      className="Sing-usuario"
+    >
+      {isLoading && <LoadingScreen />}
       <div className="GridArea animationFade">
         <div className="Welcome">
           <h2 className="Info-Title">Sign Up in TinyFy</h2>
@@ -155,8 +150,8 @@ const Signup = ({ onRegister, title, description }) => {
                 }}
                 errors={errors}
               />
-              <button className="Button-Forms" type="button" onClick={onSubmit}>
-                Continuar
+              <button className="Button-Forms" type="submit">
+                Continue
               </button>
             </>
           )}
@@ -189,9 +184,10 @@ const Signup = ({ onRegister, title, description }) => {
                 }}
                 errors={errors}
               />
-              <button className="Button-Forms" type="submit">
-                Registrar
+              <button className="Button-Forms" type="submit" disabled={isLoading}>
+                {isLoading ? 'Registering...' : 'Register'}
               </button>
+              {apiError && <p className="Error-Message">{apiError}</p>}
             </>
           )}
 
@@ -207,20 +203,12 @@ const Signup = ({ onRegister, title, description }) => {
           </div>
         </form>
       </div>
-      <CustomDialog
-        isOpen={showDialog}
-        onClose={() => setShowDialog(false)}
-        onConfirm={handleKeepSession}
-      />
-    </div>
+    </motion.div>
   );
 };
 
 Signup.propTypes = {
   onRegister: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  logoSrc: PropTypes.string.isRequired,
 };
 
 export default Signup;
