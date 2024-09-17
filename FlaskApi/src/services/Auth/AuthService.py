@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_jwt_extended import create_access_token
 import bcrypt
+from flask_cors import CORS
 from models.User import User, db
 from app import app
+
+CORS(app)
 
 @app.route('/login', methods=['POST'])
 def login():
