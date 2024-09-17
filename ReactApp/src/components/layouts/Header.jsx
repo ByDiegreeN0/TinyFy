@@ -11,6 +11,7 @@ import defaultAvatar from "../../assets/Img/AvatarUser.jpg";
 import BotonLinkIcon from "../../assets/Svg/Icon/BotonLink.svg";
 import "../styles/stylesLayouts/HeaderDash.css";
 import "../styles/stylesLayouts/Header.css";
+import LoadingScreen from "C:/Users/CARLOS/Documentos/TinyFy/ReactApp/src/components/Common/LoadingScreen.jsx";
 
 const Header = ({ isAuthenticated, onLogout, user }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -74,10 +75,82 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
   const AuthenticatedHeader = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
+<<<<<<< HEAD
+    const BotonLink = () => {
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        const name = e.target.name.value;
+        const url = e.target.url.value;
+        const newLink = {
+          LinkUrl: url,
+          LinkName: name,
+          ClickCount: 0,
+          DailyViewCount: 0,
+          MonthlyViewCount: 0,
+          YearlyViewCount: 0,
+          CreatedAt: new Date().toISOString(),
+        };
+        try {
+          const response = await fetch("http://localhost:8000/links", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newLink),
+          });
+          if (response.ok) {
+            console.log("Enlace creado con éxito");
+            setShowModal(false);
+            // Redirigir al dashboard de enlaces y recargar la página
+            window.location.href = '/dashboardlinks';
+          } else {
+            console.error("Error al crear el enlace");
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.error("Error al crear el enlace:", error);
+          setIsLoading(false);
+        }
+      };
+
+      return (
+        <>
+          <div className="BotonLink" onClick={() => setShowModal(true)}>
+            <img src={BotonLinkIcon} alt="Boton de Link" />
+          </div>
+          {showModal && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Shorten New Link</h2>
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="name">Link Name</label>
+                    <input type="text" id="name" name="name" required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="url">Link URL</label>
+                    <input type="url" id="url" name="url" required />
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit">Create</button>
+                    <button type="button" onClick={() => setShowModal(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+        </>
+      );
+=======
     const handleSubmit = (e) => {
       e.preventDefault();
       setShowModal(false);
+>>>>>>> d984ee83e0c4bcef9f0c126c1eaf74c54caf7c25
     };
 
     return (
@@ -137,6 +210,10 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
             <div className="text-nav">Logout</div>
           </button>
         </nav>
+<<<<<<< HEAD
+        <BotonLink />
+        {isLoading && <LoadingScreen />}
+=======
 
         <div className="BotonLink" onClick={() => setShowModal(true)}>
           <img src={BotonLinkIcon} alt="Boton de Link" />
@@ -163,6 +240,7 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
             </div>
           </div>
         )}
+>>>>>>> d984ee83e0c4bcef9f0c126c1eaf74c54caf7c25
       </>
     );
   };

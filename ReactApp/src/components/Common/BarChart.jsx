@@ -40,7 +40,7 @@ const BarChart = () => {
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return <Bar data={data} options={options}/>;
 };
 
 export default BarChart;

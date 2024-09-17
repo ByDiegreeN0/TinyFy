@@ -1,68 +1,132 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trash2 } from "lucide-react";
+import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import "../styles/stylesPages/DashboardLinks.css";
+import LoadingScreen from "../Common/LoadingScreen";
 
 export default function DashboardLinks() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [links, setLinks] = useState([
-    { id: 1, name: "Example 1", shortUrl: "ex1.com", targetUrl: "https://example1.com", views: 100, createdAt: "2023-07-31" },
-    { id: 2, name: "Example 2", shortUrl: "ex2.com", targetUrl: "https://example2.com", views: 200, createdAt: "2023-07-30" },
-  ]);
+  const [links, setLinks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [expandedCard, setExpandedCard] = useState(null);
+  const [linkToDelete, setLinkToDelete] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const linksPerPage = 10;
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated") || sessionStorage.getItem("isAuthenticated");
+    const isAuthenticated =
+      localStorage.getItem("isAuthenticated") ||
+      sessionStorage.getItem("isAuthenticated");
     if (!isAuthenticated) {
       navigate("/Signin");
+    } else {
+      fetchLinks();
     }
   }, [navigate]);
 
-  const handleDelete = (id) => {
-    setDeleteId(id);
+  const fetchLinks = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("http://localhost:8000/links");
+      if (response.ok) {
+        const data = await response.json();
+        setLinks(data);
+      } else {
+        console.error("Error al obtener los enlaces");
+      }
+    } catch (error) {
+      console.error("Error al obtener los enlaces:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (linkId) => {
+    setLinkToDelete(linkId);
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = () => {
-    setLinks(links.filter(link => link.id !== deleteId));
+  const handleDelete = async () => {
+    if (!linkToDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/links/${linkToDelete}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setLinks(links.filter(link => link.LinkId !== linkToDelete));
+        console.log(`Enlace con ID ${linkToDelete} eliminado correctamente`);
+      } else {
+        console.error(`Error al eliminar el enlace con ID ${linkToDelete}`);
+      }
+    } catch (error) {
+      console.error(`Error al eliminar el enlace con ID ${linkToDelete}:`, error);
+    }
     setShowDeleteModal(false);
-    setDeleteId(null);
+    setLinkToDelete(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const name = e.target.name.value;
     const url = e.target.url.value;
     const newLink = {
-      id: links.length + 1,
-      name,
-      shortUrl: `short${links.length + 1}.com`,
-      targetUrl: url,
-      views: 0,
-      createdAt: new Date().toISOString().split('T')[0]
+      LinkUrl: url,
+      LinkName: name,
+      ClickCount: 0,
+      DailyViewCount: 0,
+      MonthlyViewCount: 0,
+      YearlyViewCount: 0,
+      CreatedAt: new Date().toISOString(),
     };
-    setLinks([...links, newLink]);
-    setShowModal(false);
+    try {
+      const response = await fetch("http://localhost:8000/links", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newLink),
+      });
+      if (response.ok) {
+        await fetchLinks();
+        setShowModal(false);
+      } else {
+        console.error("Error al crear el enlace");
+      }
+    } catch (error) {
+      console.error("Error al crear el enlace:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const totalLinks = links.length;
-  const linksThisMonth = links.filter(link => {
-    const createdDate = new Date(link.createdAt);
+  const linksThisMonth = links.filter((link) => {
+    const createdDate = new Date(link.CreatedAt);
     const currentDate = new Date();
-    return createdDate.getMonth() === currentDate.getMonth() && createdDate.getFullYear() === currentDate.getFullYear();
+    return (
+      createdDate.getMonth() === currentDate.getMonth() &&
+      createdDate.getFullYear() === currentDate.getFullYear()
+    );
   }).length;
-  const totalIncome = links.reduce((sum, link) => sum + link.views, 0) * 0.01; 
+  const totalIncome = links.reduce(
+    (sum, link) => sum + (link.Earnings || 0),
+    0
+  );
 
   const indexOfLastLink = currentPage * linksPerPage;
   const indexOfFirstLink = indexOfLastLink - linksPerPage;
   const currentLinks = links.slice(indexOfFirstLink, indexOfLastLink);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const toggleDetails = (id) => {
+    setExpandedCard(expandedCard === id ? null : id);
+  };
 
   return (
     <motion.div
@@ -72,21 +136,34 @@ export default function DashboardLinks() {
       transition={{ duration: 0.5 }}
       className="dashboard"
     >
+      {isLoading && <LoadingScreen />}
       <div className="card-container">
-        <motion.div className="cards" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300 }}>
+        <motion.div
+          className="cards"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           <h3>Number of links</h3>
           <p>{totalLinks}</p>
         </motion.div>
-        <motion.div className="cards" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300 }}>
+        <motion.div
+          className="cards"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           <h3>Links made in the month</h3>
           <p>{linksThisMonth}</p>
         </motion.div>
-        <motion.div className="cards" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300 }}>
+        <motion.div
+          className="cards"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           <h3>Total revenue generated</h3>
           <p>${totalIncome.toFixed(2)}</p>
         </motion.div>
       </div>
-      
+
       {links.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -98,13 +175,15 @@ export default function DashboardLinks() {
           <form onSubmit={handleSubmit} className="link-form">
             <div className="form-group">
               <label htmlFor="name">Link Name</label>
-              <input id="name" name="name" required />
+              <input id="name" name="name" type="text" required />
             </div>
             <div className="form-group">
               <label htmlFor="url">Link URL</label>
               <input id="url" name="url" type="url" required />
             </div>
-            <button type="submit" className="btn-primary">Create</button>
+            <button type="submit" className="btn-primary">
+              Create
+            </button>
           </form>
         </motion.div>
       ) : (
@@ -116,7 +195,9 @@ export default function DashboardLinks() {
         >
           <div className="header">
             <h2>Links Management</h2>
-            <button onClick={() => setShowModal(true)} className="btn-primary">Shorten Link</button>
+            <button onClick={() => setShowModal(true)} className="btn-primary">
+              Shorten Link
+            </button>
           </div>
           <table className="link-table">
             <thead>
@@ -131,23 +212,25 @@ export default function DashboardLinks() {
             </thead>
             <tbody>
               <AnimatePresence>
-                {currentLinks.map(link => (
+                {currentLinks.map((link) => (
                   <motion.tr
-                    key={link.id}
+                    key={link.LinkId}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <td>{link.name}</td>
-                    <td>{link.shortUrl}</td>
-                    <td>{link.targetUrl}</td>
-                    <td>{link.views}</td>
-                    <td>{link.createdAt}</td>
+                    <td>{link.LinkName}</td>
+                    <td>{link.LinkShortUrl}</td>
+                    <td>{link.LinkUrl}</td>
+                    <td>{link.ClickCount}</td>
+                    <td>{new Date(link.CreatedAt).toLocaleDateString()}</td>
                     <td>
-                      <button className="btn-delete" onClick={() => handleDelete(link.id)}>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteClick(link.LinkId)}
+                      >
                         <Trash2 className="icon" />
-                        Eliminar
                       </button>
                     </td>
                   </motion.tr>
@@ -155,6 +238,67 @@ export default function DashboardLinks() {
               </AnimatePresence>
             </tbody>
           </table>
+          <div className="mobile-link-list">
+            <AnimatePresence>
+              {currentLinks.map((link) => (
+                <motion.div
+                  key={link.LinkId}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="mobile-link-card"
+                >
+                  <div
+                    className="mobile-link-header"
+                    onClick={() => toggleDetails(link.LinkId)}
+                  >
+                    <span className="mobile-link-name">{link.LinkName}</span>
+                    {expandedCard === link.LinkId ? (
+                      <ChevronUp className="icon" />
+                    ) : (
+                      <ChevronDown className="icon" />
+                    )}
+                  </div>
+                  {expandedCard === link.LinkId && (
+                    <div className="mobile-link-details">
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Short URL:</span>
+                        <span className="mobile-link-value">
+                          {link.LinkShortUrl}
+                        </span>
+                      </div>
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Target URL:</span>
+                        <span className="mobile-link-value">
+                          {link.LinkUrl}
+                        </span>
+                      </div>
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Views:</span>
+                        <span className="mobile-link-value">
+                          {link.ClickCount}
+                        </span>
+                      </div>
+                      <div className="mobile-link-detail">
+                        <span className="mobile-link-label">Created At:</span>
+                        <span className="mobile-link-value">
+                          {new Date(link.CreatedAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteClick(link.LinkId)}
+                      >
+                        <Trash2 className="icon" />
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
           <div className="pagination">
             <button
               onClick={() => paginate(currentPage - 1)}
@@ -177,6 +321,9 @@ export default function DashboardLinks() {
       {showModal && (
         <div className="modal">
           <div className="modal-content">
+            <button className="modal-close" onClick={() => setShowModal(false)}>
+              &times;
+            </button>
             <h2>Shorten New Link</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
@@ -188,8 +335,16 @@ export default function DashboardLinks() {
                 <input id="modalUrl" name="url" type="url" required />
               </div>
               <div className="form-actions">
-                <button type="submit" className="btn-primary">Create</button>
-                <button type="button" onClick={() => setShowModal(false)} className="btn-secondary">Cancel</button>
+                <button type="submit" className="btn-primary">
+                  Create
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="btn-secondary"
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
@@ -198,12 +353,19 @@ export default function DashboardLinks() {
 
       {showDeleteModal && (
         <div className="modal">
-          <div className="modal-content delete-modal">
-            <h2>Confirm Deletion</h2>
+          <div className="modal-content">
+            <h2>Confirm deletion</h2>
             <p>Are you sure you want to remove this link?</p>
             <div className="form-actions">
-              <button onClick={confirmDelete} className="btn-delete">Delete</button>
-              <button onClick={() => setShowDeleteModal(false)} className="btn-secondary">Cancel</button>
+              <button onClick={handleDelete} className="btn-delete">
+                Delete
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="btn-secondary"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
