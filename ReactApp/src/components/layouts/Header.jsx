@@ -11,7 +11,7 @@ import defaultAvatar from "../../assets/Img/AvatarUser.jpg";
 import BotonLinkIcon from "../../assets/Svg/Icon/BotonLink.svg";
 import "../styles/stylesLayouts/HeaderDash.css";
 import "../styles/stylesLayouts/Header.css";
-import LoadingScreen from "C:/Users/CARLOS/Documentos/TinyFy/ReactApp/src/components/Common/LoadingScreen.jsx";
+import LoadingScreen from "../Common/LoadingScreen";
 
 const Header = ({ isAuthenticated, onLogout, user }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -77,7 +77,7 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-<<<<<<< HEAD
+/*<<<<<<< HEAD*/
     const BotonLink = () => {
       const handleSubmit = async (e) => {
         e.preventDefault();
@@ -146,11 +146,6 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
           )}
         </>
       );
-=======
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      setShowModal(false);
->>>>>>> d984ee83e0c4bcef9f0c126c1eaf74c54caf7c25
     };
 
     return (
@@ -210,10 +205,9 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
             <div className="text-nav">Logout</div>
           </button>
         </nav>
-<<<<<<< HEAD
         <BotonLink />
         {isLoading && <LoadingScreen />}
-=======
+
 
         <div className="BotonLink" onClick={() => setShowModal(true)}>
           <img src={BotonLinkIcon} alt="Boton de Link" />
@@ -240,7 +234,6 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
             </div>
           </div>
         )}
->>>>>>> d984ee83e0c4bcef9f0c126c1eaf74c54caf7c25
       </>
     );
   };
