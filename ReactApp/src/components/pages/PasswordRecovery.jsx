@@ -137,6 +137,20 @@ const PasswordRecovery = () => {
           <button className="Button-Forms" type="submit">
             {step === 1 ? "Send Code" : "Verify Code"}
           </button>
+
+          <div className="Welcome-responsive">
+          <div className="Welcome-Text">
+            {step === 1
+              ? "Write your email in here, so we can send you a recovery code"
+              : "We have sent a recovery code to your email. Please check your inbox and enter the code below."}
+          </div>
+          <p className="Redirect-Text">
+            Did you remember your password?{" "}
+            <Link className="Link-Forms transitionBorder" to="../Signin">
+              Log in here
+            </Link>
+          </p>
+        </div>
         </form>
       </div>
     </div>
