@@ -6,6 +6,7 @@ import "../styles/stylesPages/Sign.css";
 import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
 
+// Componente para renderizar un grupo de formulario con etiqueta y entrada.
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
@@ -14,12 +15,12 @@ const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
     <input
       id={id}
       type={type}
-      className={`Input-Forms ${errors[id] ? "error" : ""}`}
-      {...register(id, rules)}
+      className={`Input-Forms ${errors[id] ? "error" : ""}`} // Añade clase de error si hay un error.
+      {...register(id, rules)} // Registra el campo en el formulario con las reglas de validación.
     />
     <div className="Error-Container">
       {errors[id] && (
-        <span className="Error-Message">{errors[id].message}</span>
+        <span className="Error-Message">{errors[id].message}</span> // Muestra mensaje de error si existe.
       )}
     </div>
   </div>
@@ -34,8 +35,9 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
+// Componente para mostrar un diálogo modal para la confirmación de sesión.
 const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null; // No renderiza nada si el diálogo no está abierto.
 
   return (
     <div className="Dialog-Overlay">
@@ -55,29 +57,31 @@ const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
+// Componente principal de inicio de sesión.
 const Signin = ({ onLogin, title, description, logoSrc }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
-  const [showDialog, setShowDialog] = useState(false);
+  } = useForm(); // Hook para manejar el formulario.
+  const navigate = useNavigate(); // Hook para navegación programática.
+  const [showDialog, setShowDialog] = useState(false); // Estado para mostrar el diálogo de confirmación.
 
   const onSubmit = (data) => {
-    console.log(data);
-    setShowDialog(true);
+    console.log(data); // Imprime los datos del formulario en la consola.
+    setShowDialog(true); // Muestra el diálogo de confirmación.
   };
 
+  // Maneja la confirmación del diálogo de sesión.
   const handleKeepSession = (keep) => {
     if (keep) {
-      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento local si se confirma.
     } else {
-      sessionStorage.setItem("isAuthenticated", "true");
+      sessionStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento de sesión si se niega.
     }
-    setShowDialog(false);
-    onLogin();
-    navigate("/dashboardlinks");
+    setShowDialog(false); // Cierra el diálogo.
+    onLogin(); // Llama a la función de inicio de sesión pasada como prop.
+    navigate("/dashboardlinks"); // Navega a la página de enlaces del panel de control.
   };
 
   return (
@@ -138,6 +142,20 @@ const Signin = ({ onLogin, title, description, logoSrc }) => {
           <button className="Button-Forms" type="submit">
             Sign In
           </button>
+
+          <div className="Welcome-responsive">
+            <div className="welcome-links-container">
+              <Link className="Redirect-Text" to="../Signup">
+                Don't have an account?{" "}
+                <span className="Link-Forms transitionBorder">Sign up</span>
+              </Link>{" "}
+              <br /> <br />
+              <Link className="Redirect-Text" to="../PasswordRecovery">
+                Forgot your password?{" "}
+                <span className="Link-Forms transitionBorder">Restore</span>
+              </Link>
+            </div>
+          </div>
         </form>
       </div>
       <CustomDialog
