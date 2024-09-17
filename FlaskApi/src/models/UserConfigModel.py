@@ -1,13 +1,36 @@
-from flask_sqlalchemy import SQLAlchemy
-from models.User import db  
+from models.User import db
 
-class userConfig(db.Model):
+class UserConfig(db.Model):
     __tablename__ = 'userConfig'
 
-    configId = db.Column(db.Integer, primary_key = True)
-    TwoFactor = db.Column(db.Boolean)
-    CreatedAt = db.Column(db.DateTime, default=db.func.now())
-    UserId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    _configId = db.Column('configId', db.Integer, primary_key=True)
+    _TwoFactor = db.Column('TwoFactor', db.Boolean)
+    _CreatedAt = db.Column('CreatedAt', db.DateTime, default=db.func.now())
+    _UserId = db.Column('UserId', db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self,TwoFactor):
-        self.TwoFactor = TwoFactor
+    def __init__(self, TwoFactor):
+        self._TwoFactor = TwoFactor
+
+    @property
+    def configId(self):
+        return self._configId
+
+    @property
+    def TwoFactor(self):
+        return self._TwoFactor
+
+    @TwoFactor.setter
+    def TwoFactor(self, value):
+        self._TwoFactor = value
+
+    @property
+    def CreatedAt(self):
+        return self._CreatedAt
+
+    @property
+    def UserId(self):
+        return self._UserId
+
+    @UserId.setter
+    def UserId(self, value):
+        self._UserId = value
