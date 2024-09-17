@@ -9,20 +9,15 @@ def login():
     data = request.json
     request_email = data.get('email')
     request_password = data.get('password')
-
-    print(f"Request Email: {request_email}")
-    print(f"Request Password: {request_password}")
-
+    
+    # Buscar el usuario por correo electrónico
     user = User.query.filter_by(email=request_email).first()
-    if user:
-        print(f"User Found: {user.username}")
-        print(f"Stored Password: {user.password}")
-
-        if bcrypt.checkpw(request_password.encode('utf-8'), user.password):
-            access_token = create_access_token(identity=user.email)
-            return jsonify(access_token=access_token)
-        else:
-            return jsonify({"msg": "Bad password"}), 401
-    else:
-        return jsonify({"msg": "Bad email"}), 401
-
+    
+    # Verificar si el usuario existe y la contraseña es correcta
+    if user and user.password == request_password:
+        # Crear un token de acceso
+        access_token = create_access_token(identity=user.email)
+        return jsonify(access_token=access_token)
+    
+    # Responder con un error si la autenticación falla
+    return jsonify({"msg": "Bad username or password"}), 401

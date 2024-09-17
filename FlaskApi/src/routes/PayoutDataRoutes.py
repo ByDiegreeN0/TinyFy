@@ -1,11 +1,15 @@
 from flask import request, jsonify
 from app import app
 from models.User import db
+from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+
 
 from models.PayoutDataModel import Payout_Data
 
 # Create
 @app.route('/payout_data', methods=['POST'])
+@jwt_required()
+
 def create_payout_data():
     data = request.json
     new_payout_data = Payout_Data(

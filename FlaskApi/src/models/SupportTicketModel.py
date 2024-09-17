@@ -6,7 +6,7 @@ class SupportTicket(db.Model):
     _TicketId = db.Column('TicketId', db.Integer, primary_key=True)
     _UserId = db.Column('UserId', db.Integer, db.ForeignKey('user.id'))
     _CreatedAt = db.Column('CreatedAt', db.DateTime, default=db.func.now())
-    _Status = db.Column('Status', db.Boolean, default=False)
+    _Status = db.Column('Status', db.String(20), default=False)
     messages = db.relationship('Messages', backref='support_ticket')
 
     def __init__(self, UserId, Status=False):

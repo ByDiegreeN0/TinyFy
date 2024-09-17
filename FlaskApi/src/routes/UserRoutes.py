@@ -16,6 +16,7 @@ def create_user():
 # Read
 @app.route('/users', methods=['GET'])
 def get_users():
+    
     users = User.query.all()
     return jsonify([{'id': user.id, 'username': user.username, 'email': user.email} for user in users])
 
