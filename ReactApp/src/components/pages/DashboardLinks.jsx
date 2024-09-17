@@ -5,50 +5,55 @@ import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import "../styles/stylesPages/DashboardLinks.css";
 import LoadingScreen from "../Common/LoadingScreen";
 
+// Este es el componente principal del Dashboard que gestiona los enlaces
 export default function DashboardLinks() {
-  const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [links, setLinks] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [expandedCard, setExpandedCard] = useState(null);
-  const [linkToDelete, setLinkToDelete] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const linksPerPage = 10;
+  const navigate = useNavigate(); // Hook de react-router-dom para navegar entre rutas
+  const [showModal, setShowModal] = useState(false); // Estado para manejar el modal de crear enlace
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // Estado para manejar el modal de eliminación
+  const [links, setLinks] = useState([]); // Estado para almacenar los enlaces obtenidos
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
+  const [expandedCard, setExpandedCard] = useState(null); // Estado para manejar qué tarjeta móvil está expandida
+  const [linkToDelete, setLinkToDelete] = useState(null); // Estado para almacenar el ID del enlace a eliminar
+  const [isLoading, setIsLoading] = useState(false); // Estado para manejar la pantalla de carga
+  const linksPerPage = 10; // Número de enlaces por página
 
+  // Este efecto se ejecuta cuando el componente se monta para verificar la autenticación y obtener los enlaces
   useEffect(() => {
     const isAuthenticated =
       localStorage.getItem("isAuthenticated") ||
       sessionStorage.getItem("isAuthenticated");
     if (!isAuthenticated) {
-      navigate("/Signin");
+      navigate("/Signin"); // Redirige a la página de inicio de sesión si no está autenticado
     } else {
-      fetchLinks();
+      fetchLinks(); // Obtiene los enlaces si está autenticado
     }
   }, [navigate]);
 
+  // Función para obtener los enlaces desde el backend
   const fetchLinks = async () => {
-    setIsLoading(true);
+    setIsLoading(true); // Muestra la pantalla de carga mientras se obtienen los datos
     try {
-      const response = await fetch("http://localhost:8000/links");
+      const response = await fetch("http://localhost:8000/links"); // Petición al backend
       if (response.ok) {
-        const data = await response.json();
-        setLinks(data);
+        const data = await response.json(); // Obtiene los datos en formato JSON
+        setLinks(data); // Guarda los enlaces en el estado
       } else {
         console.error("Error al obtener los enlaces");
       }
     } catch (error) {
       console.error("Error al obtener los enlaces:", error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Desactiva la pantalla de carga
     }
   };
 
+  // Maneja el clic para abrir el modal de confirmación de eliminación
   const handleDeleteClick = (linkId) => {
-    setLinkToDelete(linkId);
-    setShowDeleteModal(true);
+    setLinkToDelete(linkId); // Almacena el ID del enlace a eliminar
+    setShowDeleteModal(true); // Abre el modal de confirmación
   };
 
+  // Función que elimina un enlace desde el backend
   const handleDelete = async () => {
     if (!linkToDelete) return;
 
@@ -57,7 +62,7 @@ export default function DashboardLinks() {
         method: 'DELETE',
       });
       if (response.ok) {
-        setLinks(links.filter(link => link.LinkId !== linkToDelete));
+        setLinks(links.filter(link => link.LinkId !== linkToDelete)); // Filtra los enlaces para eliminar el seleccionado
         console.log(`Enlace con ID ${linkToDelete} eliminado correctamente`);
       } else {
         console.error(`Error al eliminar el enlace con ID ${linkToDelete}`);
@@ -65,13 +70,14 @@ export default function DashboardLinks() {
     } catch (error) {
       console.error(`Error al eliminar el enlace con ID ${linkToDelete}:`, error);
     }
-    setShowDeleteModal(false);
-    setLinkToDelete(null);
+    setShowDeleteModal(false); // Cierra el modal de confirmación
+    setLinkToDelete(null); // Limpia el estado del enlace a eliminar
   };
 
+  // Función para manejar el formulario de creación de un nuevo enlace
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsLoading(true); // Muestra la pantalla de carga mientras se envía el formulario
     const name = e.target.name.value;
     const url = e.target.url.value;
     const newLink = {
@@ -89,21 +95,22 @@ export default function DashboardLinks() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newLink),
+        body: JSON.stringify(newLink), // Envía los datos del nuevo enlace en formato JSON
       });
       if (response.ok) {
-        await fetchLinks();
-        setShowModal(false);
+        await fetchLinks(); // Vuelve a obtener los enlaces para actualizar la lista
+        setShowModal(false); // Cierra el modal de creación
       } else {
         console.error("Error al crear el enlace");
       }
     } catch (error) {
       console.error("Error al crear el enlace:", error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Desactiva la pantalla de carga
     }
   };
 
+  // Cálculos para el resumen de enlaces y paginación
   const totalLinks = links.length;
   const linksThisMonth = links.filter((link) => {
     const createdDate = new Date(link.CreatedAt);
@@ -118,14 +125,16 @@ export default function DashboardLinks() {
     0
   );
 
+  // Lógica de paginación
   const indexOfLastLink = currentPage * linksPerPage;
   const indexOfFirstLink = indexOfLastLink - linksPerPage;
   const currentLinks = links.slice(indexOfFirstLink, indexOfLastLink);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  // Función para expandir o contraer las tarjetas móviles
   const toggleDetails = (id) => {
-    setExpandedCard(expandedCard === id ? null : id);
+    setExpandedCard(expandedCard === id ? null : id); // Expande o colapsa la tarjeta seleccionada
   };
 
   return (
@@ -136,7 +145,9 @@ export default function DashboardLinks() {
       transition={{ duration: 0.5 }}
       className="dashboard"
     >
-      {isLoading && <LoadingScreen />}
+      {isLoading && <LoadingScreen />} // Muestra la pantalla de carga si isLoading es true
+
+      {/* Resumen de enlaces */}
       <div className="card-container">
         <motion.div
           className="cards"
@@ -164,6 +175,7 @@ export default function DashboardLinks() {
         </motion.div>
       </div>
 
+      {/* Si no hay enlaces, muestra el formulario de creación, si no, la tabla de administración */}
       {links.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -199,176 +211,54 @@ export default function DashboardLinks() {
               Shorten Link
             </button>
           </div>
+
+          {/* Tabla de enlaces */}
           <table className="link-table">
             <thead>
-              <tr className="Title-tabla">
-                <th>URL Name</th>
-                <th>Short URL</th>
-                <th>Target URL</th>
-                <th>Views</th>
-                <th>Created At</th>
+              <tr className="table-header">
+                <th>ID</th>
+                <th>Link</th>
+                <th>Clicks</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <AnimatePresence>
-                {currentLinks.map((link) => (
-                  <motion.tr
-                    key={link.LinkId}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <td>{link.LinkName}</td>
-                    <td>{link.LinkShortUrl}</td>
-                    <td>{link.LinkUrl}</td>
-                    <td>{link.ClickCount}</td>
-                    <td>{new Date(link.CreatedAt).toLocaleDateString()}</td>
-                    <td>
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDeleteClick(link.LinkId)}
-                      >
-                        <Trash2 className="icon" />
-                      </button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </AnimatePresence>
+              {currentLinks.map((link) => (
+                <tr key={link.LinkId}>
+                  <td>{link.LinkId}</td>
+                  <td>{link.LinkUrl}</td>
+                  <td>{link.ClickCount}</td>
+                  <td className="actions">
+                    <button
+                      className="btn-delete"
+                      onClick={() => handleDeleteClick(link.LinkId)}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
-          <div className="mobile-link-list">
-            <AnimatePresence>
-              {currentLinks.map((link) => (
-                <motion.div
-                  key={link.LinkId}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="mobile-link-card"
-                >
-                  <div
-                    className="mobile-link-header"
-                    onClick={() => toggleDetails(link.LinkId)}
-                  >
-                    <span className="mobile-link-name">{link.LinkName}</span>
-                    {expandedCard === link.LinkId ? (
-                      <ChevronUp className="icon" />
-                    ) : (
-                      <ChevronDown className="icon" />
-                    )}
-                  </div>
-                  {expandedCard === link.LinkId && (
-                    <div className="mobile-link-details">
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Short URL:</span>
-                        <span className="mobile-link-value">
-                          {link.LinkShortUrl}
-                        </span>
-                      </div>
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Target URL:</span>
-                        <span className="mobile-link-value">
-                          {link.LinkUrl}
-                        </span>
-                      </div>
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Views:</span>
-                        <span className="mobile-link-value">
-                          {link.ClickCount}
-                        </span>
-                      </div>
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Created At:</span>
-                        <span className="mobile-link-value">
-                          {new Date(link.CreatedAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDeleteClick(link.LinkId)}
-                      >
-                        <Trash2 className="icon" />
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+
+          {/* Paginación */}
           <div className="pagination">
-            <button
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="btn-secondary"
-            >
-              Back
-            </button>
-            <button
-              onClick={() => paginate(currentPage + 1)}
-              disabled={indexOfLastLink >= links.length}
-              className="btn-secondary"
-            >
-              Next
-            </button>
+            {Array.from(
+              { length: Math.ceil(links.length / linksPerPage) },
+              (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => paginate(i + 1)}
+                  className={`pagination-button ${
+                    currentPage === i + 1 ? "active" : ""
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              )
+            )}
           </div>
         </motion.div>
-      )}
-
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <button className="modal-close" onClick={() => setShowModal(false)}>
-              &times;
-            </button>
-            <h2>Shorten New Link</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="modalName">Link Name</label>
-                <input id="modalName" name="name" required />
-              </div>
-              <div className="form-group">
-                <label htmlFor="modalUrl">Link URL</label>
-                <input id="modalUrl" name="url" type="url" required />
-              </div>
-              <div className="form-actions">
-                <button type="submit" className="btn-primary">
-                  Create
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="btn-secondary"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showDeleteModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Confirm deletion</h2>
-            <p>Are you sure you want to remove this link?</p>
-            <div className="form-actions">
-              <button onClick={handleDelete} className="btn-delete">
-                Delete
-              </button>
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="btn-secondary"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
       )}
     </motion.div>
   );
