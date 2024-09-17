@@ -1,11 +1,14 @@
 from flask import request, jsonify
 from app import app
 from models.User import db
+from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
 
 from models.MessagesModel import Messages
 
 # Create
 @app.route('/messages', methods=['POST'])
+@jwt_required() # con este metodo se protege la ruta
+
 def create_message():
     data = request.json
     new_message = Messages(TicketId=data['TicketId'], Message=data['Message'])
@@ -15,17 +18,22 @@ def create_message():
 
 # Read
 @app.route('/messages', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
 def get_messages():
     messages = Messages.query.all()
     return jsonify([{'MessageId': m.MessageId, 'TicketId': m.TicketId, 'Message': m.Message, 'CreatedAt': m.CreatedAt} for m in messages])
 
 @app.route('/messages/<int:message_id>', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_message(message_id):
     message = Messages.query.get_or_404(message_id)
     return jsonify({'MessageId': message.MessageId, 'TicketId': message.TicketId, 'Message': message.Message, 'CreatedAt': message.CreatedAt})
 
 # Update
 @app.route('/messages/<int:message_id>', methods=['PUT'])
+@jwt_required() # con este metodo se protege la ruta
+
 def update_message(message_id):
     message = Messages.query.get_or_404(message_id)
     data = request.json
@@ -36,6 +44,8 @@ def update_message(message_id):
 
 # Delete
 @app.route('/messages/<int:message_id>', methods=['DELETE'])
+@jwt_required() # con este metodo se protege la ruta
+
 def delete_message(message_id):
     message = Messages.query.get_or_404(message_id)
     db.session.delete(message)

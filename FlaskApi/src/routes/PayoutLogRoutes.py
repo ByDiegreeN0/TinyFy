@@ -1,4 +1,6 @@
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+
 from app import app
 from models.User import db
 
@@ -6,6 +8,8 @@ from models.PayoutLogModel import PayoutLog
 
 # Create
 @app.route('/payout_log', methods=['POST'])
+@jwt_required() # con este metodo se protege la ruta
+
 def create_payout_log():
     data = request.json
     new_payout_log = PayoutLog(
@@ -22,6 +26,8 @@ def create_payout_log():
 
 # Read
 @app.route('/payout_log', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_payout_log():
     payout_logs = PayoutLog.query.all()
     return jsonify([{
@@ -35,6 +41,8 @@ def get_payout_log():
     } for pl in payout_logs])
 
 @app.route('/payout_log/<int:payout_log_id>', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_payout_log_by_id(payout_log_id):
     payout_log = PayoutLog.query.get_or_404(payout_log_id)
     return jsonify({
@@ -49,6 +57,8 @@ def get_payout_log_by_id(payout_log_id):
 
 # Update
 @app.route('/payout_log/<int:payout_log_id>', methods=['PUT'])
+@jwt_required() # con este metodo se protege la ruta
+
 def update_payout_log(payout_log_id):
     payout_log = PayoutLog.query.get_or_404(payout_log_id)
     data = request.json
@@ -63,6 +73,8 @@ def update_payout_log(payout_log_id):
 
 # Delete
 @app.route('/payout_log/<int:payout_log_id>', methods=['DELETE'])
+@jwt_required() # con este metodo se protege la ruta
+
 def delete_payout_log(payout_log_id):
     payout_log = PayoutLog.query.get_or_404(payout_log_id)
     db.session.delete(payout_log)

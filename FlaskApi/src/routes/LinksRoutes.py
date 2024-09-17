@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
 from app import app
 from models.User import db
 
@@ -6,6 +7,7 @@ from models.LinksModel import Links
 
 # Create
 @app.route('/links', methods=['POST'])
+@jwt_required() # con este metodo se protege la ruta
 def create_link():
     data = request.json
     new_link = Links(
@@ -23,6 +25,7 @@ def create_link():
 
 # Read
 @app.route('/links', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
 def get_links():
     links = Links.query.all()
     return jsonify([{
@@ -37,6 +40,7 @@ def get_links():
     } for l in links])
 
 @app.route('/links/<int:link_id>', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
 def get_link(link_id):
     link = Links.query.get_or_404(link_id)
     return jsonify({
@@ -52,6 +56,7 @@ def get_link(link_id):
 
 # Update
 @app.route('/links/<int:link_id>', methods=['PUT'])
+@jwt_required() # con este metodo se protege la ruta
 def update_link(link_id):
     link = Links.query.get_or_404(link_id)
     data = request.json
@@ -67,6 +72,7 @@ def update_link(link_id):
 
 # Delete
 @app.route('/links/<int:link_id>', methods=['DELETE'])
+@jwt_required() # con este metodo se protege la ruta
 def delete_link(link_id):
     link = Links.query.get_or_404(link_id)
     db.session.delete(link)
