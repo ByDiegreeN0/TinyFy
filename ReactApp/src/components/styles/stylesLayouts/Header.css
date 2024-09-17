@@ -1,93 +1,37 @@
-.HomeNav {
-  display: flex;
-  position: fixed;
+.HomeHeader, .RegularHeader {
+    display: flex;
+    position: fixed;
   width: 100vw;
   height: 120px;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background-color: transparent;
   z-index: 99;
 }
 
-.HomeNav .Nav-Logo {
+.HomeHeader {
+  background-color: transparent;
+}
+
+.RegularHeader {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-background);
+}
+
+.HomeHeader .Nav-Logo, .RegularHeader .Nav-Logo {
   width: 60px;
   height: 60px;
   scale: 3;
   margin: 0 0 10px 80px;
-  background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreBlancoLado.svg');
   background-position: center;
 }
 
-.HomeNav .Nav-List {
-  display: flex;
-  list-style: none;
-  padding: 1rem;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-around;
+.HomeHeader .Nav-Logo {
+  background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreBlancoLado.svg');
 }
 
-.HomeNav .Nav-Item {
-  text-align: center;
-  width: 150px;
-}
-
-.HomeNav .Nav-Item a {
-  text-decoration: none;
-  color: var(--color-background);
-  font-weight: bold;
-  font-size: 1.25rem;
-  position: relative;
-}
-
-.HomeNav .Nav-Item a::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -2px;
-  width: 0;
-  height: 2px;
-  background-color: var(--color-title);
-  transition: width 800ms ease;
-  transform: translateX(-50%);
-}
-.HomeNav .Nav-Item a:not(:hover)::after {
-  width: 0px;
-}
-
-.HomeNav.scrolled {
-  background-color: var(--color-background);
-  transition: background-color 0.3s ease;
-  box-shadow: 0 2px 14px #333;
-}
-
-.HomeNav.scrolled a{
-  color: var(--color-title);
-}
-.HomeNav.scrolled .Nav-Item a::after{
-  background-color: var(--color-primary);
-}
-.HomeNav.scrolled .Nav-Logo{
-  background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreLado.svg');
-}
-
-.Nav {
-  display: flex;
-  width: 100vw;
-  height: 120px;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  background-color: var(--color-background);
-}
-
-.Nav .Nav-Logo {
-  width: 60px;
-  height: 60px;
-  margin: 0 50px;
-  scale: 3;
-  margin: 0 0 10px 80px;
+.RegularHeader .Nav-Logo {
   background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreLado.svg');
 }
 
@@ -107,10 +51,17 @@
 
 .Nav-Item a {
   text-decoration: none;
-  color: var(--color-title);
   font-weight: bold;
   font-size: 1.25rem;
   position: relative;
+}
+
+.HomeHeader .Nav-Item a {
+  color: var(--color-background);
+}
+
+.RegularHeader .Nav-Item a {
+  color: var(--color-title);
 }
 
 .Nav-Item a::after {
@@ -120,59 +71,90 @@
   bottom: -2px;
   width: 0;
   height: 2px;
-  background-color: var(--color-primary);
   transition: width 800ms ease;
   transform: translateX(-50%);
+}
+
+.HomeHeader .Nav-Item a::after {
+  background-color: var(--color-title);
+}
+
+.RegularHeader .Nav-Item a::after {
+  background-color: var(--color-primary);
 }
 
 .Nav-Item a:not(:hover)::after {
   width: 0px;
 }
 
-.Nav.scrolled {
-  filter: brightness(0.95);
+.HomeHeader.scrolled {
+  background-color: var(--color-background);
   transition: background-color 0.3s ease;
   box-shadow: 0 2px 14px #333;
 }
 
+.HomeHeader.scrolled a {
+  color: var(--color-title);
+}
+
+.HomeHeader.scrolled .Nav-Item a::after {
+  background-color: var(--color-primary);
+}
+
+.HomeHeader.scrolled .Nav-Logo {
+  background-image: url('../../../assets/Svg/Logos/TInyFyLogoNombreLado.svg');
+}
+
+.RegularHeader.scrolled {
+  filter: brightness(0.95);
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 14px #333;
+}
 
 .Menu-Button {
   display: none;
 }
 
 @media screen and (max-width: 768px) {
-  .Nav {
-    display: flex;
-    position: fixed;
+  .HomeHeader, .RegularHeader {
     justify-content: space-between;
-    align-items: center;
     padding: 10px;
-    z-index: 1000;
   }
+
   .Nav-Logo {
     margin: 20px;
   }
 
   .Nav-List {
     display: none;
-    position: absolute;
-    top: 120px;
-    left: 0;
-    width: 100%;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 250px;
     background-color: var(--color-background);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+    padding: 120px 1rem 1rem;
     z-index: 1000;
     flex-direction: column;
+    transition: right 0.3s ease-in-out;
   }
+
   .Nav-List.open {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    right: 0;
   }
+
   .Nav-Item {
     margin: 10px 0;
   }
+
+  .HomeHeader .Nav-Item a,
+  .RegularHeader .Nav-Item a,
+  .HomeHeader.scrolled .Nav-Item a {
+    color: var(--color-title);
+  }
+
   .Menu-Button {
     display: inline-block;
     width: 60px;
@@ -182,10 +164,28 @@
     background: none;
     border: none;
     cursor: pointer;
+    z-index: 1001;
   }
-  .Nav.scrolled .Nav-Logo {
+
+  .HomeHeader.scrolled .Nav-Logo,
+  .RegularHeader.scrolled .Nav-Logo {
     width: 80px;
     height: 80px;
+  }
+
+  .menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .menu-overlay.active {
+    display: block;
   }
 }
 
@@ -204,13 +204,25 @@
   display: block;
   width: 35px;
   height: 4px;
-  background: var(--color-title);
   margin: 5px 0;
   transition: all 0.3s ease-in-out;
 }
 
+.HomeHeader .menuBarra span {
+  background: var(--color-background);
+}
+
+.RegularHeader .menuBarra span,
+.HomeHeader.scrolled .menuBarra span {
+  background: var(--color-title);
+}
+
+.menuBarra.open span {
+  background: var(--color-title);
+}
+
 .menuBarra.open .fila1 {
-  transform: translateY(15px) rotate(45deg);
+  transform: translateY(14px) rotate(45deg);
 }
 
 .menuBarra.open .fila2 {
@@ -218,5 +230,5 @@
 }
 
 .menuBarra.open .fila3 {
-  transform: translateY(-12px) rotate(-45deg);
+  transform: translateY(-14px) rotate(-45deg);
 }

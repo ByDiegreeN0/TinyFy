@@ -12,47 +12,42 @@ import BotonLinkIcon from "../../assets/Svg/Icon/BotonLink.svg";
 import "../styles/stylesLayouts/HeaderDash.css";
 import "../styles/stylesLayouts/Header.css";
 
-// Define el componente Header que recibe props para gestionar autenticación y usuario.
 const Header = ({ isAuthenticated, onLogout, user }) => {
-  const [scrolled, setScrolled] = useState(false);  // Estado para manejar el scroll
-  const location = useLocation();  // Hook para obtener la ubicación actual
-  const navigate = useNavigate();  // Hook para la navegación programática
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // Escucha el evento de scroll para modificar el estado
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 100);  // Si ha hecho scroll más de 100px, activa `scrolled`
+      setScrolled(window.scrollY > 100);
     };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);  // Limpia el event listener al desmontar
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  // Función para manejar el cierre de sesión
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");  // Elimina los datos del localStorage
-    sessionStorage.removeItem("isAuthenticated");  // Elimina los datos de la sesión
-    onLogout();  // Llama a la función de cierre de sesión pasada como prop
-    navigate("/");  // Redirige a la página de inicio
+    localStorage.removeItem("isAuthenticated");
+    sessionStorage.removeItem("isAuthenticated");
+    onLogout();
+    navigate("/");
   };
 
-  // Componente para usuarios no autenticados
   const UnauthenticatedHeader = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
-    // Función para alternar el menú en móviles
     const toggleMenu = () => {
       setMenuOpen(!menuOpen);
     };
 
-    const esHome = location.pathname === "/";  // Verifica si la ruta es la página de inicio
-    const navClass = esHome ? "HomeNav" : "Nav";  // Ajusta la clase CSS dependiendo de la ruta
+    const isHome = location.pathname === "/";
+    const headerClass = isHome ? "HomeHeader" : "RegularHeader";
 
     return (
-      <nav className={`${navClass} Unauthenticated ${scrolled ? "scrolled" : ""}`}>
+      <nav className={`${headerClass} Unauthenticated ${scrolled ? "scrolled" : ""}`}>
         <Link to="/" className="Nav-Logo"></Link>
         <button className="Menu-Button" onClick={toggleMenu}>
           <div className={`menuBarra ${menuOpen ? "open" : ""}`}>
@@ -76,12 +71,10 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     );
   };
 
-  // Componente para usuarios autenticados
   const AuthenticatedHeader = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
-    // Función para enviar el formulario del modal
     const handleSubmit = (e) => {
       e.preventDefault();
       setShowModal(false);
