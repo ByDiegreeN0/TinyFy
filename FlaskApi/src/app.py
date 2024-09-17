@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from config import config
 from models.User import db  
@@ -9,6 +10,12 @@ from models import *
 app = Flask(__name__)
 app.config.from_object(config['development'])
 
+# Inicializa CORS (esta libreria permite a aplicaciones en otros puertos, mandar datos al API)
+CORS(app) 
+
+
+# Inicializa JWT
+jwt = JWTManager(app)
 
 
 # Inicializa SQLAlchemy

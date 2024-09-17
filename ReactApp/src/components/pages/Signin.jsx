@@ -6,6 +6,7 @@ import "../styles/stylesPages/Sign.css";
 import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
 
+// Componente para renderizar un grupo de formulario con etiqueta y entrada.
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
@@ -14,12 +15,12 @@ const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
     <input
       id={id}
       type={type}
-      className={`Input-Forms ${errors[id] ? "error" : ""}`}
-      {...register(id, rules)}
+      className={`Input-Forms ${errors[id] ? "error" : ""}`} // Añade clase de error si hay un error.
+      {...register(id, rules)} // Registra el campo en el formulario con las reglas de validación.
     />
     <div className="Error-Container">
       {errors[id] && (
-        <span className="Error-Message">{errors[id].message}</span>
+        <span className="Error-Message">{errors[id].message}</span> // Muestra mensaje de error si existe.
       )}
     </div>
   </div>
@@ -34,100 +35,130 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
+// Componente para mostrar un diálogo modal para la confirmación de sesión.
 const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null; // No renderiza nada si el diálogo no está abierto.
 
   return (
     <div className="Dialog-Overlay">
       <div className="Dialog-Content">
-        <h2>Mantener sesión</h2>
-        <p>¿Desea mantener la sesión iniciada?</p>
+        <h2>Keep session</h2>
+        <p>Do you want to stay logged in?</p>
         <div className="Dialog-Actions">
-          <button className="Button-Forms" onClick={() => onConfirm(true)}>Sí</button>
-          <button className="Button-Forms" onClick={() => onConfirm(false)}>No</button>
+          <button className="Button-Forms" onClick={() => onConfirm(true)}>
+            Yes
+          </button>
+          <button className="Button-Forms" onClick={() => onConfirm(false)}>
+            No
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-const Signin = ({ onLogin }) => {
+// Componente principal de inicio de sesión.
+const Signin = ({ onLogin, title, description, logoSrc }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
-  const [showDialog, setShowDialog] = useState(false);
+  } = useForm(); // Hook para manejar el formulario.
+  const navigate = useNavigate(); // Hook para navegación programática.
+  const [showDialog, setShowDialog] = useState(false); // Estado para mostrar el diálogo de confirmación.
 
   const onSubmit = (data) => {
-    console.log(data);
-    // En una aplicación real, aquí harías una llamada a tu API de autenticación
-    setShowDialog(true);
+    console.log(data); // Imprime los datos del formulario en la consola.
+    setShowDialog(true); // Muestra el diálogo de confirmación.
   };
 
+  // Maneja la confirmación del diálogo de sesión.
   const handleKeepSession = (keep) => {
     if (keep) {
-      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento local si se confirma.
     } else {
-      sessionStorage.setItem("isAuthenticated", "true");
+      sessionStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento de sesión si se niega.
     }
-    setShowDialog(false);
-    onLogin();
-    navigate("/dashboardlinks");
+    setShowDialog(false); // Cierra el diálogo.
+    onLogin(); // Llama a la función de inicio de sesión pasada como prop.
+    navigate("/dashboardlinks"); // Navega a la página de enlaces del panel de control.
   };
 
   return (
     <div className="Sing-usuario animationFade">
       <div className="GridArea">
-        <div className="Welcome">
-          <h1 className="Info-Title">Bienvenido</h1>
+        <div
+          className="Welcome"
+          title={title}
+          description={description}
+          logoSrc={logoSrc}
+        >
+          <h1 className="Info-Title">Welcome</h1>
           <p className="Welcome-Text">
-            Bienvenidos al acortador de links TinyFy. Si ya tienes una
-            cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
-            una para comenzar.
+            Welcome to the link shortener{title}. If you already have one
+            account, log in to continue. If you don't have an account, create
+            one to start.
           </p>
           <Link className="Redirect-Text" to="../Signup">
-            ¿No tienes cuenta?{" "}
-            <span className="Link-Forms transitionBorder">Regístrate</span>
+            Don't have an account?{" "}
+            <span className="Link-Forms transitionBorder">Sign up</span>
+          </Link>{" "}
+          <br /> <br />
+          <Link className="Redirect-Text" to="../PasswordRecovery">
+            Forgot your password?{" "}
+            <span className="Link-Forms transitionBorder">Restore</span>
           </Link>
         </div>
         <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
-          <h2 className="Info-Title">Inicio de Sesión</h2>
+          <h2 className="Info-Title">Sign In</h2>
           <FormGroup
             id="email"
-            label="Correo Electrónico"
+            label="Email"
             type="email"
             register={register}
             rules={{
-              required: "El correo electrónico es obligatorio",
+              required: "Email is required",
               pattern: {
                 value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
-                message: "El correo electrónico no es válido",
+                message: "The email is not valid",
               },
             }}
             errors={errors}
           />
           <FormGroup
             id="password"
-            label="Contraseña"
+            label="Password"
             type="password"
             register={register}
             rules={{
-              required: "La contraseña es obligatoria",
+              required: "Password is required",
               minLength: {
                 value: 6,
-                message: "La contraseña debe tener al menos 6 caracteres",
+                message: "Password must be at least 6 characters",
               },
             }}
             errors={errors}
           />
           <button className="Button-Forms" type="submit">
-            Iniciar Sesión
+            Sign In
           </button>
+
+          <div className="Welcome-responsive">
+            <div className="welcome-links-container">
+              <Link className="Redirect-Text" to="../Signup">
+                Don't have an account?{" "}
+                <span className="Link-Forms transitionBorder">Sign up</span>
+              </Link>{" "}
+              <br /> <br />
+              <Link className="Redirect-Text" to="../PasswordRecovery">
+                Forgot your password?{" "}
+                <span className="Link-Forms transitionBorder">Restore</span>
+              </Link>
+            </div>
+          </div>
         </form>
       </div>
-      <CustomDialog 
+      <CustomDialog
         isOpen={showDialog}
         onClose={() => setShowDialog(false)}
         onConfirm={handleKeepSession}
@@ -138,6 +169,9 @@ const Signin = ({ onLogin }) => {
 
 Signin.propTypes = {
   onLogin: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  logoSrc: PropTypes.string.isRequired,
 };
 
 export default Signin;

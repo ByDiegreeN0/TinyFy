@@ -6,6 +6,7 @@ import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
 import "../styles/stylesPages/Sign.css";
 
+// Componente para renderizar un grupo de formulario con etiqueta y entrada.
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
@@ -14,12 +15,12 @@ const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
     <input
       id={id}
       type={type}
-      className={`Input-Forms ${errors[id] ? "error" : ""}`}
-      {...register(id, rules)}
+      className={`Input-Forms ${errors[id] ? "error" : ""}`} // Aplica clase de error si hay errores.
+      {...register(id, rules)} // Registra el campo en el formulario con las reglas de validación.
     />
     <div className="Error-Container">
       {errors[id] && (
-        <span className="Error-Message">{errors[id].message}</span>
+        <span className="Error-Message">{errors[id].message}</span> // Muestra mensaje de error si existe.
       )}
     </div>
   </div>
@@ -34,24 +35,37 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
+// Componente para mostrar un diálogo modal para la confirmación de sesión.
 const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null; // No renderiza nada si el diálogo no está abierto.
 
   return (
     <div className="Dialog-Overlay">
       <div className="Dialog-Content">
-        <h2>Mantener sesión</h2>
-        <p>¿Desea mantener la sesión iniciada?</p>
+        <h2>Keep session</h2>
+        <p>Do you want to stay logged in?</p>
         <div className="Dialog-Actions">
-          <button className="Button-Forms" onClick={() => onConfirm(true)}>Sí</button>
-          <button className="Button-Forms" onClick={() => onConfirm(false)}>No</button>
+          <button className="Button-Forms" onClick={() => onConfirm(true)}>
+            Sí
+          </button>
+          <button className="Button-Forms" onClick={() => onConfirm(false)}>
+            No
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-const Signup = ({ onRegister }) => {
+CustomDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+};
+
+// Componente principal de registro.
+const Signup = ({ onRegister, title, description }) => {
+  // Hook para manejar el formulario y su estado.
   const {
     register,
     handleSubmit,
@@ -59,84 +73,84 @@ const Signup = ({ onRegister }) => {
     watch,
     trigger,
   } = useForm();
-  const [step, setStep] = useState(1);
-  const [showDialog, setShowDialog] = useState(false);
-  const password = watch("password");
-  const navigate = useNavigate();
+  const [step, setStep] = useState(1); // Estado para rastrear el paso actual del formulario.
+  const [showDialog, setShowDialog] = useState(false); // Estado para controlar la visibilidad del diálogo de confirmación.
+  const password = watch("password"); // Observa el campo de contraseña para la validación de confirmación.
+  const navigate = useNavigate(); // Hook para navegación programática.
 
+  // Maneja el envío del formulario.
   const onSubmit = async (data) => {
     if (step === 1) {
-      const isValid = await trigger(["firstName", "lastName", "email"]);
-      if (isValid) setStep(2);
+      const isValid = await trigger(["firstName", "lastName", "email"]); // Valida los campos del primer paso.
+      if (isValid) setStep(2); // Avanza al siguiente paso si los campos son válidos.
     } else if (step === 2) {
-      const isValid = await trigger(["password", "passwordConfirm"]);
+      const isValid = await trigger(["password", "passwordConfirm"]); // Valida los campos del segundo paso.
       if (isValid) {
-        console.log(data);
-        // Aquí simularemos un registro exitoso
-        // En una aplicación real, aquí harías una llamada a tu API de registro
-        setShowDialog(true);
+        console.log(data); // Imprime los datos del formulario en la consola.
+        // Simulación de un registro exitoso.
+        setShowDialog(true); // Muestra el diálogo de confirmación.
       }
     }
   };
 
+  // Maneja la decisión del usuario en el diálogo de confirmación de sesión.
   const handleKeepSession = (keep) => {
     if (keep) {
-      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento local si se confirma.
     } else {
-      sessionStorage.setItem("isAuthenticated", "true");
+      sessionStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento de sesión si se niega.
     }
-    setShowDialog(false);
-    onRegister();
-    navigate("/dashboardlinks");  // Cambiado de "/dashboard" a "/dashboardlinks"
+    setShowDialog(false); // Cierra el diálogo.
+    onRegister(); // Llama a la función de registro pasada como prop.
+    navigate("/dashboardlinks"); // Navega a la página de enlaces del panel de control.
   };
 
   return (
     <div className="Sing-usuario">
       <div className="GridArea animationFade">
         <div className="Welcome">
-          <h2 className="Info-Title">Registro de Usuario</h2>
+          <h2 className="Info-Title">Sign Up in TinyFy</h2>
           <div className="Welcome-Text">
-            Bienvenido al acortador de links TinyFy. Si ya tienes una
-            cuenta, inicia sesión para continuar. Si no tienes una cuenta, crea
-            una para comenzar.
+            If you already have an account, log in to continue. If you don't
+            have an account, create one to get started.
           </div>
-          {step === 1 && (
+          {(step === 1 || step === 2) && (
             <p className="Redirect-Text">
-              ¿Ya tienes una cuenta?{" "}
+              Do you already have an account?{" "}
               <Link className="Link-Forms transitionBorder" to="../Signin">
-                Inicia sesión aquí
+                Sign In here
               </Link>
             </p>
           )}
         </div>
         <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
-          <h2 className="Info-Title">Registrarse</h2>
+          <h2 className="Info-Title">Sign Up</h2>
           {step === 1 && (
             <>
               <FormGroup
                 id="firstName"
-                label="Nombre"
+                label="Name"
                 register={register}
-                rules={{ required: "El nombre es obligatorio" }}
+                rules={{ required: "The name is required" }}
                 errors={errors}
               />
               <FormGroup
                 id="lastName"
-                label="Apellido"
+                label="Last name"
                 register={register}
-                rules={{ required: "El apellido es obligatorio" }}
+                rules={{ required: "Last name is required" }}
                 errors={errors}
               />
               <FormGroup
                 id="email"
-                label="Correo Electrónico"
+                label="Email"
                 type="email"
                 register={register}
                 rules={{
-                  required: "El correo electrónico es obligatorio",
+                  required: "Email is required",
                   pattern: {
                     value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
-                    message: "El correo electrónico no es válido",
+                    message: "The email is not valid",
                   },
                 }}
                 errors={errors}
@@ -151,27 +165,27 @@ const Signup = ({ onRegister }) => {
             <>
               <FormGroup
                 id="password"
-                label="Contraseña"
+                label="Password"
                 type="password"
                 register={register}
                 rules={{
-                  required: "La contraseña es obligatoria",
+                  required: "Password is required",
                   minLength: {
                     value: 6,
-                    message: "La contraseña debe tener al menos 6 caracteres",
+                    message: "Password must be at least 6 characters",
                   },
                 }}
                 errors={errors}
               />
               <FormGroup
                 id="passwordConfirm"
-                label="Confirmar Contraseña"
+                label="Confirm Password"
                 type="password"
                 register={register}
                 rules={{
-                  required: "La confirmación de la contraseña es obligatoria",
+                  required: "Password confirmation is mandatory",
                   validate: (value) =>
-                    value === password || "Las contraseñas no coinciden",
+                    value === password || "Passwords do not match",
                 }}
                 errors={errors}
               />
@@ -180,9 +194,20 @@ const Signup = ({ onRegister }) => {
               </button>
             </>
           )}
+
+          <div className="Welcome-responsive">
+            {(step === 1 || step === 2) && (
+              <p className="Redirect-Text">
+                Do you already have an account?{" "}
+                <Link className="Link-Forms transitionBorder" to="../Signin">
+                  Sign In here
+                </Link>
+              </p>
+            )}
+          </div>
         </form>
       </div>
-      <CustomDialog 
+      <CustomDialog
         isOpen={showDialog}
         onClose={() => setShowDialog(false)}
         onConfirm={handleKeepSession}
@@ -193,6 +218,9 @@ const Signup = ({ onRegister }) => {
 
 Signup.propTypes = {
   onRegister: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  logoSrc: PropTypes.string.isRequired,
 };
 
 export default Signup;

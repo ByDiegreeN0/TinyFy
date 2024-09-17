@@ -1,4 +1,3 @@
- /* Estilos de la página de login */
 .Sing-usuario {
   display: flex;
   width: 100vw;
@@ -8,7 +7,7 @@
   justify-content: center;
   background-color: var(--color-background);
 }
-/* Grid y disposición de elementos */
+
 .GridArea {
   display: grid;
   width: 100%;
@@ -24,28 +23,33 @@
   padding: 1rem;
 }
 
-/* Estilos para la sección de bienvenida */
 .Welcome {
   grid-area: welcome;
   padding: 1rem;
 }
 
+.Welcome-responsive {
+  display: none;
+}
 
-/* Tipografía y estilos de texto */
+.welcome-links-container {
+  margin: 1rem;
+}
+
 .Info-Title {
-  font-size: 3rem;
+  font-size: 2.8rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-/* Enlaces y estilos de texto */
 .Welcome-Text,
 .Redirect-Text {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 500;
   margin-bottom: 2rem;
   color: var(--color-title);
   text-decoration: none;
+  gap: 20px;
 }
 
 .Link-Forms {
@@ -53,7 +57,6 @@
   color: var(--color-primary);
 }
 
-/* Formulario de inicio de sesión */
 .Forms {
   grid-area: login;
   padding: 1rem;
@@ -61,7 +64,6 @@
   background: var(--color-background);
 }
 
-/* Estilos para títulos de secciones */
 .Forms h2 {
   font-size: 2.5rem;
   font-weight: bold;
@@ -94,21 +96,17 @@
 
 .Input-Forms:focus {
   outline: none;
-  background: linear-gradient(
-    to top,
-    var(--color-inputs) 0%,
-    var(--color-background) 100%
-  );
+  background: linear-gradient(to top,
+      var(--color-inputs) 0%,
+      var(--color-background) 100%);
 }
 
 .Input-Forms.error {
   outline: 1px solid var(--color-error);
 }
 
-/* Estilos para mensajes de error */
 .Error-Container {
   height: 10px;
-  /* Ajusta esta altura según sea necesario */
 }
 
 .Error-Message {
@@ -134,6 +132,7 @@
 .Button-Forms:hover {
   background-color: var(--color-title);
 }
+
 .Redirect-Boton {
   display: none;
 }
@@ -147,6 +146,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
+
 .Dialog-Content {
   position: absolute;
   top: 50%;
@@ -158,11 +158,13 @@
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
+
 .Dialog-Actions {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
 }
+
 .Button-Forms {
   width: 100%;
   height: 50px;
@@ -174,10 +176,34 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 @media screen and (max-width: 768px) {
   .Welcome {
     display: none;
   }
+
+  .Welcome-responsive {
+    display: block;
+  }
+
+
+  .Welcome-Text,
+  .Redirect-Text {
+    font-size: 1rem;
+    margin-top: 20px;
+
+  }
+
+  .Forms {
+    margin-top: 8rem;
+
+  }
+
+  .Redirect-Text {
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+
   .GridArea {
     display: flex;
     align-items: center;
