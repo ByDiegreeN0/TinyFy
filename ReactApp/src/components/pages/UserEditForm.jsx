@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import "../styles/stylesPages/UserEditForm.css";
 
 const UserEditForm = () => {
+
+  const token = localStorage.getItem('accessToken');// token de authorization
+
+  if (!token) {
+    console.error("No token found");
+    navigate("/Signin");
+  }
+  
+  
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',

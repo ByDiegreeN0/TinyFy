@@ -3,6 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import "../styles/stylesPages/DashboardReferrals.css"
 
 const DashboardReferrals = () => {
+
+  const token = localStorage.getItem('accessToken');// token de authorization
+
+  if (!token) {
+    console.error("No token found");
+    navigate("/Signin");
+  }
+  
+
+
   const navigate = useNavigate();
   const [referralLink, setReferralLink] = useState('https://example.com/ref/user123');
   const [referredUsers, setReferredUsers] = useState([

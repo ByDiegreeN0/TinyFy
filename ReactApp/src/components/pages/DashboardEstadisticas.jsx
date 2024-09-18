@@ -6,6 +6,16 @@ import LineChart from "../Common/LineChart"
 import "../styles/stylesPages/DashboardEstadisticas.css";
 
 const DashboardEstadisticas = () => {
+
+  const token = localStorage.getItem('accessToken');// token de authorization
+
+  if (!token) {
+    console.error("No token found");
+    navigate("/Signin");
+  }
+  
+
+  
   const navigate = useNavigate();
 
   useEffect(() => {

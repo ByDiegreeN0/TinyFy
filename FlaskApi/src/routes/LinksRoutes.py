@@ -4,6 +4,7 @@ from app import app
 from models.User import db
 from models.LinksModel import Links
 
+
 # Crear un nuevo enlace
 @app.route('/links', methods=['POST'])
 @jwt_required() # con este metodo se protege la ruta

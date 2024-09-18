@@ -6,7 +6,18 @@ import "../styles/stylesPages/DashboardLinks.css";
 import LoadingScreen from "../Common/LoadingScreen";
 
 export default function DashboardLinks() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Inicializa navigate aquí
+  const token = localStorage.getItem('accessToken');
+
+  useEffect(() => {
+    if (!token) {
+      console.error("No token found");
+      navigate("/Signin");
+    } else {
+      fetchLinks();
+    }
+  }, [navigate, token]);
+
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [links, setLinks] = useState([]);
@@ -16,21 +27,14 @@ export default function DashboardLinks() {
   const [isLoading, setIsLoading] = useState(false);
   const linksPerPage = 10;
 
-  useEffect(() => {
-    const isAuthenticated =
-      localStorage.getItem("isAuthenticated") ||
-      sessionStorage.getItem("isAuthenticated");
-    if (!isAuthenticated) {
-      navigate("/Signin");
-    } else {
-      fetchLinks();
-    }
-  }, [navigate]);
-
   const fetchLinks = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/links");
+      const response = await fetch("http://localhost:8000/links", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         setLinks(data);
@@ -44,23 +48,24 @@ export default function DashboardLinks() {
     }
   };
 
-  const handleDeleteClick = (linkId) => {
-    setLinkToDelete(linkId);
-    setShowDeleteModal(true);
-  };
-
   const handleDelete = async () => {
-    if (!linkToDelete) return;
-
+    if (!linkToDelete) {
+      console.error("No link ID specified for deletion.");
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:8000/links/${linkToDelete}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (response.ok) {
         setLinks(links.filter(link => link.LinkId !== linkToDelete));
         console.log(`Enlace con ID ${linkToDelete} eliminado correctamente`);
       } else {
-        console.error(`Error al eliminar el enlace con ID ${linkToDelete}`);
+        const errorText = await response.text();
+        console.error(`Error al eliminar el enlace con ID ${linkToDelete}: ${errorText}`);
       }
     } catch (error) {
       console.error(`Error al eliminar el enlace con ID ${linkToDelete}:`, error);
@@ -78,9 +83,6 @@ export default function DashboardLinks() {
       LinkUrl: url,
       LinkName: name,
       ClickCount: 0,
-      DailyViewCount: 0,
-      MonthlyViewCount: 0,
-      YearlyViewCount: 0,
       CreatedAt: new Date().toISOString(),
     };
     try {
@@ -88,6 +90,7 @@ export default function DashboardLinks() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(newLink),
       });
@@ -228,7 +231,10 @@ export default function DashboardLinks() {
                     <td>
                       <button
                         className="btn-delete"
-                        onClick={() => handleDeleteClick(link.LinkId)}
+                        onClick={() => {
+                          setLinkToDelete(link.LinkId); // Configura el ID del enlace a eliminar
+                          setShowDeleteModal(true); // Muestra el modal de confirmación
+                        }}
                       >
                         <Trash2 className="icon" />
                       </button>
@@ -288,7 +294,10 @@ export default function DashboardLinks() {
                       </div>
                       <button
                         className="btn-delete"
-                        onClick={() => handleDeleteClick(link.LinkId)}
+                        onClick={() => {
+                          setLinkToDelete(link.LinkId); // Configura el ID del enlace a eliminar
+                          setShowDeleteModal(true); // Muestra el modal de confirmación
+                        }}
                       >
                         <Trash2 className="icon" />
                         Delete
