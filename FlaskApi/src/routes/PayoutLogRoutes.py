@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
 
 from app import app
 from models.User import db
@@ -7,6 +8,7 @@ from models.User import db
 from models.PayoutLogModel import PayoutLog
 
 # Create
+@cross_origin # implementa CORS
 @app.route('/payout_log', methods=['POST'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -25,6 +27,7 @@ def create_payout_log():
     return jsonify({'message': 'Payout Log created successfully'}), 201
 
 # Read
+@cross_origin # implementa CORS
 @app.route('/payout_log', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -40,6 +43,7 @@ def get_payout_log():
         'UserId': pl.UserId
     } for pl in payout_logs])
 
+@cross_origin # implementa CORS
 @app.route('/payout_log/<int:payout_log_id>', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -56,6 +60,7 @@ def get_payout_log_by_id(payout_log_id):
     })
 
 # Update
+@cross_origin # implementa CORS
 @app.route('/payout_log/<int:payout_log_id>', methods=['PUT'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -72,6 +77,7 @@ def update_payout_log(payout_log_id):
     return jsonify({'message': 'Payout Log updated successfully'})
 
 # Delete
+@cross_origin # implementa CORS
 @app.route('/payout_log/<int:payout_log_id>', methods=['DELETE'])
 @jwt_required() # con este metodo se protege la ruta
 
