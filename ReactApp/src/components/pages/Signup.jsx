@@ -6,7 +6,6 @@ import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
 import "../styles/stylesPages/Sign.css";
 
-// Componente para renderizar un grupo de formulario con etiqueta y entrada.
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
@@ -15,12 +14,12 @@ const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
     <input
       id={id}
       type={type}
-      className={`Input-Forms ${errors[id] ? "error" : ""}`} // Aplica clase de error si hay errores.
-      {...register(id, rules)} // Registra el campo en el formulario con las reglas de validación.
+      className={`Input-Forms ${errors[id] ? "error" : ""}`}
+      {...register(id, rules)}
     />
     <div className="Error-Container">
       {errors[id] && (
-        <span className="Error-Message">{errors[id].message}</span> // Muestra mensaje de error si existe.
+        <span className="Error-Message">{errors[id].message}</span>
       )}
     </div>
   </div>
@@ -35,9 +34,8 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
-// Componente para mostrar un diálogo modal para la confirmación de sesión.
 const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
-  if (!isOpen) return null; // No renderiza nada si el diálogo no está abierto.
+  if (!isOpen) return null;
 
   return (
     <div className="Dialog-Overlay">
@@ -46,7 +44,7 @@ const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
         <p>Do you want to stay logged in?</p>
         <div className="Dialog-Actions">
           <button className="Button-Forms" onClick={() => onConfirm(true)}>
-            Sí
+            Yes
           </button>
           <button className="Button-Forms" onClick={() => onConfirm(false)}>
             No
@@ -63,9 +61,7 @@ CustomDialog.propTypes = {
   onConfirm: PropTypes.func.isRequired,
 };
 
-// Componente principal de registro.
 const Signup = ({ onRegister, title, description }) => {
-  // Hook para manejar el formulario y su estado.
   const {
     register,
     handleSubmit,
@@ -73,36 +69,59 @@ const Signup = ({ onRegister, title, description }) => {
     watch,
     trigger,
   } = useForm();
-  const [step, setStep] = useState(1); // Estado para rastrear el paso actual del formulario.
-  const [showDialog, setShowDialog] = useState(false); // Estado para controlar la visibilidad del diálogo de confirmación.
-  const password = watch("password"); // Observa el campo de contraseña para la validación de confirmación.
-  const navigate = useNavigate(); // Hook para navegación programática.
+  const [step, setStep] = useState(1);
+  const [showDialog, setShowDialog] = useState(false);
+  const password = watch("password");
+  const navigate = useNavigate();
 
-  // Maneja el envío del formulario.
   const onSubmit = async (data) => {
     if (step === 1) {
-      const isValid = await trigger(["firstName", "lastName", "email"]); // Valida los campos del primer paso.
-      if (isValid) setStep(2); // Avanza al siguiente paso si los campos son válidos.
+      const isValid = await trigger(["firstName", "lastName", "email"]);
+      if (isValid) setStep(2);
     } else if (step === 2) {
-      const isValid = await trigger(["password", "passwordConfirm"]); // Valida los campos del segundo paso.
+      const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
-        console.log(data); // Imprime los datos del formulario en la consola.
-        // Simulación de un registro exitoso.
-        setShowDialog(true); // Muestra el diálogo de confirmación.
+        try {
+          const response = await fetch('http://localhost:8000/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: `${data.firstName} ${data.lastName}`,
+              email: data.email,
+              password: data.password,
+              RoleId: 1,
+            }),
+          });
+
+          if (response.ok) {
+            const responseData = await response.json();
+            localStorage.setItem('accessToken', responseData.access_token); // Guarda el token en localStorage
+            console.log('User registered successfully');
+            setShowDialog(true);
+          } else {
+            const errorData = await response.json();
+            console.error('Registration failed:', errorData.message);
+            alert("Registration failed: " + errorData.message);
+          }
+        } catch (error) {
+          console.error('Error during registration:', error);
+          alert('Error during registration: Network error');
+        }
       }
     }
   };
 
-  // Maneja la decisión del usuario en el diálogo de confirmación de sesión.
   const handleKeepSession = (keep) => {
     if (keep) {
-      localStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento local si se confirma.
+      localStorage.setItem("isAuthenticated", "true");
     } else {
-      sessionStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento de sesión si se niega.
+      sessionStorage.setItem("isAuthenticated", "true");
     }
-    setShowDialog(false); // Cierra el diálogo.
-    onRegister(); // Llama a la función de registro pasada como prop.
-    navigate("/dashboardlinks"); // Navega a la página de enlaces del panel de control.
+    setShowDialog(false);
+    onRegister();
+    navigate("/dashboardlinks");
   };
 
   return (
@@ -156,7 +175,7 @@ const Signup = ({ onRegister, title, description }) => {
                 errors={errors}
               />
               <button className="Button-Forms" type="button" onClick={onSubmit}>
-                Continuar
+                Continue
               </button>
             </>
           )}
@@ -190,7 +209,7 @@ const Signup = ({ onRegister, title, description }) => {
                 errors={errors}
               />
               <button className="Button-Forms" type="submit">
-                Registrar
+                Register
               </button>
             </>
           )}
@@ -220,7 +239,6 @@ Signup.propTypes = {
   onRegister: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  logoSrc: PropTypes.string.isRequired,
 };
 
 export default Signup;
