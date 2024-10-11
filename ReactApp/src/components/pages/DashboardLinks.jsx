@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
-import "../styles/stylesPages/DashboardLinks.css";
 import LoadingScreen from "../Common/LoadingScreen";
+import CreateLinkForm from "../Common/CreateLinkForm";
+import DeleteLinkModal from "../Common/DeleteLinkModal";
+import "../styles/stylesPages/DashboardLinks.css";
 
 export default function DashboardLinks() {
-  const navigate = useNavigate(); // Inicializa navigate aquí
+  const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -48,43 +50,8 @@ export default function DashboardLinks() {
     }
   };
 
-  const handleDelete = async () => {
-    if (!linkToDelete) {
-      console.error("No link ID specified for deletion.");
-      return;
-    }
-    try {
-      const response = await fetch(`http://localhost:8000/links/${linkToDelete}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        setLinks(links.filter(link => link.LinkId !== linkToDelete));
-        console.log(`Enlace con ID ${linkToDelete} eliminado correctamente`);
-      } else {
-        const errorText = await response.text();
-        console.error(`Error al eliminar el enlace con ID ${linkToDelete}: ${errorText}`);
-      }
-    } catch (error) {
-      console.error(`Error al eliminar el enlace con ID ${linkToDelete}:`, error);
-    }
-    setShowDeleteModal(false);
-    setLinkToDelete(null);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleCreateLink = async (newLink) => {
     setIsLoading(true);
-    const name = e.target.name.value;
-    const url = e.target.url.value;
-    const newLink = {
-      LinkUrl: url,
-      LinkName: name,
-      ClickCount: 0,
-      CreatedAt: new Date().toISOString(),
-    };
     try {
       const response = await fetch("http://localhost:8000/links", {
         method: "POST",
@@ -104,6 +71,32 @@ export default function DashboardLinks() {
       console.error("Error al crear el enlace:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    await handleDelete(linkToDelete);
+    setShowDeleteModal(false);
+    setLinkToDelete(null);
+  };
+
+  const handleDelete = async (linkId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/links/${linkId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setLinks(links.filter(link => link.LinkId !== linkId));
+        console.log(`Enlace con ID ${linkId} eliminado correctamente`);
+      } else {
+        const errorText = await response.text();
+        console.error(`Error al eliminar el enlace con ID ${linkId}: ${errorText}`);
+      }
+    } catch (error) {
+      console.error(`Error al eliminar el enlace con ID ${linkId}:`, error);
     }
   };
 
@@ -175,19 +168,7 @@ export default function DashboardLinks() {
           className="link-form-container"
         >
           <h2>Shorten New Link</h2>
-          <form onSubmit={handleSubmit} className="link-form">
-            <div className="form-group">
-              <label htmlFor="name">Link Name</label>
-              <input id="name" name="name" type="text" required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="url">Link URL</label>
-              <input id="url" name="url" type="url" required />
-            </div>
-            <button type="submit" className="btn-primary">
-              Create
-            </button>
-          </form>
+          <CreateLinkForm onSubmit={handleCreateLink} isModal={false} />
         </motion.div>
       ) : (
         <motion.div
@@ -232,8 +213,8 @@ export default function DashboardLinks() {
                       <button
                         className="btn-delete"
                         onClick={() => {
-                          setLinkToDelete(link.LinkId); // Configura el ID del enlace a eliminar
-                          setShowDeleteModal(true); // Muestra el modal de confirmación
+                          setLinkToDelete(link.LinkId);
+                          setShowDeleteModal(true);
                         }}
                       >
                         <Trash2 className="icon" />
@@ -295,8 +276,8 @@ export default function DashboardLinks() {
                       <button
                         className="btn-delete"
                         onClick={() => {
-                          setLinkToDelete(link.LinkId); // Configura el ID del enlace a eliminar
-                          setShowDeleteModal(true); // Muestra el modal de confirmación
+                          setLinkToDelete(link.LinkId);
+                          setShowDeleteModal(true);
                         }}
                       >
                         <Trash2 className="icon" />
@@ -312,14 +293,14 @@ export default function DashboardLinks() {
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
-              className="btn-secondary"
+              className="btn-primary"
             >
               Back
             </button>
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={indexOfLastLink >= links.length}
-              className="btn-secondary"
+              className="btn-primary"
             >
               Next
             </button>
@@ -334,50 +315,16 @@ export default function DashboardLinks() {
               &times;
             </button>
             <h2>Shorten New Link</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="modalName">Link Name</label>
-                <input id="modalName" name="name" required />
-              </div>
-              <div className="form-group">
-                <label htmlFor="modalUrl">Link URL</label>
-                <input id="modalUrl" name="url" type="url" required />
-              </div>
-              <div className="form-actions">
-                <button type="submit" className="btn-primary">
-                  Create
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="btn-secondary"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            <CreateLinkForm onSubmit={handleCreateLink} isModal={true} onCancel={() => setShowModal(false)} />
           </div>
         </div>
       )}
 
       {showDeleteModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Confirm deletion</h2>
-            <p>Are you sure you want to remove this link?</p>
-            <div className="form-actions">
-              <button onClick={handleDelete} className="btn-delete">
-                Delete
-              </button>
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="btn-secondary"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <DeleteLinkModal 
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setShowDeleteModal(false)}
+        />
       )}
     </motion.div>
   );
