@@ -12,6 +12,7 @@ def generar_link_corto():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=15))
 
 @cross_origin  # Implementa CORS
+@jwt_required()
 @app.route('/links', methods=['POST'])
 def create_link():
     data = request.json
