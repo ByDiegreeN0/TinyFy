@@ -1,0 +1,1 @@
+# En este archivo van todas las funciones derivadas para hacer que lonks funcione correctamente 
