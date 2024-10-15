@@ -1,5 +1,7 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
+
 
 from app import app
 from models.User import db

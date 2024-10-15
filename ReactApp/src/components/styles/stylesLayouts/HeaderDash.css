@@ -1,7 +1,7 @@
-/* Estilos para el header autenticado (HeaderDash) */
+
 .HeaderDash {
   display: inline-flex;
-  position: fixed;
+  position: fixed; 
   height: 100vh;
   width: 80px;
   align-items: center;
@@ -126,6 +126,7 @@
   width: 30px;
   height: 30px;
   margin-right: 20px;
+  fill: #fff;
   transition: transform 300ms ease, filter 300ms ease;
 }
 
@@ -153,7 +154,6 @@
   box-shadow: 0px 0px 10px var(--color-primary);
 }
 
-/* Estilos para el BotonLink */
 .authenticated-header-container {
   position: relative;
   height: 100vh;
@@ -185,7 +185,6 @@
   height: 30px;
 }
 
-/* Estilos para el modal (según lo proporcionado) */
 .modal {
   position: fixed;
   top: 0;
@@ -210,7 +209,6 @@
   animation: scaleIn 0.5s ease-out;
 }
 
-/* Animaciones para el modal */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -221,7 +219,6 @@
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Estilos adicionales para el formulario dentro del modal */
 .form-group {
   margin-bottom: 15px;
 }
@@ -260,4 +257,31 @@
 .form-actions button[type="button"] {
   background-color: #ccc;
   color: black;
+}
+
+@media screen and (max-width: 768px) {
+  body .HeaderDash {
+    position: fixed;
+    top: 0;  
+    height: 100%;
+  }
+  
+  
+  body .container-links {
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  
+  body .Nav-Link {
+    flex-direction: column;
+    padding: 5px;
+    margin: 0;
+  }
+  
+  body .Nav-Ico {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
 }

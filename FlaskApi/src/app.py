@@ -1,4 +1,10 @@
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
+
+
 from flask import Flask
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from config import config
 from models.User import db  
@@ -9,6 +15,13 @@ from models import *
 app = Flask(__name__)
 app.config.from_object(config['development'])
 
+# Inicializa CORS (esta libreria permite a aplicaciones en otros puertos, mandar datos al API)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
+CORS(app, resources={r"/api/*": {"origins": "localhost:5000"}})  # DEJA QUE UNICAMENT EL PUERTO 5000 DEL LOCALHOST, ACCEDA A LAS PROPIEDADES DEL API
+
+
+# Inicializa JWT
+jwt = JWTManager(app)
 
 
 # Inicializa SQLAlchemy

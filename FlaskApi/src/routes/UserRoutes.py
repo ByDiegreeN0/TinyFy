@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
 import bcrypt
 from models.User import User, db
 from app import app
 
 # Create
+@cross_origin # implementa CORS
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.json
@@ -14,18 +16,21 @@ def create_user():
     return jsonify({'message': 'User created successfully'}), 201
 
 # Read
+@cross_origin # implementa CORS
 @app.route('/users', methods=['GET'])
 def get_users():
     
     users = User.query.all()
     return jsonify([{'id': user.id, 'username': user.username, 'email': user.email} for user in users])
 
+@cross_origin # implementa CORS
 @app.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.get_or_404(user_id)
     return jsonify({'id': user.id, 'username': user.username, 'email': user.email})
 
 # Update
+@cross_origin # implementa CORS
 @app.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     user = User.query.get_or_404(user_id)
@@ -39,6 +44,7 @@ def update_user(user_id):
     return jsonify({'message': 'User updated successfully'})
 
 # Delete
+@cross_origin # implementa CORS
 @app.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
