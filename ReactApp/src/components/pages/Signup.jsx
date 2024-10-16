@@ -82,7 +82,8 @@ const Signup = ({ onRegister, title, description }) => {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
         try {
-          const response = await fetch('http://localhost:8000/users', {
+          // Register the user
+          const registerResponse = await fetch('http://localhost:8000/users', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -95,19 +96,38 @@ const Signup = ({ onRegister, title, description }) => {
             }),
           });
 
-          if (response.ok) {
-            const responseData = await response.json();
-            localStorage.setItem('accessToken', responseData.access_token); // Guarda el token en localStorage
+          if (registerResponse.ok) {
             console.log('User registered successfully');
-            setShowDialog(true);
+            
+            // Now, login to get the access token
+            const loginResponse = await fetch('http://localhost:8000/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: data.email,
+                password: data.password,
+              }),
+            });
+
+            if (loginResponse.ok) {
+              const loginData = await loginResponse.json();
+              localStorage.setItem('accessToken', loginData.access_token);
+              setShowDialog(true);
+            } else {
+              const errorData = await loginResponse.json();
+              console.error('Login failed:', errorData.msg);
+              alert("Login failed: " + errorData.msg);
+            }
           } else {
-            const errorData = await response.json();
+            const errorData = await registerResponse.json();
             console.error('Registration failed:', errorData.message);
             alert("Registration failed: " + errorData.message);
           }
         } catch (error) {
-          console.error('Error during registration:', error);
-          alert('Error during registration: Network error');
+          console.error('Error during registration or login:', error);
+          alert('Error during registration or login: Network error');
         }
       }
     }
