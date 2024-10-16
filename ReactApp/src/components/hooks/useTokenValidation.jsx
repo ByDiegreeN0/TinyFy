@@ -9,18 +9,17 @@ const useTokenValidation = () => {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      navigate("/SignIn");
+      console.log("Hola")
     } else {
       try {
         const decodedToken = jwt_decode.decode(token);
         const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp < currentTime) {
-          navigate("/SignIn");
+          console.log("Hola")
         }
       } catch (error) {
         console.error("Error decoding token:", error);
-        navigate("/SignIn");
       }
     }
   }, [navigate]);

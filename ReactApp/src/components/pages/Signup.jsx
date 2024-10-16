@@ -82,7 +82,6 @@ const Signup = ({ onRegister, title, description }) => {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
         try {
-          // Register the user
           const registerResponse = await fetch('http://localhost:8000/users', {
             method: 'POST',
             headers: {
@@ -95,11 +94,8 @@ const Signup = ({ onRegister, title, description }) => {
               RoleId: 1,
             }),
           });
-
+  
           if (registerResponse.ok) {
-            console.log('User registered successfully');
-            
-            // Now, login to get the access token
             const loginResponse = await fetch('http://localhost:8000/login', {
               method: 'POST',
               headers: {
@@ -110,10 +106,11 @@ const Signup = ({ onRegister, title, description }) => {
                 password: data.password,
               }),
             });
-
+  
             if (loginResponse.ok) {
               const loginData = await loginResponse.json();
               localStorage.setItem('accessToken', loginData.access_token);
+              localStorage.setItem('userId', loginData.user_id); // Almacena el ID del usuario
               setShowDialog(true);
             } else {
               const errorData = await loginResponse.json();
@@ -132,6 +129,7 @@ const Signup = ({ onRegister, title, description }) => {
       }
     }
   };
+  
 
   const handleKeepSession = (keep) => {
     if (keep) {
