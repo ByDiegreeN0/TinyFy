@@ -1,27 +1,29 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as jwt_decode from "jwt-decode";
 
 const useTokenValidation = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      console.log("No token found");
+      navigate("/SignIn");
     } else {
       try {
         const decodedToken = jwt_decode.decode(token);
         const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp < currentTime) {
-          console.log("Token has expired");
-        } else {
-          console.log("Token is valid");
+          navigate("/SignIn");
         }
       } catch (error) {
         console.error("Error decoding token:", error);
+        navigate("/SignIn");
       }
     }
-  }, []);
+  }, [navigate]);
 };
 
 export default useTokenValidation;
