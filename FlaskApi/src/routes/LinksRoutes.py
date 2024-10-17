@@ -6,6 +6,7 @@ from models.User import db
 from models.LinksModel import Links
 import random
 import string
+from services.AmountClicks import register_click 
 
 # Función para generar un enlace corto aleatorio
 def generar_link_corto():
@@ -13,6 +14,20 @@ def generar_link_corto():
 
 @cross_origin  # Implementa CORS
 @jwt_required()
+
+@app.route('/click', methods=['POST'])
+def click_endpoint():
+    data = request.json
+    link_id = data.get('LinkId')  # Obtener el LinkId del cuerpo de la solicitud
+
+    if link_id is not None:
+        try:
+            register_click(link_id)  # Llama a la función para registrar el click
+            return jsonify({'status': 'success'}), 201  # Respuesta exitosa
+        except ValueError as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 404  # Manejo de error
+    return jsonify({'status': 'error', 'message': 'LinkId required'}), 400  # Manejo de error
+
 @app.route('/links', methods=['POST'])
 def create_link():
     data = request.json
