@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
 
 from models.User import db
 from app import app
@@ -7,6 +8,7 @@ from app import app
 from models.SystemAnalyticsModel import SystemAnalytics
 
 # Create
+@cross_origin # implementa CORS
 @app.route('/system-analytics', methods=['POST'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -22,6 +24,7 @@ def create_system_analytics():
     return jsonify({'message': 'System Analytics created successfully'}), 201
 
 # Read
+@cross_origin # implementa CORS
 @app.route('/system-analytics', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -35,6 +38,7 @@ def get_system_analytics():
         'CreatedAt': a.CreatedAt
     } for a in analytics])
 
+@cross_origin # implementa CORS
 @app.route('/system-analytics/<int:analytics_id>', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -49,6 +53,7 @@ def get_system_analytics_by_id(analytics_id):
     })
 
 # Update
+@cross_origin # implementa CORS
 @app.route('/system-analytics/<int:analytics_id>', methods=['PUT'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -65,6 +70,7 @@ def update_system_analytics(analytics_id):
     return jsonify({'message': 'System Analytics updated successfully'})
 
 # Delete
+@cross_origin # implementa CORS
 @app.route('/system-analytics/<int:analytics_id>', methods=['DELETE'])
 @jwt_required() # con este metodo se protege la ruta
 
