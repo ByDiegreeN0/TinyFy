@@ -2,18 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/stylesPages/DashboardPayouts.css";
 import axios from "axios";
+import useTokenValidation from "../hooks/useTokenValidation";
 
 export default function DashboardPayouts() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("accessToken"); // Obtener token del localStorage
-
-  // Si no hay token, redirige al usuario a la página de inicio de sesión
-  useEffect(() => {
-    if (!token) {
-      console.error("No token found");
-      navigate("/Signin");
-    }
-  }, [navigate, token]);
+  useTokenValidation();
+  const token = localStorage.getItem("accessToken"); 
 
   const [paymentMethod, setPaymentMethod] = useState("paypal");
   const [editMode, setEditMode] = useState(false);

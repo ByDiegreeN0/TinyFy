@@ -13,7 +13,7 @@ import PageLoader from './components/Common/LoadingScreen';
 import TerminosYCondiciones from './components/Common/TerminosCondiciones';
 import UserEditForm from './components/pages/UserEditForm';
 import PasswordRecovery from './components/pages/PasswordRecovery';
-import logo from './assets/Svg/Logos/TInyFyLogoNombreBlanco.svg'; 
+import logo from './assets/Svg/Logos/HomeSVG.svg'; 
 import './components/styles/index.css';
 
 const App = () => {

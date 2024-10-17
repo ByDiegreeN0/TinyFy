@@ -2,21 +2,14 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BarChart from "../Common/BarChart";
 import PieChart from "../Common/PieChart";
-import LineChart from "../Common/LineChart"
+import LineChart from "../Common/LineChart";
+import useTokenValidation from "../hooks/useTokenValidation";
 import "../styles/stylesPages/DashboardEstadisticas.css";
 
 const DashboardEstadisticas = () => {
-
-  const token = localStorage.getItem('accessToken');// token de authorization
-
-  if (!token) {
-    console.error("No token found");
-    navigate("/Signin");
-  }
-  
-
-  
   const navigate = useNavigate();
+
+  useTokenValidation();
 
   useEffect(() => {
     const isAuthenticated =

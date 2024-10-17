@@ -1,24 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../styles/stylesPages/DashboardSupport.css";
+import useTokenValidation from "../hooks/useTokenValidation";
 
 const DashboardSupport = () => {
   const navigate = useNavigate();
-
-  const token = localStorage.getItem('accessToken');// token de authorization
-
-  if (!token) {
-    console.error("No token found");
-    navigate("/Signin");
-  }
-  
-
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') || sessionStorage.getItem('isAuthenticated');
-    if (!isAuthenticated) {
-      navigate('/Signin');
-    }
-  }, [navigate]);
+  useTokenValidation();
 
   return (
     <div className="dashboard">
