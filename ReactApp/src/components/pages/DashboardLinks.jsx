@@ -4,19 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import "../styles/stylesPages/DashboardLinks.css";
 import LoadingScreen from "../Common/LoadingScreen";
+import useTokenValidation from "../hooks/useTokenValidation";
+import LinkTable from "../Common/LinkTable";
 
 export default function DashboardLinks() {
-  const navigate = useNavigate(); // Inicializa navigate aquí
-  const token = localStorage.getItem('accessToken');
-
-  useEffect(() => {
-    if (!token) {
-      console.error("No token found");
-      navigate("/Signin");
-    } else {
-      fetchLinks();
-    }
-  }, [navigate, token]);
+  const navigate = useNavigate(); 
+  useTokenValidation();
 
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -28,12 +21,15 @@ export default function DashboardLinks() {
   const linksPerPage = 10;
 
   const fetchLinks = async () => {
+    const token = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("userId"); // Asumimos que el ID del usuario se guarda en el almacenamiento local
     setIsLoading(true);
     try {
       const response = await fetch("http://localhost:8000/links", {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+          "User-ID": userId, // Enviamos el ID del usuario en los headers
+        },
       });
       if (response.ok) {
         const data = await response.json();
@@ -48,27 +44,40 @@ export default function DashboardLinks() {
     }
   };
 
+  useEffect(() => {
+    fetchLinks();
+  }, []);
+
   const handleDelete = async () => {
     if (!linkToDelete) {
       console.error("No link ID specified for deletion.");
       return;
     }
+    const token = localStorage.getItem("accessToken");
     try {
-      const response = await fetch(`http://localhost:8000/links/${linkToDelete}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
+      const response = await fetch(
+        `http://localhost:8000/links/${linkToDelete}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       if (response.ok) {
-        setLinks(links.filter(link => link.LinkId !== linkToDelete));
+        setLinks(links.filter((link) => link.LinkId !== linkToDelete));
         console.log(`Enlace con ID ${linkToDelete} eliminado correctamente`);
       } else {
         const errorText = await response.text();
-        console.error(`Error al eliminar el enlace con ID ${linkToDelete}: ${errorText}`);
+        console.error(
+          `Error al eliminar el enlace con ID ${linkToDelete}: ${errorText}`
+        );
       }
     } catch (error) {
-      console.error(`Error al eliminar el enlace con ID ${linkToDelete}:`, error);
+      console.error(
+        `Error al eliminar el enlace con ID ${linkToDelete}:`,
+        error
+      );
     }
     setShowDeleteModal(false);
     setLinkToDelete(null);
@@ -79,18 +88,21 @@ export default function DashboardLinks() {
     setIsLoading(true);
     const name = e.target.name.value;
     const url = e.target.url.value;
+    const token = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("userId");
     const newLink = {
       LinkUrl: url,
       LinkName: name,
       ClickCount: 0,
       CreatedAt: new Date().toISOString(),
+      UserId: userId, // Incluimos el ID del usuario al crear un nuevo enlace
     };
     try {
       const response = await fetch("http://localhost:8000/links", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newLink),
       });
@@ -123,7 +135,6 @@ export default function DashboardLinks() {
 
   const indexOfLastLink = currentPage * linksPerPage;
   const indexOfFirstLink = indexOfLastLink - linksPerPage;
-  const currentLinks = links.slice(indexOfFirstLink, indexOfLastLink);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -202,112 +213,15 @@ export default function DashboardLinks() {
               Shorten Link
             </button>
           </div>
-          <table className="link-table">
-            <thead>
-              <tr className="Title-tabla">
-                <th>URL Name</th>
-                <th>Short URL</th>
-                <th>Target URL</th>
-                <th>Views</th>
-                <th>Created At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <AnimatePresence>
-                {currentLinks.map((link) => (
-                  <motion.tr
-                    key={link.LinkId}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <td>{link.LinkName}</td>
-                    <td>{link.LinkShortUrl}</td>
-                    <td>{link.LinkUrl}</td>
-                    <td>{link.ClickCount}</td>
-                    <td>{new Date(link.CreatedAt).toLocaleDateString()}</td>
-                    <td>
-                      <button
-                        className="btn-delete"
-                        onClick={() => {
-                          setLinkToDelete(link.LinkId); // Configura el ID del enlace a eliminar
-                          setShowDeleteModal(true); // Muestra el modal de confirmación
-                        }}
-                      >
-                        <Trash2 className="icon" />
-                      </button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </AnimatePresence>
-            </tbody>
-          </table>
-          <div className="mobile-link-list">
-            <AnimatePresence>
-              {currentLinks.map((link) => (
-                <motion.div
-                  key={link.LinkId}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="mobile-link-card"
-                >
-                  <div
-                    className="mobile-link-header"
-                    onClick={() => toggleDetails(link.LinkId)}
-                  >
-                    <span className="mobile-link-name">{link.LinkName}</span>
-                    {expandedCard === link.LinkId ? (
-                      <ChevronUp className="icon" />
-                    ) : (
-                      <ChevronDown className="icon" />
-                    )}
-                  </div>
-                  {expandedCard === link.LinkId && (
-                    <div className="mobile-link-details">
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Short URL:</span>
-                        <span className="mobile-link-value">
-                          {link.LinkShortUrl}
-                        </span>
-                      </div>
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Target URL:</span>
-                        <span className="mobile-link-value">
-                          {link.LinkUrl}
-                        </span>
-                      </div>
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Views:</span>
-                        <span className="mobile-link-value">
-                          {link.ClickCount}
-                        </span>
-                      </div>
-                      <div className="mobile-link-detail">
-                        <span className="mobile-link-label">Created At:</span>
-                        <span className="mobile-link-value">
-                          {new Date(link.CreatedAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <button
-                        className="btn-delete"
-                        onClick={() => {
-                          setLinkToDelete(link.LinkId); // Configura el ID del enlace a eliminar
-                          setShowDeleteModal(true); // Muestra el modal de confirmación
-                        }}
-                      >
-                        <Trash2 className="icon" />
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+          <LinkTable 
+            links={links}
+            expandedCard={expandedCard}
+            toggleDetails={toggleDetails}
+            setLinkToDelete={setLinkToDelete}
+            setShowDeleteModal={setShowDeleteModal}
+            currentPage={currentPage}
+            linksPerPage={linksPerPage}
+          />
           <div className="pagination">
             <button
               onClick={() => paginate(currentPage - 1)}

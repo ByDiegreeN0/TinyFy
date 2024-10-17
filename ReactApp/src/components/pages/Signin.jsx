@@ -70,15 +70,16 @@ const Signin = ({ onLogin, title, description, logoSrc }) => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:8000/login', data); // Enviar datos al backend Flask
-      localStorage.setItem('accessToken', response.data.access_token); // Guarda el token en el almacenamiento local
-      setShowDialog(true); // Muestra el diálogo de confirmación.
+      const response = await axios.post('http://localhost:8000/login', data);
+      localStorage.setItem('accessToken', response.data.access_token);
+      localStorage.setItem('userId', response.data.user_id); // Almacena el ID del usuario
+      setShowDialog(true);
     } catch (error) {
       console.error(error);
-      // Manejo del error, mostrar mensaje al usuario
       alert("Login failed: " + (error.response ? error.response.data.msg : "Network error"));
     }
   };
+  
 
   // Maneja la confirmación del diálogo de sesión.
   const handleKeepSession = (keep) => {
