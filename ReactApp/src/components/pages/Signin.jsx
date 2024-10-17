@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"; // Importa axios
 import "../styles/stylesPages/Sign.css";
 import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
@@ -67,10 +68,18 @@ const Signin = ({ onLogin, title, description, logoSrc }) => {
   const navigate = useNavigate(); // Hook para navegación programática.
   const [showDialog, setShowDialog] = useState(false); // Estado para mostrar el diálogo de confirmación.
 
-  const onSubmit = (data) => {
-    console.log(data); // Imprime los datos del formulario en la consola.
-    setShowDialog(true); // Muestra el diálogo de confirmación.
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:8000/login', data);
+      localStorage.setItem('accessToken', response.data.access_token);
+      localStorage.setItem('userId', response.data.user_id); // Almacena el ID del usuario
+      setShowDialog(true);
+    } catch (error) {
+      console.error(error);
+      alert("Login failed: " + (error.response ? error.response.data.msg : "Network error"));
+    }
   };
+  
 
   // Maneja la confirmación del diálogo de sesión.
   const handleKeepSession = (keep) => {
@@ -133,7 +142,7 @@ const Signin = ({ onLogin, title, description, logoSrc }) => {
             rules={{
               required: "Password is required",
               minLength: {
-                value: 6,
+                value: 5,
                 message: "Password must be at least 6 characters",
               },
             }}

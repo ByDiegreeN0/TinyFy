@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import "../styles/stylesPages/Sign.css";
 import LoadingScreen from "../Common/LoadingScreen";
 
-// FormGroup component definition
+
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
     <label className="Label-Forms" htmlFor={id}>
@@ -35,6 +35,34 @@ FormGroup.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
+const CustomDialog = ({ isOpen, onClose, onConfirm }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="Dialog-Overlay">
+      <div className="Dialog-Content">
+        <h2>Keep session</h2>
+        <p>Do you want to stay logged in?</p>
+        <div className="Dialog-Actions">
+          <button className="Button-Forms" onClick={() => onConfirm(true)}>
+            Yes
+          </button>
+          <button className="Button-Forms" onClick={() => onConfirm(false)}>
+            No
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CustomDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+};
+
+const Signup = ({ onRegister, title, description }) => {
 // Main Signup component
 const Signup = ({ onRegister }) => {
   const {
@@ -45,6 +73,7 @@ const Signup = ({ onRegister }) => {
     trigger,
   } = useForm();
   const [step, setStep] = useState(1);
+  const [showDialog, setShowDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
   const password = watch("password");
@@ -57,6 +86,9 @@ const Signup = ({ onRegister }) => {
     } else if (step === 2) {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
+
+        try {
+          const registerResponse = await fetch('http://localhost:8000/users', {
         setIsLoading(true);
         setApiError(null);
         try {
@@ -69,6 +101,55 @@ const Signup = ({ onRegister }) => {
               username: `${data.firstName} ${data.lastName}`,
               email: data.email,
               password: data.password,
+              RoleId: 1,
+            }),
+          });
+  
+          if (registerResponse.ok) {
+            const loginResponse = await fetch('http://localhost:8000/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: data.email,
+                password: data.password,
+              }),
+            });
+  
+            if (loginResponse.ok) {
+              const loginData = await loginResponse.json();
+              localStorage.setItem('accessToken', loginData.access_token);
+              localStorage.setItem('userId', loginData.user_id); // Almacena el ID del usuario
+              setShowDialog(true);
+            } else {
+              const errorData = await loginResponse.json();
+              console.error('Login failed:', errorData.msg);
+              alert("Login failed: " + errorData.msg);
+            }
+          } else {
+            const errorData = await registerResponse.json();
+            console.error('Registration failed:', errorData.message);
+            alert("Registration failed: " + errorData.message);
+          }
+        } catch (error) {
+          console.error('Error during registration or login:', error);
+          alert('Error during registration or login: Network error');
+        }
+      }
+    }
+  };
+  
+
+  const handleKeepSession = (keep) => {
+    if (keep) {
+      localStorage.setItem("isAuthenticated", "true");
+    } else {
+      sessionStorage.setItem("isAuthenticated", "true");
+    }
+    setShowDialog(false);
+    onRegister();
+    navigate("/dashboardlinks");
               RoleId: 1
             }),
           });
@@ -150,6 +231,7 @@ const Signup = ({ onRegister }) => {
                 }}
                 errors={errors}
               />
+              <button className="Button-Forms" type="button" onClick={onSubmit}>
               <button className="Button-Forms" type="submit">
                 Continue
               </button>
@@ -184,6 +266,8 @@ const Signup = ({ onRegister }) => {
                 }}
                 errors={errors}
               />
+              <button className="Button-Forms" type="submit">
+                Register
               <button className="Button-Forms" type="submit" disabled={isLoading}>
                 {isLoading ? 'Registering...' : 'Register'}
               </button>
@@ -209,6 +293,9 @@ const Signup = ({ onRegister }) => {
 
 Signup.propTypes = {
   onRegister: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+
 };
 
 export default Signup;

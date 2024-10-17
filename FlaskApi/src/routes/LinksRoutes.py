@@ -1,10 +1,14 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
+
 from app import app
 from models.User import db
 from models.LinksModel import Links
 
+
 # Crear un nuevo enlace
+@cross_origin # implementa CORS
 @app.route('/links', methods=['POST'])
 @jwt_required() # con este metodo se protege la ruta
 def create_link():
@@ -23,6 +27,7 @@ def create_link():
     return jsonify({'message': 'Link created successfully'}), 201
 
 # Obtener todos los enlaces
+@cross_origin # implementa CORS
 @app.route('/links', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 def get_links():
@@ -39,6 +44,7 @@ def get_links():
     } for l in links])
 
 # Obtener un enlace por ID
+@cross_origin # implementa CORS
 @app.route('/links/<int:link_id>', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 def get_link(link_id):
@@ -55,6 +61,7 @@ def get_link(link_id):
     })
 
 # Actualizar un enlace por ID
+@cross_origin # implementa CORS
 @app.route('/links/<int:link_id>', methods=['PUT'])
 @jwt_required() # con este metodo se protege la ruta
 def update_link(link_id):
@@ -71,6 +78,8 @@ def update_link(link_id):
     return jsonify({'message': 'Link updated successfully'})
 
 # Eliminar un enlace por ID
+
+@cross_origin # implementa CORS
 @app.route('/links/<int:link_id>', methods=['DELETE'])
 @jwt_required() # con este metodo se protege la ruta
 def delete_link(link_id):

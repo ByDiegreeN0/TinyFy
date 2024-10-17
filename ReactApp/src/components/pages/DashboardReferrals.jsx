@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/stylesPages/DashboardReferrals.css"
+import "../styles/stylesPages/DashboardReferrals.css";
+import useTokenValidation from "../hooks/useTokenValidation";
 
 const DashboardReferrals = () => {
   const navigate = useNavigate();
+  useTokenValidation();
+
   const [referralLink, setReferralLink] = useState('https://example.com/ref/user123');
   const [referredUsers, setReferredUsers] = useState([
     { name: 'Alice Smith', date: '2023-05-01' },
@@ -15,13 +18,6 @@ const DashboardReferrals = () => {
     { date: '2023-05-15', total: 75 },
     { date: '2023-05-30', total: 100 },
   ]);
-
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') || sessionStorage.getItem('isAuthenticated');
-    if (!isAuthenticated) {
-      navigate('/Signin');
-    }
-  }, [navigate]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);

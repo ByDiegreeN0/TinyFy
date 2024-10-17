@@ -1,11 +1,13 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
 from app import app
 from models.User import db
 
 from models.WarnedAccountsModel import WarnedAccount
 
 # Create
+@cross_origin # implementa CORS
 @app.route('/warned_accounts', methods=['POST'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -17,6 +19,7 @@ def create_warned_account():
     return jsonify({'message': 'WarnedAccount created successfully'}), 201
 
 # Read
+@cross_origin # implementa CORS
 @app.route('/warned_accounts', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -24,6 +27,7 @@ def get_warned_accounts():
     warned_accounts = WarnedAccount.query.all()
     return jsonify([{'WarnedAccountsId': wa.WarnedAccountsId, 'UserId': wa.UserId, 'WarnedDate': wa.WarnedDate} for wa in warned_accounts])
 
+@cross_origin # implementa CORS
 @app.route('/warned_accounts/<int:warned_accounts_id>', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -32,6 +36,7 @@ def get_warned_account(warned_accounts_id):
     return jsonify({'WarnedAccountsId': warned_account.WarnedAccountsId, 'UserId': warned_account.UserId, 'WarnedDate': warned_account.WarnedDate})
 
 # Update
+@cross_origin # implementa CORS
 @app.route('/warned_accounts/<int:warned_accounts_id>', methods=['PUT'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -44,6 +49,7 @@ def update_warned_account(warned_accounts_id):
     return jsonify({'message': 'WarnedAccount updated successfully'})
 
 # Delete
+@cross_origin # implementa CORS
 @app.route('/warned_accounts/<int:warned_accounts_id>', methods=['DELETE'])
 @jwt_required() # con este metodo se protege la ruta
 

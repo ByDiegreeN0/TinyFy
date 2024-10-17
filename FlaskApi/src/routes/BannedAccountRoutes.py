@@ -1,5 +1,7 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
+
 
 from app import app
 from models.User import db
@@ -7,6 +9,7 @@ from models.BannedAccountsModel import BannedAccount
 
 
 # Create
+@cross_origin # implementa CORS
 @app.route('/banned_accounts', methods=['POST'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -18,6 +21,7 @@ def create_banned_account():
     return jsonify({'message': 'BannedAccount created successfully'}), 201
 
 # Read
+@cross_origin # implementa CORS
 @app.route('/banned_accounts', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -25,6 +29,7 @@ def get_banned_accounts():
     banned_accounts = BannedAccount.query.all()
     return jsonify([{'BannedAccountId': ba.BannedAccountId, 'UserId': ba.UserId, 'BanReason': ba.BanReason, 'CreatedAt': ba.CreatedAt} for ba in banned_accounts])
 
+@cross_origin # implementa CORS
 @app.route('/banned_accounts/<int:banned_account_id>', methods=['GET'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -33,6 +38,7 @@ def get_banned_account(banned_account_id):
     return jsonify({'BannedAccountId': banned_account.BannedAccountId, 'UserId': banned_account.UserId, 'BanReason': banned_account.BanReason, 'CreatedAt': banned_account.CreatedAt})
 
 # Update
+@cross_origin # implementa CORS
 @app.route('/banned_accounts/<int:banned_account_id>', methods=['PUT'])
 @jwt_required() # con este metodo se protege la ruta
 
@@ -45,6 +51,7 @@ def update_banned_account(banned_account_id):
     return jsonify({'message': 'BannedAccount updated successfully'})
 
 # Delete
+@cross_origin # implementa CORS
 @app.route('/banned_accounts/<int:banned_account_id>', methods=['DELETE'])
 @jwt_required() # con este metodo se protege la ruta
 

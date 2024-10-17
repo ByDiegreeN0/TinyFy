@@ -2,14 +2,17 @@ from flask import request, jsonify
 from app import app
 from models.User import db
 from flask_jwt_extended import jwt_required # libreria de flask para proteger rutas
-
-
+from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
 from models.PayoutDataModel import Payout_Data
 
-# Create
+
+
+
+
+#create
+@cross_origin # implementa CORS
 @app.route('/payout_data', methods=['POST'])
 @jwt_required()
-
 def create_payout_data():
     data = request.json
     new_payout_data = Payout_Data(
@@ -20,7 +23,7 @@ def create_payout_data():
         city=data['city'],
         zipcode=data['zipcode'],
         address=data['address'],
-        address2=data['address2'],
+        address2=data.get('address2', ''),
         phonePrefix=data['phonePrefix'],
         phoneNumber=data['phoneNumber'],
         CreatedAt=data.get('CreatedAt'),
@@ -31,8 +34,12 @@ def create_payout_data():
     db.session.commit()
     return jsonify({'message': 'Payout Data created successfully'}), 201
 
+
 # Read
+@cross_origin # implementa CORS
 @app.route('/payout_data', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_payout_data():
     payout_data_list = Payout_Data.query.all()
     return jsonify([{
@@ -52,7 +59,10 @@ def get_payout_data():
         'UpdatedAt': p.UpdatedAt
     } for p in payout_data_list])
 
+@cross_origin # implementa CORS
 @app.route('/payout_data/<int:payout_data_id>', methods=['GET'])
+@jwt_required() # con este metodo se protege la ruta
+
 def get_payout_data_by_id(payout_data_id):
     payout_data = Payout_Data.query.get_or_404(payout_data_id)
     return jsonify({
@@ -73,7 +83,10 @@ def get_payout_data_by_id(payout_data_id):
     })
 
 # Update
+@cross_origin # implementa CORS
 @app.route('/payout_data/<int:payout_data_id>', methods=['PUT'])
+@jwt_required() # con este metodo se protege la ruta
+
 def update_payout_data(payout_data_id):
     payout_data = Payout_Data.query.get_or_404(payout_data_id)
     data = request.json
@@ -93,7 +106,11 @@ def update_payout_data(payout_data_id):
     return jsonify({'message': 'Payout Data updated successfully'})
 
 # Delete
+
+@cross_origin # implementa CORS
 @app.route('/payout_data/<int:payout_data_id>', methods=['DELETE'])
+@jwt_required() # con este metodo se protege la ruta
+
 def delete_payout_data(payout_data_id):
     payout_data = Payout_Data.query.get_or_404(payout_data_id)
     db.session.delete(payout_data)
