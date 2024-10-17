@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/stylesUtils/TransitionBorder.css";
-import "../styles/stylesUtils/withFadeInOnScroll.css";
+import { motion } from "framer-motion";
 import "../styles/stylesPages/Sign.css";
+import LoadingScreen from "../Common/LoadingScreen";
+
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
@@ -62,6 +63,8 @@ CustomDialog.propTypes = {
 };
 
 const Signup = ({ onRegister, title, description }) => {
+// Main Signup component
+const Signup = ({ onRegister }) => {
   const {
     register,
     handleSubmit,
@@ -71,6 +74,8 @@ const Signup = ({ onRegister, title, description }) => {
   } = useForm();
   const [step, setStep] = useState(1);
   const [showDialog, setShowDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState(null);
   const password = watch("password");
   const navigate = useNavigate();
 
@@ -81,8 +86,13 @@ const Signup = ({ onRegister, title, description }) => {
     } else if (step === 2) {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
+
         try {
           const registerResponse = await fetch('http://localhost:8000/users', {
+        setIsLoading(true);
+        setApiError(null);
+        try {
+          const response = await fetch('http://localhost:8000/users', { // Actualiza el puerto si es necesario
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -140,10 +150,39 @@ const Signup = ({ onRegister, title, description }) => {
     setShowDialog(false);
     onRegister();
     navigate("/dashboardlinks");
+              RoleId: 1
+            }),
+          });
+
+          const responseData = await response.json();
+
+          if (!response.ok) {
+            throw new Error(responseData.error || responseData.message || 'Falló el registro');
+          }
+
+          localStorage.setItem("isAuthenticated", "true");
+          onRegister();
+          navigate("/dashboardlinks"); // Ajusta la ruta según tu aplicación
+        } catch (error) {
+          console.error("Error durante el registro:", error);
+          setApiError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
   };
 
+  // JSX for the component
   return (
-    <div className="Sing-usuario">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+      className="Sing-usuario"
+    >
+      {isLoading && <LoadingScreen />}
       <div className="GridArea animationFade">
         <div className="Welcome">
           <h2 className="Info-Title">Sign Up in TinyFy</h2>
@@ -193,6 +232,7 @@ const Signup = ({ onRegister, title, description }) => {
                 errors={errors}
               />
               <button className="Button-Forms" type="button" onClick={onSubmit}>
+              <button className="Button-Forms" type="submit">
                 Continue
               </button>
             </>
@@ -228,7 +268,10 @@ const Signup = ({ onRegister, title, description }) => {
               />
               <button className="Button-Forms" type="submit">
                 Register
+              <button className="Button-Forms" type="submit" disabled={isLoading}>
+                {isLoading ? 'Registering...' : 'Register'}
               </button>
+              {apiError && <p className="Error-Message">{apiError}</p>}
             </>
           )}
 
@@ -244,12 +287,7 @@ const Signup = ({ onRegister, title, description }) => {
           </div>
         </form>
       </div>
-      <CustomDialog
-        isOpen={showDialog}
-        onClose={() => setShowDialog(false)}
-        onConfirm={handleKeepSession}
-      />
-    </div>
+    </motion.div>
   );
 };
 
@@ -257,6 +295,7 @@ Signup.propTypes = {
   onRegister: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+
 };
 
 export default Signup;
