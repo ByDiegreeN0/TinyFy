@@ -25,8 +25,7 @@ def click_endpoint():
             return jsonify({'status': 'error', 'message': str(e)}), 404  # Manejo de error
     return jsonify({'status': 'error', 'message': 'LinkId required'}), 400  # Manejo de error
 
-@cross_origin  # Implementa CORS
-@jwt_required()
+
 @cross_origin  # Implementa CORS
 @jwt_required()
 @app.route('/links', methods=['POST'])
