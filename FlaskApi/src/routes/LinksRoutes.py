@@ -6,7 +6,7 @@ from models.User import db
 from models.LinksModel import Links
 import random
 import string
-from services.AmountClicks import register_click 
+from services.LinkService.AmountClicks import register_click 
 
 # Función para generar un enlace corto aleatorio
 def generar_link_corto():
@@ -14,7 +14,6 @@ def generar_link_corto():
 
 @cross_origin  # Implementa CORS
 @jwt_required()
-
 @app.route('/click', methods=['POST'])
 def click_endpoint():
     data = request.json
@@ -28,6 +27,8 @@ def click_endpoint():
             return jsonify({'status': 'error', 'message': str(e)}), 404  # Manejo de error
     return jsonify({'status': 'error', 'message': 'LinkId required'}), 400  # Manejo de error
 
+@cross_origin  # Implementa CORS
+@jwt_required()
 @app.route('/links', methods=['POST'])
 def create_link():
     data = request.json
@@ -56,3 +57,64 @@ def create_link():
         'message': 'Link created successfully',
         'shortUrl': f"http://localhost:5000/{link_short_url}"
     }), 201
+
+
+# Read
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links', methods=['GET'])
+def get_links():
+    links = Links.query.all()
+    return jsonify([{
+        'LinkId': l.LinkId,
+        'LinkName': l.LinkName,
+        'LinkUrl': l.LinkUrl,
+        'LinkShortUrl': l.LinkShortUrl,
+        'ClickCount': l.ClickCount,
+        'Earnings': l.Earnings,
+        'CreatedAt': l.CreatedAt,
+        'userId': l.userId
+    } for l in links])
+
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links/<int:link_id>', methods=['GET'])
+def get_link(link_id):
+    link = Links.query.get_or_404(link_id)
+    return jsonify({
+        'LinkId': link.LinkId,
+        'LinkName': link.LinkName,
+        'LinkUrl': link.LinkUrl,
+        'LinkShortUrl': link.LinkShortUrl,
+        'ClickCount': link.ClickCount,
+        'Earnings': link.Earnings,
+        'CreatedAt': link.CreatedAt,
+        'userId': link.userId
+    })
+
+# Update
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links/<int:link_id>', methods=['PUT'])
+def update_link(link_id):
+    link = Links.query.get_or_404(link_id)
+    data = request.json
+    link.LinkName = data.get('LinkName', link.LinkName)
+    link.LinkUrl = data.get('LinkUrl', link.LinkUrl)
+    link.LinkShortUrl = data.get('LinkShortUrl', link.LinkShortUrl)
+    link.ClickCount = data.get('ClickCount', link.ClickCount)
+    link.Earnings = data.get('Earnings', link.Earnings)
+    link.CreatedAt = data.get('CreatedAt', link.CreatedAt)
+    link.userId = data.get('userId', link.userId)
+    db.session.commit()
+    return jsonify({'message': 'Link updated successfully'})
+
+# Delete
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links/<int:link_id>', methods=['DELETE'])
+def delete_link(link_id):
+    link = Links.query.get_or_404(link_id)
+    db.session.delete(link)
+    db.session.commit()
+    return jsonify({'message': 'Link deleted successfully'})
