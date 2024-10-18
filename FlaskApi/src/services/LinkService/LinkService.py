@@ -43,15 +43,3 @@ def acortar_link(LinkName, LinkUrl, userId):
         raise Exception("Error al guardar el enlace: " + str(e))
 
     return LinkShortUrl
-
-
-# FUNCION PARA SUMAR LAS VISTAS DE LOS LINKS AL SER VISITADOS
-
-def sumar_vistas(LinkShortUrl):
-    link = Links.query.filter_by(LinkShortUrl=LinkShortUrl).first() # busca en base de datos el link correspondiente al SHORURL que retorno la funcion pasada
-    
-    if link:
-        link.ClickCount += 1 # suma 1 a la cantidad de clicks
-        db.session.commit() # guarda en base de datos los cambios
-    else:
-        raise ValueError("Link no encontrado") # si no encuentra el link, lanza una excepcion con un mensaje de error    
