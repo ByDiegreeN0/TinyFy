@@ -1,20 +1,17 @@
-from flask import request, jsonify
-from flask_jwt_extended import jwt_required
-from flask_cors import cross_origin
-from app import app
-from models.User import db
-from models.LinksModel import Links
-import random
-import string
-from services.AmountClicks import register_click 
 
-# Función para generar un enlace corto aleatorio
-def generar_link_corto():
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=15))
+from flask import request, jsonify  # Flask: 'request' para acceder a los datos de la solicitud HTTP y 'jsonify' para devolver respuestas en formato JSON.
+from flask_jwt_extended import jwt_required  # jwt_required: Decorador para proteger rutas, permitiendo solo acceso con JWT válidos.
+from flask_cors import cross_origin  # cross_origin: Decorador para habilitar CORS en rutas específicas, permitiendo que el backend sea consumido por diferentes dominios.
+from app import app  # Importa la instancia de la aplicación Flask desde el archivo principal 'app', para definir rutas y manejar la configuración.
+from models.User import db  # Importa 'db', la instancia de SQLAlchemy conectada a la base de datos, desde el modelo 'User'.
+from models.LinksModel import Links  # Importa el modelo 'Links', que probablemente representa una tabla en la base de datos para almacenar los enlaces.
+import random  # Biblioteca estándar de Python para generar números o elecciones aleatorias (como códigos o identificadores).
+import string  # Biblioteca estándar de Python que maneja cadenas de texto. Usualmente utilizada junto con 'random' para generar strings aleatorias.
+from services.LinkService.AmountClicks import register_click  
+from services.LinkService.LinkService import generar_link_corto
+
 
 @cross_origin  # Implementa CORS
-@jwt_required()
-
 @app.route('/click', methods=['POST'])
 def click_endpoint():
     data = request.json
@@ -28,6 +25,8 @@ def click_endpoint():
             return jsonify({'status': 'error', 'message': str(e)}), 404  # Manejo de error
     return jsonify({'status': 'error', 'message': 'LinkId required'}), 400  # Manejo de error
 
+@cross_origin  # Implementa CORS
+@jwt_required()
 @app.route('/links', methods=['POST'])
 def create_link():
     data = request.json
@@ -56,3 +55,63 @@ def create_link():
         'message': 'Link created successfully',
         'shortUrl': f"http://localhost:5000/{link_short_url}"
     }), 201
+
+# Read
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links', methods=['GET'])
+def get_links():
+    links = Links.query.all()
+    return jsonify([{
+        'LinkId': l.LinkId,
+        'LinkName': l.LinkName,
+        'LinkUrl': l.LinkUrl,
+        'LinkShortUrl': l.LinkShortUrl,
+        'ClickCount': l.ClickCount,
+        'Earnings': l.Earnings,
+        'CreatedAt': l.CreatedAt,
+        'userId': l.userId
+    } for l in links])
+
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links/<int:link_id>', methods=['GET'])
+def get_link(link_id):
+    link = Links.query.get_or_404(link_id)
+    return jsonify({
+        'LinkId': link.LinkId,
+        'LinkName': link.LinkName,
+        'LinkUrl': link.LinkUrl,
+        'LinkShortUrl': link.LinkShortUrl,
+        'ClickCount': link.ClickCount,
+        'Earnings': link.Earnings,
+        'CreatedAt': link.CreatedAt,
+        'userId': link.userId
+    })
+
+# Update
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links/<int:link_id>', methods=['PUT'])
+def update_link(link_id):
+    link = Links.query.get_or_404(link_id)
+    data = request.json
+    link.LinkName = data.get('LinkName', link.LinkName)
+    link.LinkUrl = data.get('LinkUrl', link.LinkUrl)
+    link.LinkShortUrl = data.get('LinkShortUrl', link.LinkShortUrl)
+    link.ClickCount = data.get('ClickCount', link.ClickCount)
+    link.Earnings = data.get('Earnings', link.Earnings)
+    link.CreatedAt = data.get('CreatedAt', link.CreatedAt)
+    link.userId = data.get('userId', link.userId)
+    db.session.commit()
+    return jsonify({'message': 'Link updated successfully'})
+
+# Delete
+@cross_origin  # Implementa CORS
+@jwt_required()
+@app.route('/links/<int:link_id>', methods=['DELETE'])
+def delete_link(link_id):
+    link = Links.query.get_or_404(link_id)
+    db.session.delete(link)
+    db.session.commit()
+    return jsonify({'message': 'Link deleted successfully'})
