@@ -27,6 +27,8 @@ def click_endpoint():
 
 @cross_origin  # Implementa CORS
 @jwt_required()
+@cross_origin  # Implementa CORS
+@jwt_required()
 @app.route('/links', methods=['POST'])
 def create_link():
     data = request.json
