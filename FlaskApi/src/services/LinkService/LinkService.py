@@ -1,8 +1,7 @@
 # LinkService.py
 import random
 import string
-from models.Links import Links
-from models.LinksModel import LinksModel
+from models.LinksModel import Links
 from app import db
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -29,10 +28,10 @@ def acortar_link(LinkName, LinkUrl, userId):
     if not LinkUrl:
         raise ValueError("URL es requerida")
 
-    LinkShortUrl = generar_codigo()
+    LinkShortUrl = generar_link_corto()
 
     while Links.query.filter_by(LinkShortUrl=LinkShortUrl).first():
-        LinkShortUrl = generar_codigo()
+        LinkShortUrl = generar_link_corto()
 
     nuevo_link = Links(LinkName=LinkName, LinkUrl=LinkUrl, LinkShortUrl=LinkShortUrl, userId=userId)
 
