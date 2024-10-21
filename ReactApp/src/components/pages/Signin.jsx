@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios"; // Importa axios
+import axios from "axios";
 import "../styles/stylesPages/Sign.css";
 import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
@@ -64,33 +64,52 @@ const Signin = ({ onLogin, title, description, logoSrc }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(); // Hook para manejar el formulario.
-  const navigate = useNavigate(); // Hook para navegación programática.
-  const [showDialog, setShowDialog] = useState(false); // Estado para mostrar el diálogo de confirmación.
+  } = useForm();
+  const navigate = useNavigate();
+  const [showDialog, setShowDialog] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:8000/login', data);
-      localStorage.setItem('accessToken', response.data.access_token);
-      localStorage.setItem('userId', response.data.user_id); // Almacena el ID del usuario
+      const response = await axios.post('/api/login', data);
+      const { access_token } = response.data;
+      localStorage.setItem('accessToken', access_token);
+      
+      // Intentamos obtener el user_id del token
+      const userId = getUserIdFromToken(access_token);
+      if (userId) {
+        localStorage.setItem('userId', userId);
+      } else {
+        console.warn('No se pudo obtener el ID del usuario del token');
+      }
+      
       setShowDialog(true);
     } catch (error) {
       console.error(error);
-      alert("Login failed: " + (error.response ? error.response.data.msg : "Network error"));
+      setLoginError("Login failed: " + (error.response ? error.response.data.msg : "Network error"));
     }
   };
-  
 
-  // Maneja la confirmación del diálogo de sesión.
   const handleKeepSession = (keep) => {
     if (keep) {
-      localStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento local si se confirma.
+      localStorage.setItem("isAuthenticated", "true");
     } else {
-      sessionStorage.setItem("isAuthenticated", "true"); // Guarda la sesión en el almacenamiento de sesión si se niega.
+      sessionStorage.setItem("isAuthenticated", "true");
     }
-    setShowDialog(false); // Cierra el diálogo.
-    onLogin(); // Llama a la función de inicio de sesión pasada como prop.
-    navigate("/dashboardlinks"); // Navega a la página de enlaces del panel de control.
+    setShowDialog(false);
+    onLogin();
+    navigate("/dashboardlinks");
+  };
+
+  // Función para intentar obtener el ID del usuario del token
+  const getUserIdFromToken = (token) => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.identity || null;
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return null;
+    }
   };
 
   return (

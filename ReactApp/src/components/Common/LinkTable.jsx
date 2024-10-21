@@ -2,18 +2,20 @@ import React from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
 
-const LinkTable = ({ 
-  links, 
-  expandedCard, 
-  toggleDetails, 
-  setLinkToDelete, 
-  setShowDeleteModal, 
-  currentPage, 
-  linksPerPage 
+const LinkTable = ({
+  links,
+  expandedCard,
+  toggleDetails,
+  setLinkToDelete,
+  setShowDeleteModal,
+  currentPage,
+  linksPerPage,
+  userId,
 }) => {
+  const filteredLinks = links.filter((link) => link.userId === userId);
   const indexOfLastLink = currentPage * linksPerPage;
   const indexOfFirstLink = indexOfLastLink - linksPerPage;
-  const currentLinks = links.slice(indexOfFirstLink, indexOfLastLink);
+  const currentLinks = filteredLinks.slice(indexOfFirstLink, indexOfLastLink);
 
   return (
     <>
@@ -91,15 +93,11 @@ const LinkTable = ({
                   </div>
                   <div className="mobile-link-detail">
                     <span className="mobile-link-label">Target URL:</span>
-                    <span className="mobile-link-value">
-                      {link.LinkUrl}
-                    </span>
+                    <span className="mobile-link-value">{link.LinkUrl}</span>
                   </div>
                   <div className="mobile-link-detail">
                     <span className="mobile-link-label">Views:</span>
-                    <span className="mobile-link-value">
-                      {link.ClickCount}
-                    </span>
+                    <span className="mobile-link-value">{link.ClickCount}</span>
                   </div>
                   <div className="mobile-link-detail">
                     <span className="mobile-link-label">Created At:</span>

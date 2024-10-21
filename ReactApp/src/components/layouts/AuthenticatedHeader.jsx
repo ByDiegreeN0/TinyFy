@@ -19,26 +19,62 @@ const AuthenticatedHeader = ({ user, onLogout }) => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
 
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const decodedToken = JSON.parse(window.atob(base64));
+        if (decodedToken && decodedToken.sub) {
+          console.log("User ID extracted from token:", decodedToken.sub);
+          return decodedToken.sub;
+        } else {
+          console.error("Decoded token does not contain a user ID.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        return null;
+      }
+    } else {
+      console.log("No token found in localStorage.");
+      return null;
+    }
+  };
+  
   const handleCreateLink = async (newLink) => {
     setIsLoading(true);
+    const userId = getUserIdFromToken();
+    if (!userId) {
+      console.error("Unable to create link because no user ID was found.");
+      setIsLoading(false);
+      return;
+    }
+  
+    const linkWithUserId = {
+      ...newLink,
+      userId: userId,
+    };
+  
     try {
       const response = await fetch("http://localhost:8000/links", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
+          "Authorization": `Bearer ${localStorage.getItem('accessToken')}`,
         },
-        body: JSON.stringify(newLink),
+        body: JSON.stringify(linkWithUserId),
       });
       if (response.ok) {
-        console.log("Enlace creado con éxito");
+        console.log("Link created successfully");
         setShowModal(false);
         window.location.href = '/dashboardlinks';
       } else {
-        console.error("Error al crear el enlace");
+        console.error("Error creating the link");
       }
     } catch (error) {
-      console.error("Error al crear el enlace:", error);
+      console.error("Error creating the link:", error);
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +83,7 @@ const AuthenticatedHeader = ({ user, onLogout }) => {
   const BotonLink = () => (
     <>
       <div className="BotonLink" onClick={() => setShowModal(true)}>
-        <img src={BotonLinkIcon} alt="Boton de Link" />
+        <img src={BotonLinkIcon} alt="Link Button" />
       </div>
       {showModal && (
         <div className="modal">
@@ -70,10 +106,10 @@ const AuthenticatedHeader = ({ user, onLogout }) => {
         <Link to="/edit-profile" className="PefilUsuario">
           <img
             src={user?.profilePicture || defaultAvatar}
-            alt={`${user?.name || "Usuario"}'s profile picture`}
+            alt={`${user?.name || "User"}'s profile picture`}
             className="UserProfilePicture"
           />
-          <h1 className="title-nav">{user?.name || "Usuario"}</h1>
+          <h1 className="title-nav">{user?.name || "User"}</h1>
         </Link>
         <div className="container-links">
           <Link

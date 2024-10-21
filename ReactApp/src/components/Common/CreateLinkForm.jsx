@@ -3,7 +3,7 @@ import "../styles/stylesCommon/CreateLinkForm.css";
 
 const CreateLinkForm = ({ onSubmit, isModal, onCancel }) => {
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Asegúrate de que 'e' sea el evento del formulario
     const name = e.target.name.value;
     const url = e.target.url.value;
     const newLink = {
@@ -12,7 +12,7 @@ const CreateLinkForm = ({ onSubmit, isModal, onCancel }) => {
       ClickCount: 0,
       CreatedAt: new Date().toISOString(),
     };
-    onSubmit(newLink);
+    onSubmit(newLink); // Llama a la función onSubmit pasada como prop
   };
 
   return (

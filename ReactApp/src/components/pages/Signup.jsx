@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
 import "../styles/stylesPages/Sign.css";
+
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
@@ -68,13 +70,19 @@ const Signup = ({ onRegister, title, description }) => {
     formState: { errors },
     watch,
     trigger,
+    setError,
+    clearErrors,
   } = useForm();
   const [step, setStep] = useState(1);
   const [showDialog, setShowDialog] = useState(false);
+  const [generalError, setGeneralError] = useState("");
   const password = watch("password");
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    clearErrors();
+    setGeneralError("");
+
     if (step === 1) {
       const isValid = await trigger(["firstName", "lastName", "email"]);
       if (isValid) setStep(2);
@@ -82,7 +90,7 @@ const Signup = ({ onRegister, title, description }) => {
       const isValid = await trigger(["password", "passwordConfirm"]);
       if (isValid) {
         try {
-          const registerResponse = await fetch('http://localhost:8000/users', {
+          const registerResponse = await fetch('/api/users', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -96,7 +104,7 @@ const Signup = ({ onRegister, title, description }) => {
           });
   
           if (registerResponse.ok) {
-            const loginResponse = await fetch('http://localhost:8000/login', {
+            const loginResponse = await fetch('/api/login', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -110,26 +118,35 @@ const Signup = ({ onRegister, title, description }) => {
             if (loginResponse.ok) {
               const loginData = await loginResponse.json();
               localStorage.setItem('accessToken', loginData.access_token);
-              localStorage.setItem('userId', loginData.user_id); // Almacena el ID del usuario
+              // Intentamos obtener el user_id del token
+              const userId = getUserIdFromToken(loginData.access_token);
+              if (userId) {
+                localStorage.setItem('userId', userId);
+              } else {
+                console.warn('No se pudo obtener el ID del usuario del token');
+              }
               setShowDialog(true);
             } else {
               const errorData = await loginResponse.json();
-              console.error('Login failed:', errorData.msg);
-              alert("Login failed: " + errorData.msg);
+              setGeneralError(`Error de inicio de sesión: ${errorData.msg}`);
             }
           } else {
             const errorData = await registerResponse.json();
-            console.error('Registration failed:', errorData.message);
-            alert("Registration failed: " + errorData.message);
+            if (errorData.message.includes("email")) {
+              setError("email", {
+                type: "manual",
+                message: "Este correo electrónico ya está registrado",
+              });
+            } else {
+              setGeneralError(`Error de registro: ${errorData.message}`);
+            }
           }
         } catch (error) {
-          console.error('Error during registration or login:', error);
-          alert('Error during registration or login: Network error');
+          setGeneralError('Error de red: No se pudo conectar con el servidor');
         }
       }
     }
   };
-  
 
   const handleKeepSession = (keep) => {
     if (keep) {
@@ -140,6 +157,16 @@ const Signup = ({ onRegister, title, description }) => {
     setShowDialog(false);
     onRegister();
     navigate("/dashboardlinks");
+  };
+
+  const getUserIdFromToken = (token) => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.identity || null;
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return null;
+    }
   };
 
   return (
@@ -162,6 +189,9 @@ const Signup = ({ onRegister, title, description }) => {
         </div>
         <form className="Forms" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="Info-Title">Sign Up</h2>
+          {generalError && (
+            <div className="Error-Message General-Error">{generalError}</div>
+          )}
           {step === 1 && (
             <>
               <FormGroup
