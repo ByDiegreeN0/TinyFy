@@ -13,3 +13,4 @@ from .warningsModel import Warnings
 from .UserConfigModel import UserConfig
 from .PermissionModel import Permissions
 from .CPMModel import CPM
+from .UserAnalyticsModel import UserAnalytics

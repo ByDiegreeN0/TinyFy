@@ -2,7 +2,7 @@
 import random
 import string
 from models.LinksModel import Links
-from app import db
+from models.User import db
 from sqlalchemy.exc import SQLAlchemyError
 
 def generar_link_corto():
