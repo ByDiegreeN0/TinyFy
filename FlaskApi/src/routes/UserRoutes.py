@@ -5,6 +5,10 @@ import bcrypt
 from models.User import User, db
 from app import app
 
+
+from events.UserCreated import create_payout_data , create_user_analytics # importa los eventos que crean datos automaticamente para payoutdata y use analytics
+
+
 # Create
 @cross_origin # implementa CORS
 @app.route('/users', methods=['POST'])
@@ -14,6 +18,12 @@ def create_user():
     new_user = User(username=data['username'], email=data['email'], password=hashed_password, RoleId=data['RoleId'])
     db.session.add(new_user)
     db.session.commit()
+    
+    create_payout_data(new_user) # crea registros automaticamente para payoutdata
+    create_user_analytics(new_user) # genera campos por defecto en 0, para inicializar las analiticas del usuario
+    
+  
+        
     return jsonify({'message': 'User created successfully'}), 201
 
 # Read
