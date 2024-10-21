@@ -1,4 +1,5 @@
 
+
 from flask import request, jsonify  # Flask: 'request' para acceder a los datos de la solicitud HTTP y 'jsonify' para devolver respuestas en formato JSON.
 from flask_jwt_extended import jwt_required  # jwt_required: Decorador para proteger rutas, permitiendo solo acceso con JWT válidos.
 from flask_cors import cross_origin  # cross_origin: Decorador para habilitar CORS en rutas específicas, permitiendo que el backend sea consumido por diferentes dominios.
@@ -33,16 +34,16 @@ def create_link():
     data = request.json
 
     # Validación básica de datos
-    if not data or 'LinkUrl' not in data or 'ClickCount' not in data:
+    if not data or 'LinkUrl' not in data:
         return jsonify({'error': 'Missing data'}), 400
 
-    # Generar enlace corto
+    # Generar el enlace corto
     link_short_url = generar_link_corto()
 
     new_link = Links(
-        LinkName=data.get('LinkName'),  # Usar get para evitar KeyError
+        LinkName=data.get('LinkName'),  
         LinkUrl=data['LinkUrl'],
-        LinkShortUrl=link_short_url,  # Guardar el enlace corto
+        LinkShortUrl=link_short_url,  
         ClickCount=data.get('ClickCount', 0),
         Earnings=data.get('Earnings', 0),
         CreatedAt=data.get('CreatedAt'),
@@ -52,10 +53,16 @@ def create_link():
     # Agregar a la base de datos
     db.session.add(new_link)
     db.session.commit()
+
+    # Construir el enlace completo con el dominio
+    domain = "http://localhost:5000"  
+    full_short_url = f"{domain}/{link_short_url}"
+
     return jsonify({
         'message': 'Link created successfully',
-        'shortUrl': f"http://localhost:5000/{link_short_url}"
+        'shortUrl': full_short_url  # Devuelve el enlace corto completo
     }), 201
+
 
 # Read
 @cross_origin  # Implementa CORS
@@ -63,10 +70,13 @@ def create_link():
 @app.route('/links', methods=['GET'])
 def get_links():
     links = Links.query.all()
+    domain = "http://localhost:5000"  # Cambia esto por tu dominio real
+
     return jsonify([{
         'LinkId': l.LinkId,
         'LinkName': l.LinkName,
         'LinkUrl': l.LinkUrl,
+        'LinkShortUrl': f"{domain}/{l.LinkShortUrl}",  # Incluir dominio en el enlace corto
         'LinkShortUrl': l.LinkShortUrl,
         'ClickCount': l.ClickCount,
         'Earnings': l.Earnings,
@@ -74,21 +84,25 @@ def get_links():
         'userId': l.userId
     } for l in links])
 
+
 @cross_origin  # Implementa CORS
 @jwt_required()
 @app.route('/links/<int:link_id>', methods=['GET'])
 def get_link(link_id):
     link = Links.query.get_or_404(link_id)
+    domain = "http://localhost:5000"  # Cambia esto por tu dominio real
     return jsonify({
         'LinkId': link.LinkId,
         'LinkName': link.LinkName,
         'LinkUrl': link.LinkUrl,
+        'LinkShortUrl': f"{domain}/{link.LinkShortUrl}",  # Incluir dominio en el enlace corto
         'LinkShortUrl': link.LinkShortUrl,
         'ClickCount': link.ClickCount,
         'Earnings': link.Earnings,
         'CreatedAt': link.CreatedAt,
         'userId': link.userId
     })
+
 
 # Update
 @cross_origin  # Implementa CORS
@@ -107,6 +121,7 @@ def update_link(link_id):
     db.session.commit()
     return jsonify({'message': 'Link updated successfully'})
 
+
 # Delete
 @cross_origin  # Implementa CORS
 @jwt_required()
@@ -116,3 +131,4 @@ def delete_link(link_id):
     db.session.delete(link)
     db.session.commit()
     return jsonify({'message': 'Link deleted successfully'})
+
