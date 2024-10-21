@@ -14,12 +14,12 @@ def acortar_link(LinkName, LinkUrl, userId):
     Crea un nuevo enlace acortado y lo guarda en la base de datos.
 
     Args:
-        link_name (str): El nombre del enlace.
-        link_url (str): La URL original que se va a acortar.
-        user_id (int): El ID del usuario que crea el enlace.
+        LinkName (str): El nombre del enlace.
+        LinkUrl (str): La URL original que se va a acortar.
+        userId (int): El ID del usuario que crea el enlace.
 
     Returns:
-        str: El enlace corto generado.
+        str: El enlace corto generado con el dominio completo.
     
     Raises:
         ValueError: Si la URL no está presente.
@@ -42,4 +42,8 @@ def acortar_link(LinkName, LinkUrl, userId):
         db.session.rollback()
         raise Exception("Error al guardar el enlace: " + str(e))
 
-    return LinkShortUrl
+    # Construir el enlace completo con el dominio
+    domain = "http://localhost:5000"  # Cambia esto por tu dominio real
+    full_short_url = f"{domain}/{LinkShortUrl}"
+
+    return full_short_url  # Devuelve el enlace corto completo
