@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_jwt_extended import jwt_required # con esta libreria se protegen las rutas
 from flask_cors import cross_origin # Implementa cross_origin para hacer peticiones desde afuera del api (esto deberia arreglar el app)
 import bcrypt
 from models.User import User, db
@@ -17,6 +18,7 @@ def create_user():
 
 # Read
 @cross_origin # implementa CORS
+@jwt_required() # con este metodo se protege la ruta
 @app.route('/users', methods=['GET'])
 def get_users():
     
@@ -24,6 +26,7 @@ def get_users():
     return jsonify([{'id': user.id, 'username': user.username, 'email': user.email} for user in users])
 
 @cross_origin # implementa CORS
+@jwt_required() # con este metodo se protege la ruta
 @app.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.get_or_404(user_id)
@@ -31,6 +34,7 @@ def get_user(user_id):
 
 # Update
 @cross_origin # implementa CORS
+@jwt_required() # con este metodo se protege la ruta
 @app.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     user = User.query.get_or_404(user_id)
@@ -45,6 +49,7 @@ def update_user(user_id):
 
 # Delete
 @cross_origin # implementa CORS
+@jwt_required() # con este metodo se protege la ruta
 @app.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)

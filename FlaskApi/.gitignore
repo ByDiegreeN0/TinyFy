@@ -1,5 +1,6 @@
 .env
 venv
 *.py[cod]
-
+*.pyc
+**/__pycache__/
 .pyset_cache/

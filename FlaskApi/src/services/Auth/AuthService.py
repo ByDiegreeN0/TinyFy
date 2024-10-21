@@ -19,7 +19,7 @@ def login():
     # Verificar si el usuario existe y la contraseña es correcta
     if user and bcrypt.checkpw(request_password.encode('utf-8'), user.password.encode('utf-8')):
         # Crear un token de acceso
-        access_token = create_access_token(identity=user.email)
+        access_token = create_access_token(identity=user.id)
         return jsonify(access_token=access_token)
     
     # Responder con un error si la autenticación falla
