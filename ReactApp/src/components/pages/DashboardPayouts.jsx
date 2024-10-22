@@ -7,13 +7,12 @@ import useTokenValidation from "../hooks/useTokenValidation";
 export default function DashboardPayouts() {
   const navigate = useNavigate();
   useTokenValidation();
-  const token = localStorage.getItem("accessToken"); 
+  const token = localStorage.getItem("accessToken");
 
   const [paymentMethod, setPaymentMethod] = useState("paypal");
   const [editMode, setEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [payoutData, setPayoutData] = useState(null); // Inicializa con null
-
+  const [payoutData, setPayoutData] = useState(null);
   const url = "http://localhost:8000/payout_data";
 
   // Función para obtener los datos de payout (GET)
@@ -26,22 +25,21 @@ export default function DashboardPayouts() {
         },
       });
 
-      if (response.status === 200) {
-        setPayoutData(response.data); // Guardar datos en el estado
-      } else {
-        console.error("Error fetching Payout Data:", response.statusText);
-        if (response.status === 401) {
-          navigate("/Signin"); // Redirigir si el token es inválido
-        }
+      if (response.status === 200 && response.data.length > 0) {
+        // Tomamos el primer registro ya que el backend devuelve un array
+        setPayoutData(response.data[0]);
       }
     } catch (err) {
       console.error("Error:", err);
+      if (err.response?.status === 401) {
+        navigate("/Signin");
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Función para crear o actualizar los datos del payout (POST o PUT)
+  // Función para crear o actualizar los datos del payout
   const submitPayoutData = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -54,32 +52,39 @@ export default function DashboardPayouts() {
       city: e.target.city.value,
       zipcode: e.target.zipCode.value,
       address: e.target.address.value,
-      address2: e.target.address2?.value || '',
+      address2: e.target.address2?.value || "",
       phonePrefix: e.target.prefix.value,
       phoneNumber: e.target.phoneNumber.value,
       CreatedAt: new Date().toISOString(),
+      UpdatedAt: new Date().toISOString(),
     };
 
     try {
-      const response = payoutData
-        ? await axios.put(`${url}/${payoutData.id}`, newPayoutData, {
+      let response;
+      if (payoutData?.PayoutDataId) {
+        // Si existe PayoutDataId, actualizamos
+        response = await axios.put(
+          `${url}/${payoutData.PayoutDataId}`,
+          newPayoutData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        // Si no existe, creamos nuevo
+        response = await axios.post(url, newPayoutData, {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        : await axios.post(url, newPayoutData, {
-          headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
+      }
 
       if (response.status === 201 || response.status === 200) {
         console.log("Payout data saved successfully");
-        fetchPayoutData(); // Actualizar la lista de payout data
-      } else {
-        console.error("Error posting/updating Payout Data");
+        setEditMode(false);
+        fetchPayoutData();
       }
     } catch (error) {
       console.error("Error:", error);
@@ -88,52 +93,48 @@ export default function DashboardPayouts() {
     }
   };
 
-  // Función para eliminar un dato de payout (DELETE)
-  const deletePayoutData = async (payoutId) => {
-    setIsLoading(true);
-
-    try {
-      const response = await axios.delete(`${url}/${payoutId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 200) {
-        console.log("Payout data deleted successfully");
-        fetchPayoutData(); // Actualizar la lista de payout data
-      } else {
-        console.error("Error deleting Payout Data");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
+  // Manejador para el botón de editar/guardar
+  const handleEditClick = async () => {
+    if (editMode) {
+      // Si estamos en modo edición, el formulario se enviará normalmente
+      const form = document.querySelector(".payout-form");
+      form.dispatchEvent(new Event("submit", { cancelable: true }));
+    } else {
+      // Si no estamos en modo edición, solo cambiamos al modo edición
+      setEditMode(true);
     }
   };
 
-  // useEffect para obtener datos al cargar la página
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated") || sessionStorage.getItem("isAuthenticated");
-
+    const isAuthenticated =
+      localStorage.getItem("isAuthenticated") ||
+      sessionStorage.getItem("isAuthenticated");
     if (!isAuthenticated) {
       navigate("/Signin");
     } else {
-      fetchPayoutData(); // Obtener datos si está autenticado
+      fetchPayoutData();
     }
   }, [navigate]);
 
-  // Inicializa los campos del formulario cuando se obtienen los datos de payout
   useEffect(() => {
     if (payoutData) {
-      setPaymentMethod(payoutData.Method);
+      setPaymentMethod(payoutData.Method || "paypal");
     }
   }, [payoutData]);
 
   const paymentHistory = [
-    { id: "001", requestedAt: "2023-06-01", doneAt: "2023-06-03", amount: "$500" },
-    { id: "002", requestedAt: "2023-06-15", doneAt: "2023-06-17", amount: "$750" },
-    // Más historial de pagos...
+    {
+      id: "001",
+      requestedAt: "2023-06-01",
+      doneAt: "2023-06-03",
+      amount: "$500",
+    },
+    {
+      id: "002",
+      requestedAt: "2023-06-15",
+      doneAt: "2023-06-17",
+      amount: "$750",
+    },
   ];
 
   return (
@@ -143,13 +144,17 @@ export default function DashboardPayouts() {
 
         <div className="payment-options">
           <button
-            className={`payment-option ${paymentMethod === "paypal" ? "active" : ""}`}
+            className={`payment-option ${
+              paymentMethod === "paypal" ? "active" : ""
+            }`}
             onClick={() => setPaymentMethod("paypal")}
           >
             PayPal
           </button>
           <button
-            className={`payment-option ${paymentMethod === "pse" ? "active" : ""}`}
+            className={`payment-option ${
+              paymentMethod === "pse" ? "active" : ""
+            }`}
             onClick={() => setPaymentMethod("pse")}
           >
             PSE
@@ -166,7 +171,7 @@ export default function DashboardPayouts() {
                 name="paypalEmail"
                 placeholder="Please enter"
                 disabled={!editMode}
-                defaultValue={payoutData ? payoutData.email : ''}
+                defaultValue={payoutData?.email || ""}
               />
             </div>
             <div className="form-group">
@@ -177,7 +182,7 @@ export default function DashboardPayouts() {
                 name="fullName"
                 placeholder="Please enter"
                 disabled={!editMode}
-                defaultValue={payoutData ? payoutData.Name : ''}
+                defaultValue={payoutData?.Name || ""}
               />
             </div>
             <div className="form-group">
@@ -188,7 +193,7 @@ export default function DashboardPayouts() {
                 name="prefix"
                 placeholder="Please enter"
                 disabled={!editMode}
-                defaultValue={payoutData ? payoutData.phonePrefix : ''}
+                defaultValue={payoutData?.phonePrefix || ""}
               />
             </div>
           </div>
@@ -201,19 +206,19 @@ export default function DashboardPayouts() {
               name="address"
               placeholder="Please enter"
               disabled={!editMode}
-              defaultValue={payoutData ? payoutData.address : ''}
+              defaultValue={payoutData?.address || ""}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="address">Address 2</label>
+            <label htmlFor="address2">Address 2</label>
             <input
               type="text"
-              id="address"
+              id="address2"
               name="address2"
               placeholder="Please enter"
               disabled={!editMode}
-              defaultValue={payoutData ? payoutData.address2 : ''}
+              defaultValue={payoutData?.address2 || ""}
             />
           </div>
 
@@ -225,9 +230,10 @@ export default function DashboardPayouts() {
               name="phoneNumber"
               placeholder="Please enter"
               disabled={!editMode}
-              defaultValue={payoutData ? payoutData.phoneNumber : ''}
+              defaultValue={payoutData?.phoneNumber || ""}
             />
           </div>
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="country">Country</label>
@@ -237,7 +243,7 @@ export default function DashboardPayouts() {
                 name="country"
                 placeholder="Please enter"
                 disabled={!editMode}
-                defaultValue={payoutData ? payoutData.country : ''}
+                defaultValue={payoutData?.country || ""}
               />
             </div>
             <div className="form-group">
@@ -248,7 +254,7 @@ export default function DashboardPayouts() {
                 name="city"
                 placeholder="Please enter"
                 disabled={!editMode}
-                defaultValue={payoutData ? payoutData.city : ''}
+                defaultValue={payoutData?.city || ""}
               />
             </div>
             <div className="form-group">
@@ -259,7 +265,7 @@ export default function DashboardPayouts() {
                 name="zipCode"
                 placeholder="Please enter"
                 disabled={!editMode}
-                defaultValue={payoutData ? payoutData.zipcode : ''}
+                defaultValue={payoutData?.zipcode || ""}
               />
             </div>
           </div>
@@ -267,7 +273,12 @@ export default function DashboardPayouts() {
           {paymentMethod === "pse" && (
             <div className="form-group">
               <label htmlFor="bank">Bank</label>
-              <select id="bank" name="bank" disabled={!editMode} defaultValue={payoutData ? payoutData.bank : ''}>
+              <select
+                id="bank"
+                name="bank"
+                disabled={!editMode}
+                defaultValue={payoutData?.bank || ""}
+              >
                 <option value="">Select your bank</option>
                 <option value="bancolombia">Bancolombia</option>
                 <option value="davivienda">Davivienda</option>
@@ -279,14 +290,21 @@ export default function DashboardPayouts() {
           <button
             type="button"
             className="edit-button"
-            onClick={() => setEditMode(!editMode)}
+            style={{ display: editMode ? "none" : "block" }}
+            onClick={handleEditClick}
           >
             {editMode ? "Save Information" : "Edit Information"}
           </button>
 
-          <button type="submit" className="save-button">
-            Submit Payout
-          </button>
+          {editMode && (
+            <button
+              type="submit"
+              className="edit-button"
+              style={{ display: editMode ? "block" : "none" }}
+            >
+              Submit Payout
+            </button>
+          )}
         </form>
 
         <div className="payment-history">
