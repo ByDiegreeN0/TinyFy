@@ -11,7 +11,7 @@ class User(db.Model):
     _email = db.Column('email', db.String(120), unique=True, nullable=False)
     _password = db.Column('password', db.String(120), nullable=False)
     _ReferralToId = db.Column('ReferralToId', db.Integer, db.ForeignKey('user.id'))
-
+    _referral_link= db.Column('referral_link', db.String(100), nullable=False)
     _LastLogin = db.Column('LastLogin', db.DateTime)
     _CreatedAt = db.Column('CreatedAt', db.DateTime, default=db.func.now())
 
@@ -22,10 +22,11 @@ class User(db.Model):
     supportTickets = db.relationship('SupportTicket', backref='user')
     links = db.relationship('Links', backref='user')
 
-    def __init__(self, username, email, password, RoleId, LastLogin=None):
+    def __init__(self, username, email, password, referral_link, RoleId, LastLogin=None):
         self._username = username
         self._email = email
         self._password = password
+        self._referral_link = referral_link
         self._RoleId = RoleId
         self._LastLogin = LastLogin
 
