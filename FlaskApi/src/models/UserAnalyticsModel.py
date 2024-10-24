@@ -5,13 +5,9 @@ class UserAnalytics(db.Model):
     
     AnalyticID = db.Column(db.Integer, primary_key=True)
     UserId = db.Column(db.Integer, db.ForeignKey('user.id'))
-    AnalyticType = db.Column(db.String(10))
-    User_LinksCreated = db.Column(db.Integer)
-    User_Earning = db.Column(db.Integer)
-    CreatedAt = db.Column(db.DateTime, default=db.func.now())
+    AnalyticType = db.Column(db.String(10), default="undefined")  # Define un valor por defecto
+    User_LinksCreated = db.Column(db.Integer, default=0)  # Valor por defecto
+    User_Earning = db.Column(db.Integer, default=0)  # Valor por defecto
+    CreatedAt = db.Column(db.DateTime, default=db.func.now())  # Valor por defecto para la fecha
     
-    def __init__(self, UserId, AnalyticType, User_LinksCreated, User_Earning=0):
-        self.UserId = UserId
-        self.AnalyticType = AnalyticType
-        self.User_LinksCreated = User_LinksCreated
-        self.User_Earning = User_Earning
+

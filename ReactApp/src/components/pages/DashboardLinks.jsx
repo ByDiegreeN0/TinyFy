@@ -2,47 +2,84 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import axios from "axios";
 import "../styles/stylesPages/DashboardLinks.css";
 import LoadingScreen from "../Common/LoadingScreen";
 import useTokenValidation from "../hooks/useTokenValidation";
 import LinkTable from "../Common/LinkTable";
+import DeleteLinkModal from "../Common/DeleteLinkModal";
+import CreateLinkForm from "../Common/CreateLinkForm";
 
 export default function DashboardLinks() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   useTokenValidation();
 
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [links, setLinks] = useState([]);
+  const [filteredLinks, setFilteredLinks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCard, setExpandedCard] = useState(null);
   const [linkToDelete, setLinkToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const linksPerPage = 10;
+  
+
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const decodedToken = JSON.parse(window.atob(base64));
+        if (decodedToken && decodedToken.sub) {
+          console.log("User ID extracted from token:", decodedToken.sub);
+          return decodedToken.sub;
+        } else {
+          console.error("Decoded token does not contain a user ID.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        return null;
+      }
+    } else {
+      console.log("No token found in localStorage.");
+      return null;
+    }
+  };
+
+  const userId = getUserIdFromToken(); 
+  const userLinks = links.filter(link => link.userId === userId); 
 
   const fetchLinks = async () => {
     const token = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem("userId"); // Asumimos que el ID del usuario se guarda en el almacenamiento local
+    const userId = getUserIdFromToken();
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/links", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "User-ID": userId, // Enviamos el ID del usuario en los headers
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8000/links?userId=${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setLinks(data);
+        setFilteredLinks(data);
+        console.log('Fetched links:', data);  
       } else {
-        console.error("Error al obtener los enlaces");
+        console.error("Error fetching links");
       }
     } catch (error) {
-      console.error("Error al obtener los enlaces:", error);
+      console.error("Error fetching links:", error);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchLinks();
@@ -65,59 +102,61 @@ export default function DashboardLinks() {
         }
       );
       if (response.ok) {
+        setFilteredLinks(
+          filteredLinks.filter((link) => link.LinkId !== linkToDelete)
+        );
         setLinks(links.filter((link) => link.LinkId !== linkToDelete));
-        console.log(`Enlace con ID ${linkToDelete} eliminado correctamente`);
+        console.log(`Link with ID ${linkToDelete} deleted successfully`);
       } else {
         const errorText = await response.text();
         console.error(
-          `Error al eliminar el enlace con ID ${linkToDelete}: ${errorText}`
+          `Error deleting the link with ID ${linkToDelete}: ${errorText}`
         );
       }
     } catch (error) {
-      console.error(
-        `Error al eliminar el enlace con ID ${linkToDelete}:`,
-        error
-      );
+      console.error(`Error deleting the link with ID ${linkToDelete}:`, error);
     }
     setShowDeleteModal(false);
     setLinkToDelete(null);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (newLink) => {
     setIsLoading(true);
-    const name = e.target.name.value;
-    const url = e.target.url.value;
-    const token = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem("userId");
-    const newLink = {
-      LinkUrl: url,
-      LinkName: name,
-      ClickCount: 0,
-      CreatedAt: new Date().toISOString(),
-      UserId: userId, // Incluimos el ID del usuario al crear un nuevo enlace
+    const userId = getUserIdFromToken();
+    if (!userId) {
+      console.error("Unable to create link because no user ID was found.");
+      setIsLoading(false);
+      return;
+    }
+  
+    const linkWithUserId = {
+      ...newLink,
+      userId: userId,
     };
+  
     try {
       const response = await fetch("http://localhost:8000/links", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-        body: JSON.stringify(newLink),
+        body: JSON.stringify(linkWithUserId),
       });
       if (response.ok) {
         await fetchLinks();
         setShowModal(false);
+        console.log("Link created successfully.");  
       } else {
-        console.error("Error al crear el enlace");
+        console.error("Error creating the link");
       }
     } catch (error) {
-      console.error("Error al crear el enlace:", error);
+      console.error("Error creating the link:", error);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const totalLinks = links.length;
   const linksThisMonth = links.filter((link) => {
@@ -178,7 +217,7 @@ export default function DashboardLinks() {
         </motion.div>
       </div>
 
-      {links.length === 0 ? (
+      {userLinks.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -186,19 +225,11 @@ export default function DashboardLinks() {
           className="link-form-container"
         >
           <h2>Shorten New Link</h2>
-          <form onSubmit={handleSubmit} className="link-form">
-            <div className="form-group">
-              <label htmlFor="name">Link Name</label>
-              <input id="name" name="name" type="text" required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="url">Link URL</label>
-              <input id="url" name="url" type="url" required />
-            </div>
-            <button type="submit" className="btn-primary">
-              Create
-            </button>
-          </form>
+          <CreateLinkForm
+            onSubmit={handleSubmit}
+            isModal={false}
+            onCancel={() => setShowModal(false)}
+          />
         </motion.div>
       ) : (
         <motion.div
@@ -213,14 +244,15 @@ export default function DashboardLinks() {
               Shorten Link
             </button>
           </div>
-          <LinkTable 
-            links={links}
+          <LinkTable
+            links={filteredLinks}
             expandedCard={expandedCard}
             toggleDetails={toggleDetails}
             setLinkToDelete={setLinkToDelete}
             setShowDeleteModal={setShowDeleteModal}
             currentPage={currentPage}
             linksPerPage={linksPerPage}
+            userId={getUserIdFromToken()}
           />
           <div className="pagination">
             <button
@@ -232,7 +264,7 @@ export default function DashboardLinks() {
             </button>
             <button
               onClick={() => paginate(currentPage + 1)}
-              disabled={indexOfLastLink >= links.length}
+              disabled={indexOfLastLink >= filteredLinks.length}
               className="btn-secondary"
             >
               Next
@@ -248,50 +280,20 @@ export default function DashboardLinks() {
               &times;
             </button>
             <h2>Shorten New Link</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="modalName">Link Name</label>
-                <input id="modalName" name="name" required />
-              </div>
-              <div className="form-group">
-                <label htmlFor="modalUrl">Link URL</label>
-                <input id="modalUrl" name="url" type="url" required />
-              </div>
-              <div className="form-actions">
-                <button type="submit" className="btn-primary">
-                  Create
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="btn-secondary"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            <CreateLinkForm
+              onSubmit={handleSubmit}
+              isModal={true}
+              onCancel={() => setShowModal(false)}
+            />
           </div>
         </div>
       )}
 
       {showDeleteModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Confirm deletion</h2>
-            <p>Are you sure you want to remove this link?</p>
-            <div className="form-actions">
-              <button onClick={handleDelete} className="btn-delete">
-                Delete
-              </button>
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="btn-secondary"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <DeleteLinkModal
+          onConfirm={handleDelete}
+          onCancel={() => setShowDeleteModal(false)}
+        />
       )}
     </motion.div>
   );
