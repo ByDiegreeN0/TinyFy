@@ -29,6 +29,6 @@ def create_user_analytics(new_user):
 
 
 def create_referral_link(): 
-    host = "http://localhost:5173/referral/" 
     short_url = generar_link_corto()
-    return host + short_url 
+    return short_url  
+

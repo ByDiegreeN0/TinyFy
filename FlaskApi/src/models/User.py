@@ -10,26 +10,28 @@ class User(db.Model):
     _username = db.Column('username', db.String(80), unique=True, nullable=False)
     _email = db.Column('email', db.String(120), unique=True, nullable=False)
     _password = db.Column('password', db.String(120), nullable=False)
-    _ReferralToId = db.Column('ReferralToId', db.Integer, db.ForeignKey('user.id'))
-    _referral_link= db.Column('referral_link', db.String(100), nullable=False)
-    _LastLogin = db.Column('LastLogin', db.DateTime)
-    _CreatedAt = db.Column('CreatedAt', db.DateTime, default=db.func.now())
-
-    _RoleId = db.Column('RoleId', db.Integer, db.ForeignKey('roles.RoleId'))
+    _referral_to_id = db.Column('ReferralToId', db.Integer, db.ForeignKey('user.id'))
+    _referral_link = db.Column('referral_link', db.String(100), nullable=False)
+    _last_login = db.Column('LastLogin', db.DateTime)
+    _created_at = db.Column('CreatedAt', db.DateTime, default=db.func.now())
+    _role_id = db.Column('RoleId', db.Integer, db.ForeignKey('roles.RoleId'))
+    
     warnedAccount = db.relationship('WarnedAccount', backref='user')
     bannedAccount = db.relationship('BannedAccount', backref='user')
     restrictedAccount = db.relationship('RestrictedAccount', backref='user')
     supportTickets = db.relationship('SupportTicket', backref='user')
     links = db.relationship('Links', backref='user')
 
-    def __init__(self, username, email, password, referral_link, RoleId, LastLogin=None):
+    def __init__(self, username, email, password, referral_link, role_id, referral_to_id=None, last_login=None):
         self._username = username
         self._email = email
         self._password = password
         self._referral_link = referral_link
-        self._RoleId = RoleId
-        self._LastLogin = LastLogin
+        self._role_id = role_id
+        self._referral_to_id = referral_to_id  # Este ahora puede ser None
+        self._last_login = last_login
 
+    # Getters and Setters
     @property
     def id(self):
         return self._id
@@ -40,8 +42,6 @@ class User(db.Model):
 
     @username.setter
     def username(self, value):
-        if not value:
-            raise ValueError("Username cannot be empty")
         self._username = value
 
     @property
@@ -50,8 +50,6 @@ class User(db.Model):
 
     @email.setter
     def email(self, value):
-        if not value:
-            raise ValueError("Email cannot be empty")
         self._email = value
 
     @property
@@ -60,26 +58,44 @@ class User(db.Model):
 
     @password.setter
     def password(self, value):
-        if not value:
-            raise ValueError("Password cannot be empty")
         self._password = value
 
     @property
-    def RoleId(self):
-        return self._RoleId
+    def referral_to_id(self):
+        return self._referral_to_id
 
-    @RoleId.setter
-    def RoleId(self, value):
-        if value is None:
-            raise ValueError("RoleId cannot be None")
-        self._RoleId = value
+    @referral_to_id.setter
+    def referral_to_id(self, value):
+        self._referral_to_id = value
 
     @property
-    def LastLogin(self):
-        return self._LastLogin
+    def referral_link(self):
+        return self._referral_link
 
-    @LastLogin.setter
-    def LastLogin(self, value):
-        if value is not None and not isinstance(value, datetime):
-            raise ValueError("LastLogin must be a datetime object")
-        self._LastLogin = value
+    @referral_link.setter
+    def referral_link(self, value):
+        self._referral_link = value
+
+    @property
+    def last_login(self):
+        return self._last_login
+
+    @last_login.setter
+    def last_login(self, value):
+        self._last_login = value
+
+    @property
+    def created_at(self):
+        return self._created_at
+
+    @created_at.setter
+    def created_at(self, value):
+        self._created_at = value
+
+    @property
+    def role_id(self):
+        return self._role_id
+
+    @role_id.setter
+    def role_id(self, value):
+        self._role_id = value
