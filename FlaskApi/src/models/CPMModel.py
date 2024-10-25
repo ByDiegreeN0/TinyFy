@@ -1,4 +1,5 @@
 from models.User import db
+from datetime import datetime
 
 class CPM(db.Model):
     __tablename__ = 'CPM'
