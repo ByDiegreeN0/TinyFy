@@ -151,14 +151,7 @@ export default function DashboardPayouts() {
           >
             PayPal
           </button>
-          <button
-            className={`payment-option ${
-              paymentMethod === "pse" ? "active" : ""
-            }`}
-            onClick={() => setPaymentMethod("pse")}
-          >
-            PSE
-          </button>
+        
         </div>
 
         <form className="payout-form" onSubmit={submitPayoutData}>
@@ -269,24 +262,7 @@ export default function DashboardPayouts() {
               />
             </div>
           </div>
-
-          {paymentMethod === "pse" && (
-            <div className="form-group">
-              <label htmlFor="bank">Bank</label>
-              <select
-                id="bank"
-                name="bank"
-                disabled={!editMode}
-                defaultValue={payoutData?.bank || ""}
-              >
-                <option value="">Select your bank</option>
-                <option value="bancolombia">Bancolombia</option>
-                <option value="davivienda">Davivienda</option>
-                <option value="bbva">BBVA</option>
-              </select>
-            </div>
-          )}
-
+          
           <button
             type="button"
             className="edit-button"

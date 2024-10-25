@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../styles/stylesPages/DashboardReferrals.css";
 import useTokenValidation from "../hooks/useTokenValidation";
+import axios from "axios";
+
 
 const DashboardReferrals = () => {
   const navigate = useNavigate();
@@ -24,6 +26,8 @@ const DashboardReferrals = () => {
     alert('Referral link copied to clipboard!');
   };
 
+  const url = "http://localhost:8000/users";
+
   return (
     <div className="dashboard">
       <div className="referral-container">
@@ -32,6 +36,24 @@ const DashboardReferrals = () => {
           <div className="referral-link">
             <input type="text" value={referralLink} readOnly />
             <button onClick={copyToClipboard}>Copy</button>
+          </div>
+
+          {/* carlos, obivmanete todo lo qu eestoy haciendo aca se puede cambiar
+              solo estoy haciendo estos cambios para ir adelantando y probando los sistemas
+              pongale los estilos como ud los quiera :p
+
+              PD: el texto de abajo "Want to refer a friend? Paste their referral link here", 
+              toca ajustarlo para el responsive, o buscar un texto mas corto, como ud quiera
+
+              Despues de que ya exista un link de referido, este imput se tiene que deshabilitar
+              y no dejar que jamas se vuelva a modificar, el usuario referido jamas puede ser 
+              cambiado
+          */}
+
+          <h2>Want to refer a friend? Paste their referral link here</h2>
+          <div className="referral-link">
+            <input type="text" placeholder='Paste their referral link here' />
+            <button>Refer</button>
           </div>
         </div>
 
