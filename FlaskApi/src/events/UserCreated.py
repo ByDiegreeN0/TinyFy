@@ -27,6 +27,9 @@ def create_user_analytics(new_user):
     db.session.add(new_user_analytics)
     db.session.commit()
 
+# esta funcion es un poco inutil, pq solo esta llamando a otra ya
+# existente y la retorna, pero como no hay tiempo, lo voy a dejar 
+# asi, no me voy a poner a corregir esa vaina :D
 
 def create_referral_link(): 
     short_url = generar_link_corto()
