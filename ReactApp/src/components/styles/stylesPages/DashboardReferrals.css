@@ -40,10 +40,13 @@
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--color-title);
+  margin: 1rem;
+
 }
 
 .referral-link {
   display: flex;
+  margin: 1rem;
 }
 
 .referral-link input {
