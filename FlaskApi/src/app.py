@@ -38,7 +38,6 @@ app.config["JWT_SECRET_KEY"] = "vvn1IiwwBFj5v29ndpOH"
 # Inicializa JWT
 jwt = JWTManager(app)
 
-
 with app.app_context():
     db.create_all()  # Crea todas las tablas en el orden correcto
     create_roles()
