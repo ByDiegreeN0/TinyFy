@@ -13,7 +13,8 @@ class DevelopmentConfig:
     MYSQL_DB = os.getenv('MYSQL_DB')
     
     # Construir la URI de la base de datos para SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
+    # SQLALCHEMY_DATABASE_URI = f"mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/tinyapp'
     SQLALCHEMY_TRACK_MODIFICATIONS = False# Desactivar rastreo de modificaciones
 
 config = {

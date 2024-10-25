@@ -10,6 +10,9 @@ from models.User import db
 # Importa todos los modelos después de inicializar `db`
 from models import *
 
+# events
+from events.createRoles import create_roles # Evento para crear roles con la construccion de la app
+
 app = Flask(__name__)
 app.config.from_object(config['development'])
 
@@ -38,6 +41,7 @@ jwt = JWTManager(app)
 
 with app.app_context():
     db.create_all()  # Crea todas las tablas en el orden correcto
+    create_roles()
 
 if __name__ == "__main__":
     app.run(port=8000)
