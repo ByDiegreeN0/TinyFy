@@ -23,7 +23,6 @@ export default function DashboardLinks() {
   const [linkToDelete, setLinkToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const linksPerPage = 10;
-  
 
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("accessToken");
@@ -49,8 +48,8 @@ export default function DashboardLinks() {
     }
   };
 
-  const userId = getUserIdFromToken(); 
-  const userLinks = links.filter(link => link.userId === userId); 
+  const userId = getUserIdFromToken();
+  const userLinks = links.filter((link) => link.userId === userId);
 
   const fetchLinks = async () => {
     const token = localStorage.getItem("accessToken");
@@ -69,7 +68,7 @@ export default function DashboardLinks() {
         const data = await response.json();
         setLinks(data);
         setFilteredLinks(data);
-        console.log('Fetched links:', data);  
+        console.log("Fetched links:", data);
       } else {
         console.error("Error fetching links");
       }
@@ -79,7 +78,6 @@ export default function DashboardLinks() {
       setIsLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchLinks();
@@ -128,12 +126,12 @@ export default function DashboardLinks() {
       setIsLoading(false);
       return;
     }
-  
+
     const linkWithUserId = {
       ...newLink,
       userId: userId,
     };
-  
+
     try {
       const response = await fetch("http://localhost:8000/links", {
         method: "POST",
@@ -146,7 +144,7 @@ export default function DashboardLinks() {
       if (response.ok) {
         await fetchLinks();
         setShowModal(false);
-        console.log("Link created successfully.");  
+        console.log("Link created successfully.");
       } else {
         console.error("Error creating the link");
       }
@@ -156,7 +154,6 @@ export default function DashboardLinks() {
       setIsLoading(false);
     }
   };
-  
 
   const totalLinks = links.length;
   const linksThisMonth = links.filter((link) => {
@@ -214,6 +211,16 @@ export default function DashboardLinks() {
         >
           <h3>Total revenue generated</h3>
           <p>${totalIncome.toFixed(2)}</p>
+        </motion.div>
+        <motion.div
+          className="cards CPMCard"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <h3>CPM as of today</h3>
+          <div className="trend">
+            <p>${totalIncome.toFixed(2)}</p>
+          </div>
         </motion.div>
       </div>
 

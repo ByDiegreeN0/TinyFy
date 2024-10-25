@@ -54,12 +54,13 @@ const LinkTable = ({
                   onClick={() => copyToClipboard(link.LinkShortUrl)}
                   role="button"
                   style={{ cursor: 'pointer', userSelect: 'none' }}
+                  
                 >
                   {pageDomain + link.LinkShortUrl}
                 </td>
 
                 {/* Yo se que eso se ve feo, los estilos se los dejo al viejo carlos, esto solo lo hice para adelantar las tareas :D */}
-                <td><a href={link.LinkUrl} target="_blank" rel="noopener noreferrer">Target</a></td>
+                <td><a className='TargetLink transitionBorder' href={link.LinkUrl} target="_blank" rel="noopener noreferrer">Target</a></td>
                 <td>{link.ClickCount}</td>
                 <td>{link.Earnings}</td>
                 <td>{new Date(link.CreatedAt).toLocaleDateString()}</td>

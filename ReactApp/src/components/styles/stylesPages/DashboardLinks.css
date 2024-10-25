@@ -12,9 +12,10 @@
 
 .card-container {
   display: flex;
-  justify-content: space-between;
-  gap: 3rem;
+  justify-content: space-evenly;
+  gap: .8rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .cards {
@@ -22,9 +23,23 @@
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  flex: 1;
   transition: all 0.3s ease;
 }
+
+.CPMCard {
+  width: 86%;
+  height: 100px; /* Ocupa toda la fila */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.CPMCard .trend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 
 .cards h3 {
   color: var(--color-title);
@@ -107,6 +122,14 @@ input {
   margin-bottom: 1rem;
 }
 
+.TargetLink{
+  text-decoration: none;
+  color: var(--color-primary);
+}
+.ShortUrl .transitionBorder{
+  background-color: var(--color-title);
+}
+
 .link-table {
   width: 100%;
   border-collapse: separate;
@@ -123,6 +146,7 @@ input {
   background-color: var(--color-intermediate-two);
   color: var(--color-background);
 }
+
 
 .link-table tr {
   background-color: var(--color-inputs);

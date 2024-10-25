@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import HomeButtons from '../layouts/HomeButtons'
 import HomeCards from '../layouts/HomeCards'
 import Footer from "../layouts/Footer";
+import BlobStream from '../Common/BlobStream';
 import "../styles/stylesUtils/shapedividers_com-3875.css";
 import "../styles/stylesPages/HomePage.css";
 
@@ -18,6 +19,7 @@ const HomePage = ({logoSrc}) => {
                     <HomeButtons />
                 </div>
                 <img src={logoSrc} alt="Logo" className="home-logo animationFade" />
+                <BlobStream />
             </div>
 
             <HomeCards />
