@@ -1,0 +1,43 @@
+/* SuccessModal.css */
+.success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.success-icon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  color: var(--color-title);
+  margin-bottom: 1.5rem;
+}
+
+.success-button {
+  padding: 0.5rem 1.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.success-button:hover {
+  background-color: var(--color-intermediate-two);
+}
+
+/* Animation for the icon */
+.icon-enter {
+  transform: scale(0);
+}
+
+.icon-enter-active {
+  transform: scale(1);
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}

@@ -176,6 +176,44 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+.Form-Container {
+  position: relative;
+  grid-area: login;
+  width: 100%;
+}
+
+.Step-Navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-inputs);
+  border-radius: 5px;
+}
+
+.Back-Button {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.Back-Button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.Step-Info {
+  font-size: 0.9rem;
+  color: var(--color-title);
+  opacity: 0.8;
+}
+
 
 @media screen and (max-width: 768px) {
   .Welcome {
@@ -212,5 +250,10 @@
     flex-direction: column;
     z-index: 500;
     box-shadow: none;
+  }
+  .Step-Navigation {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
 }
