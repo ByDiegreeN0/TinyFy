@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../styles/stylesUtils/TransitionBorder.css";
 import "../styles/stylesUtils/withFadeInOnScroll.css";
 import "../styles/stylesPages/Sign.css";
-
 
 const FormGroup = ({ id, label, type = "text", register, rules, errors }) => (
   <div className="Form-Group">
@@ -76,20 +74,113 @@ const Signup = ({ onRegister, title, description }) => {
   const [step, setStep] = useState(1);
   const [showDialog, setShowDialog] = useState(false);
   const [generalError, setGeneralError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const password = watch("password");
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    clearErrors();
-    setGeneralError("");
+  const handleApiError = (error, type = 'register') => {
+    setIsSubmitting(false);
+    if (error.response) {
+      const { status, data } = error.response;
+      
+      switch (status) {
+        case 400:
+          if (data.field === 'email') {
+            setError('email', {
+              type: 'manual',
+              message: 'Invalid email format'
+            });
+          } else if (data.field === 'password') {
+            setError('password', {
+              type: 'manual',
+              message: 'Password does not meet requirements'
+            });
+          } else if (data.field === 'name') {
+            setError('firstName', {
+              type: 'manual',
+              message: 'Invalid name format'
+            });
+          } else {
+            setGeneralError('Please check your input data');
+          }
+          break;
+        
+        case 409:
+          setError('email', {
+            type: 'manual',
+            message: 'This email is already registered'
+          });
+          break;
+        
+        case 429:
+          setGeneralError('Too many attempts. Please try again later');
+          break;
+        
+        case 500:
+          setGeneralError('Server error. Please try again later');
+          break;
+        
+        default:
+          setGeneralError(type === 'register' 
+            ? 'Registration failed. Please try again' 
+            : 'Login failed. Please try again');
+      }
+    } else if (error.request) {
+      setGeneralError('Network error. Please check your internet connection');
+    } else {
+      setGeneralError('An unexpected error occurred. Please try again');
+    }
+  };
 
-    if (step === 1) {
-      const isValid = await trigger(["firstName", "lastName", "email"]);
-      if (isValid) setStep(2);
-    } else if (step === 2) {
-      const isValid = await trigger(["password", "passwordConfirm"]);
-      if (isValid) {
-        try {
+  const validateStep1 = async () => {
+    const isValid = await trigger(['firstName', 'lastName', 'email']);
+    if (isValid) {
+      const nameRegex = /^[a-zA-Z\s]{2,30}$/;
+      if (!nameRegex.test(watch('firstName'))) {
+        setError('firstName', {
+          type: 'manual',
+          message: 'Name must be 2-30 characters long and contain only letters'
+        });
+        return false;
+      }
+      if (!nameRegex.test(watch('lastName'))) {
+        setError('lastName', {
+          type: 'manual',
+          message: 'Last name must be 2-30 characters long and contain only letters'
+        });
+        return false;
+      }
+    }
+    return isValid;
+  };
+
+  const validateStep2 = async () => {
+    const isValid = await trigger(['password', 'passwordConfirm']);
+    if (isValid) {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+      if (!passwordRegex.test(watch('password'))) {
+        setError('password', {
+          type: 'manual',
+          message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+        });
+        return false;
+      }
+    }
+    return isValid;
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      clearErrors();
+      setGeneralError("");
+      setIsSubmitting(true);
+
+      if (step === 1) {
+        const isValid = await validateStep1();
+        if (isValid) setStep(2);
+      } else if (step === 2) {
+        const isValid = await validateStep2();
+        if (isValid) {
           const registerResponse = await fetch('/api/users', {
             method: 'POST',
             headers: {
@@ -102,7 +193,7 @@ const Signup = ({ onRegister, title, description }) => {
               RoleId: 1,
             }),
           });
-  
+
           if (registerResponse.ok) {
             const loginResponse = await fetch('/api/login', {
               method: 'POST',
@@ -114,49 +205,48 @@ const Signup = ({ onRegister, title, description }) => {
                 password: data.password,
               }),
             });
-  
+
             if (loginResponse.ok) {
               const loginData = await loginResponse.json();
               localStorage.setItem('accessToken', loginData.access_token);
-              // Intentamos obtener el user_id del token
+              
               const userId = getUserIdFromToken(loginData.access_token);
               if (userId) {
                 localStorage.setItem('userId', userId);
               } else {
-                console.warn('No se pudo obtener el ID del usuario del token');
+                console.warn('Could not obtain user ID from token');
               }
               setShowDialog(true);
             } else {
               const errorData = await loginResponse.json();
-              setGeneralError(`Error de inicio de sesión: ${errorData.msg}`);
+              setGeneralError(`Login error: ${errorData.msg}`);
             }
           } else {
             const errorData = await registerResponse.json();
-            if (errorData.message.includes("email")) {
-              setError("email", {
-                type: "manual",
-                message: "Este correo electrónico ya está registrado",
-              });
-            } else {
-              setGeneralError(`Error de registro: ${errorData.message}`);
-            }
+            handleApiError({ response: { status: registerResponse.status, data: errorData } });
           }
-        } catch (error) {
-          setGeneralError('Error de red: No se pudo conectar con el servidor');
         }
       }
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleKeepSession = (keep) => {
-    if (keep) {
-      localStorage.setItem("isAuthenticated", "true");
-    } else {
-      sessionStorage.setItem("isAuthenticated", "true");
+    try {
+      if (keep) {
+        localStorage.setItem("isAuthenticated", "true");
+      } else {
+        sessionStorage.setItem("isAuthenticated", "true");
+      }
+      setShowDialog(false);
+      onRegister();
+      navigate("/dashboardlinks");
+    } catch (error) {
+      setGeneralError("Failed to save session preferences");
     }
-    setShowDialog(false);
-    onRegister();
-    navigate("/dashboardlinks");
   };
 
   const getUserIdFromToken = (token) => {
@@ -164,7 +254,7 @@ const Signup = ({ onRegister, title, description }) => {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.identity || null;
     } catch (error) {
-      console.error('Error al decodificar el token:', error);
+      console.error('Error decoding token:', error);
       return null;
     }
   };
@@ -198,14 +288,42 @@ const Signup = ({ onRegister, title, description }) => {
                 id="firstName"
                 label="Name"
                 register={register}
-                rules={{ required: "The name is required" }}
+                rules={{ 
+                  required: "Name is required",
+                  minLength: {
+                    value: 2,
+                    message: "Name must be at least 2 characters long"
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Name must not exceed 30 characters"
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z\s]+$/,
+                    message: "Name can only contain letters"
+                  }
+                }}
                 errors={errors}
               />
               <FormGroup
                 id="lastName"
                 label="Last name"
                 register={register}
-                rules={{ required: "Last name is required" }}
+                rules={{ 
+                  required: "Last name is required",
+                  minLength: {
+                    value: 2,
+                    message: "Last name must be at least 2 characters long"
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Last name must not exceed 30 characters"
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z\s]+$/,
+                    message: "Last name can only contain letters"
+                  }
+                }}
                 errors={errors}
               />
               <FormGroup
@@ -217,13 +335,18 @@ const Signup = ({ onRegister, title, description }) => {
                   required: "Email is required",
                   pattern: {
                     value: /^[^@ ]+@[^@ ]+\.[^@.]{2,}$/,
-                    message: "The email is not valid",
-                  },
+                    message: "Please enter a valid email address"
+                  }
                 }}
                 errors={errors}
               />
-              <button className="Button-Forms" type="button" onClick={onSubmit}>
-                Continue
+              <button 
+                className="Button-Forms" 
+                type="button" 
+                onClick={onSubmit}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Processing..." : "Continue"}
               </button>
             </>
           )}
@@ -239,8 +362,12 @@ const Signup = ({ onRegister, title, description }) => {
                   required: "Password is required",
                   minLength: {
                     value: 6,
-                    message: "Password must be at least 6 characters",
+                    message: "Password must be at least 6 characters long"
                   },
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+                    message: "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+                  }
                 }}
                 errors={errors}
               />
@@ -250,14 +377,18 @@ const Signup = ({ onRegister, title, description }) => {
                 type="password"
                 register={register}
                 rules={{
-                  required: "Password confirmation is mandatory",
+                  required: "Password confirmation is required",
                   validate: (value) =>
-                    value === password || "Passwords do not match",
+                    value === password || "Passwords do not match"
                 }}
                 errors={errors}
               />
-              <button className="Button-Forms" type="submit">
-                Register
+              <button 
+                className="Button-Forms" 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Processing..." : "Register"}
               </button>
             </>
           )}
