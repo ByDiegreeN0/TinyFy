@@ -13,10 +13,36 @@ export default function DashboardPayouts() {
   const [editMode, setEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [payoutData, setPayoutData] = useState(null);
-  const url = "http://localhost:8000/payout_data";
+  const [userId, setUserId] = useState(null);
+  const url = "/api/payout_data";
 
-  // Función para obtener los datos de payout (GET)
-  const fetchPayoutData = async () => {
+  // Función para obtener el ID del usuario del token
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const decodedToken = JSON.parse(window.atob(base64));
+        if (decodedToken && decodedToken.sub) {
+          console.log("User ID extraído del token:", decodedToken.sub);
+          return decodedToken.sub;
+        } else {
+          console.error("El token decodificado no contiene un ID de usuario.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error al decodificar el token:", error);
+        return null;
+      }
+    } else {
+      console.log("No se encontró ningún token en localStorage.");
+      return null;
+    }
+  };
+
+  // Función para obtener los datos de payout específicos del usuario (GET)
+  const fetchPayoutData = async (userId) => {
     setIsLoading(true);
     try {
       const response = await axios.get(url, {
@@ -25,9 +51,12 @@ export default function DashboardPayouts() {
         },
       });
 
-      if (response.status === 200 && response.data.length > 0) {
-        // Tomamos el primer registro ya que el backend devuelve un array
-        setPayoutData(response.data[0]);
+      if (response.status === 200) {
+        // Filtramos para obtener solo los datos del usuario actual
+        const userPayoutData = response.data.find(data => data.UserId === userId);
+        if (userPayoutData) {
+          setPayoutData(userPayoutData);
+        }
       }
     } catch (err) {
       console.error("Error:", err);
@@ -45,6 +74,7 @@ export default function DashboardPayouts() {
     setIsLoading(true);
 
     const newPayoutData = {
+      UserId: userId, // Incluimos el ID del usuario
       Name: e.target.fullName.value,
       email: e.target.paypalEmail.value,
       Method: paymentMethod,
@@ -55,7 +85,7 @@ export default function DashboardPayouts() {
       address2: e.target.address2?.value || "",
       phonePrefix: e.target.prefix.value,
       phoneNumber: e.target.phoneNumber.value,
-      CreatedAt: new Date().toISOString(),
+      CreatedAt: payoutData?.CreatedAt || new Date().toISOString(),
       UpdatedAt: new Date().toISOString(),
     };
 
@@ -84,7 +114,7 @@ export default function DashboardPayouts() {
       if (response.status === 201 || response.status === 200) {
         console.log("Payout data saved successfully");
         setEditMode(false);
-        fetchPayoutData();
+        fetchPayoutData(userId);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -96,23 +126,30 @@ export default function DashboardPayouts() {
   // Manejador para el botón de editar/guardar
   const handleEditClick = async () => {
     if (editMode) {
-      // Si estamos en modo edición, el formulario se enviará normalmente
       const form = document.querySelector(".payout-form");
       form.dispatchEvent(new Event("submit", { cancelable: true }));
     } else {
-      // Si no estamos en modo edición, solo cambiamos al modo edición
       setEditMode(true);
     }
   };
 
+  // Efecto inicial para obtener el ID del usuario y sus datos
   useEffect(() => {
     const isAuthenticated =
       localStorage.getItem("isAuthenticated") ||
       sessionStorage.getItem("isAuthenticated");
+    
     if (!isAuthenticated) {
       navigate("/Signin");
     } else {
-      fetchPayoutData();
+      const extractedUserId = getUserIdFromToken();
+      if (extractedUserId) {
+        setUserId(extractedUserId);
+        fetchPayoutData(extractedUserId);
+      } else {
+        console.error("No se pudo obtener el ID del usuario");
+        navigate("/Signin");
+      }
     }
   }, [navigate]);
 
@@ -151,7 +188,6 @@ export default function DashboardPayouts() {
           >
             PayPal
           </button>
-        
         </div>
 
         <form className="payout-form" onSubmit={submitPayoutData}>
