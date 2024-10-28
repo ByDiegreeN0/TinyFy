@@ -4,24 +4,34 @@
 from models.User import db # importa la instancia de la libreria que interactua con la base de datos
 from models.PayoutDataModel import Payout_Data # importa el modelo de payoutdata
 from models.UserAnalyticsModel import UserAnalytics # importa el modelo de Useranalytics
+from services.LinkService.LinkService import generar_link_corto
 
 
-def create_payout_data(new_user): # al crear un usuario, obtiene los datos de routes, y crea un registro en Payout_Data
-    
+
+def create_payout_data(new_user):
+    # Crea un registro en Payout_Data usando el ID del usuario
     new_payout_data = Payout_Data(
         UserId=new_user.id,
         Name=new_user.username,
         email=new_user.email,
     )
-    
     db.session.add(new_payout_data)
     db.session.commit()
 
-def create_user_analytics(new_user): # al crear un usuario, obtiene los datos de routes, y crea un registro en user analytics
+
+def create_user_analytics(new_user):
+    # Crea un registro en UserAnalytics usando el ID del usuario
     new_user_analytics = UserAnalytics(
         UserId=new_user.id,
     )
-    
     db.session.add(new_user_analytics)
     db.session.commit()
- 
+
+# esta funcion es un poco inutil, pq solo esta llamando a otra ya
+# existente y la retorna, pero como no hay tiempo, lo voy a dejar 
+# asi, no me voy a poner a corregir esa vaina :D
+
+def create_referral_link(): 
+    short_url = generar_link_corto()
+    return short_url  
+
