@@ -1,22 +1,20 @@
-# archivo generado para colocar los endpoints y funciones necesarias para el sistema
-# de pagos con paypal
-    
-from config import DevelopmentConfig
+from flask import jsonify
+from config import DevelopmentConfig # importa las configuraciones de dev
+from models.PayoutLogModel import PayoutLog  # Importa el modelo de payout log
+from models.User import db  # Importa la instancia de db desde el modelo de usuario
 import requests
 import json
-
+from datetime import datetime  
 
 sandbox_email = DevelopmentConfig.PAYPAL_SANDBOX_EMAIL
 
-def request_payout():
+def request_payout(user_id, amount):
     from services.PayPalService.PaypalService import auth_paypal
-    
-    access_token = auth_paypal() # obtiene el access_token
-    
+
+    access_token = auth_paypal()  # Obtiene el access_token
+
     if not access_token:
-        print("No se pudo obtener el Access Token.") # si no encuentra el acces token, tira error
-        return
-    
+        return jsonify({'message': 'No se pudo obtener el Access Token.'}), 401
     
     # URL de la API de PayPal para hacer payouts
     url = "https://api-m.sandbox.paypal.com/v1/payments/payouts"
@@ -31,7 +29,7 @@ def request_payout():
     # Cuerpo de la solicitud
     data = {
         "sender_batch_header": {
-            "s ender_batch_id":"2014021801",
+            "sender_batch_id": str(int(datetime.now().timestamp())),
             "recipient_type": "EMAIL",
             "email_subject": "TiniFy Payment",
             "email_message": "You received a payment. Thanks for using our service!"
@@ -40,25 +38,33 @@ def request_payout():
             {
                 "amount": {
                     "currency": "USD",
-                    "value": "10.00"
+                    "value": str(amount)
                 },
-                "sender_item_id": "201403140001",
+                "sender_item_id": str(int(datetime.now().timestamp())), 
                 "recipient_wallet": "PAYPAL",
                 "receiver": sandbox_email
             }
         ]
     }
     
-    # necesito guardar el dato en base de datos en cuanto se haga la request del pago
-    
     # Realizar la solicitud POST
     response = requests.post(url, headers=headers, data=json.dumps(data), timeout=10)
     
     # Verificar la respuesta
-    if response.status_code == 201:
-        print("Payout created successfully")
-        print(response.json())
-    else:
-        print("Error al crear el payout:", response.status_code, response.text)
+    if response.status_code == 201: 
+        # Crear un registro en payout_log
+        payout_log = PayoutLog(
+            PayoutAmount=amount,
+            PayoutRequestedAt=datetime.now(),
+            PayoutDoneAt=datetime.now(), 
+            PayoutStatus="done",
+            UserId=user_id,
+        )
+        
+        db.session.add(payout_log)  # Añadir el registro a la sesión
+        db.session.commit()  # Subir a la base de datos
+        return jsonify({'message': 'Payout created successfully'}), 201
 
-request_payout()
+    else:
+        # Manejo de error en la solicitud de payout
+        return jsonify({'message': 'Something went wrong, PayoutLog hasn´t been created', 'error': response.text}), 500

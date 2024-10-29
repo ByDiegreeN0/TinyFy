@@ -7,7 +7,7 @@ class PayoutLog(db.Model):
     PayoutAmount = db.Column('PayoutAmount', db.Numeric(precision=10, scale=2), nullable=False)
     PayoutRequestedAt = db.Column('PayoutRequestedAt', db.DateTime, default=db.func.now())
     PayoutDoneAt = db.Column('PayoutDoneAt', db.DateTime)
-    PayoutStatus = db.Column('PayoutStatus', db.String(15))
+    PayoutStatus = db.Column('PayoutStatus', db.String(15), default='pending', nullable=False)
     PayoutConfigId = db.Column('PayoutConfigId', db.Integer, db.ForeignKey('Payout_Data.PayoutDataId'))
     UserId = db.Column('UserId', db.Integer, db.ForeignKey('user.id'))
 

@@ -1,29 +1,36 @@
-# ESTE ARCHIVO ESTA CREADO CON EL PROPOSITO DE QUE PUEDAN MANDAR REQUEST DE PAGOS
-# AUTOMATICAMENTE SIN NECESIDAD DE QUE LOS USUARIOS LO PIDAN MEDIANTE UN BOTON
+from datetime import datetime
+from models.UserAnalyticsModel import UserAnalytics  # Importa el modelo de user analytics
+from API.PaypalAPIRequest import request_payout  
 
-# LA IDEA ES QUE ESTO LO PUEDAN ACTIVAR DE MANERA OPCIONA, PERO NO CREO QUE
-# TENGAMOS TIEMPO :(
+def autoRequestPayout(user_id):
+    # Obtiene los datos de análisis del usuario
+    userAnalyticsData = UserAnalytics.query.filter_by(UserId=user_id).first() 
     
-from datetime import datetime, timedelta
-from models.UserAnalyticsModel import UserAnalytics # importa el modelo de useranalytics
-
-
-def autoRequestPayout(id, earning):
-    
-    userAnalyticsData = UserAnalytics.query.filter(UserId=id).first() 
-    
+    # Verifica si los datos del usuario existen
     if not userAnalyticsData:
+        print(f"No se encontraron datos para el usuario con ID: {user_id}")
         return False
     
+    # Obtiene las ganancias del usuario
     userEarnings = userAnalyticsData.User_Earning
-    # Obtener la fecha y hora actual
-    now = datetime.datetime.now()
     
-    # Configurar las horas en las que se harán los request de pagos
-    payout_time = datetime(datetime.now().year, datetime.now().month, 30, 17, 0) 
+    # Obtener la fecha actual
+    now = datetime.now()
 
-    # Comparar la hora actual con las horas de pago
-    if now in payout_time:
-        # Si la hora coincide, realizar el request de pago
+    # Comprobar si es el día 30 y las ganancias son al menos $5
+    if now.day == 30 and userEarnings >= 5.00:
         print("Realizando request de pago automático...")
-        # Realizar la acción de request de pago aquí
+        # Llama a la función de request de payout
+        payout_response = request_payout(userAnalyticsData.UserId, userEarnings) 
+        
+        # Verificar si la solicitud de payout fue exitosa
+        if payout_response[1] == 201:  # Verifica el código de estado de la respuesta
+            print(f"Payout de {userEarnings} USD solicitado exitosamente para el usuario {userAnalyticsData.UserId}.")
+            return True
+        else:
+            print(f"Error al solicitar payout para el usuario {userAnalyticsData.UserId}: {payout_response[0].json()}")
+            return False
+    
+    # Si el día no es 30 o las ganancias son menores a $5
+    print(f"No se realizó el request de payout para el usuario {user_id}.")
+    return False
