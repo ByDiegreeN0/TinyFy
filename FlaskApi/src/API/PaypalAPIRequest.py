@@ -4,12 +4,12 @@
 from config import DevelopmentConfig
 import requests
 import json
-from services.PayPalService.PaypalService import auth_paypal
 
 
 sandbox_email = DevelopmentConfig.PAYPAL_SANDBOX_EMAIL
 
 def request_payout():
+    from services.PayPalService.PaypalService import auth_paypal
     
     access_token = auth_paypal() # obtiene el access_token
     
@@ -31,7 +31,7 @@ def request_payout():
     # Cuerpo de la solicitud
     data = {
         "sender_batch_header": {
-            "sender_batch_id": "2014021801",
+            "s ender_batch_id":"2014021801",
             "recipient_type": "EMAIL",
             "email_subject": "TiniFy Payment",
             "email_message": "You received a payment. Thanks for using our service!"
@@ -48,6 +48,8 @@ def request_payout():
             }
         ]
     }
+    
+    # necesito guardar el dato en base de datos en cuanto se haga la request del pago
     
     # Realizar la solicitud POST
     response = requests.post(url, headers=headers, data=json.dumps(data), timeout=10)
