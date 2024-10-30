@@ -19,7 +19,7 @@ app.config.from_object(config['development'])
 
 # Inicializa CORS (esta libreria permite a aplicaciones en otros puertos, mandar datos al API)
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
-CORS(app, resources={r"/api/*": {"origins": "localhost:5000"}})  # DEJA QUE UNICAMENT EL PUERTO 5000 DEL LOCALHOST, ACCEDA A LAS PROPIEDADES DEL API
+CORS(app, resources={r"/api/*": {"origins": "localhost:5173"}})  # DEJA QUE UNICAMENT EL PUERTO 5000 DEL LOCALHOST, ACCEDA A LAS PROPIEDADES DEL API
 
 
 # Inicializa JWT

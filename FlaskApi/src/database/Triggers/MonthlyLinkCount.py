@@ -25,7 +25,7 @@ def create_monthly_link_count_trigger():
                     DECLARE monthlyCount INT;
                     SET monthlyCount = increase_monthly_link_count(NEW.UserId);
 
-                    UPDATE user_analysis
+                    UPDATE user_analytics
                     SET User_LinksCreated = monthlyCount, CreatedAt = NOW()
                     WHERE UserId = NEW.UserId;
                 END;
