@@ -5,8 +5,9 @@ from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from config import config
-from models.User import db  
-
+from models.User import db
+from database.functions import * # importa las funciones creadas para la base de datos
+from database.Triggers import * # importa todos los triggers
 # Importa todos los modelos después de inicializar `db`
 from models import *
 
@@ -40,7 +41,9 @@ jwt = JWTManager(app)
 
 with app.app_context():
     db.create_all()  # Crea todas las tablas en el orden correcto
-    create_roles()
+    create_roles() # crea roles automaticamente al iniciar la aplicacion, si no existen
+    create_database_functions() # crea todas las funciones de la base de datos, si no existen
+    create_database_triggers() # crea los triggers automaticamente si no existen
 
 if __name__ == "__main__":
     app.run(port=8000)
