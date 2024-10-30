@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-
+from database.functions import *
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -9,6 +9,9 @@ from models.User import db
 
 # Importa todos los modelos después de inicializar `db`
 from models import *
+
+# events
+from events.createRoles import create_roles # Evento para crear roles con la construccion de la app
 
 app = Flask(__name__)
 app.config.from_object(config['development'])
@@ -35,9 +38,9 @@ app.config["JWT_SECRET_KEY"] = "vvn1IiwwBFj5v29ndpOH"
 # Inicializa JWT
 jwt = JWTManager(app)
 
-
 with app.app_context():
     db.create_all()  # Crea todas las tablas en el orden correcto
+    create_roles()
 
 if __name__ == "__main__":
     app.run(port=8000)
