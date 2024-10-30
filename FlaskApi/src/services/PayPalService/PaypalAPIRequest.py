@@ -1,7 +1,9 @@
 from flask import jsonify
-from config import DevelopmentConfig # importa las configuraciones de dev
+from config import DevelopmentConfig  # Importa las configuraciones de desarrollo
 from models.PayoutLogModel import PayoutLog  # Importa el modelo de payout log
+from models.UserAnalyticsModel import UserAnalytics  # Importa el modelo de UserAnalytics
 from models.User import db  # Importa la instancia de db desde el modelo de usuario
+from .PaypalService import auth_paypal  # Importar auth_paypal al nivel superior
 import requests
 import json
 from datetime import datetime  
@@ -9,7 +11,6 @@ from datetime import datetime
 sandbox_email = DevelopmentConfig.PAYPAL_SANDBOX_EMAIL
 
 def request_payout(user_id, amount):
-    from services.PayPalService.PaypalService import auth_paypal
 
     access_token = auth_paypal()  # Obtiene el access_token
 
@@ -62,9 +63,16 @@ def request_payout(user_id, amount):
         )
         
         db.session.add(payout_log)  # Añadir el registro a la sesión
-        db.session.commit()  # Subir a la base de datos
+
+        # Actualizar User_Earning a 0 en UserAnalytics
+        user_analytics = UserAnalytics.query.filter_by(UserId=user_id).first()
+        if user_analytics:
+            user_analytics.User_Earning = 0
+            db.session.add(user_analytics)  # Añadir el cambio a la sesión
+        
+        db.session.commit()  # Subir todos los cambios a la base de datos
         return jsonify({'message': 'Payout created successfully'}), 201
 
     else:
         # Manejo de error en la solicitud de payout
-        return jsonify({'message': 'Something went wrong, PayoutLog hasn´t been created', 'error': response.text}), 500
+        return jsonify({'message': 'Something went wrong, PayoutLog hasn’t been created', 'error': response.text}), 500

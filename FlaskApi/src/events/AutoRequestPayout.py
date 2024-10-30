@@ -1,6 +1,6 @@
 from datetime import datetime
 from models.UserAnalyticsModel import UserAnalytics  # Importa el modelo de user analytics
-from API.PaypalAPIRequest import request_payout  
+from FlaskApi.src.services.PayPalService.PaypalAPIRequest import request_payout  
 
 def autoRequestPayout(user_id):
     # Obtiene los datos de análisis del usuario
