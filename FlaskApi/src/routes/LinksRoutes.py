@@ -10,6 +10,16 @@ import random  # Biblioteca estándar de Python para generar números o eleccion
 import string  # Biblioteca estándar de Python que maneja cadenas de texto. Usualmente utilizada junto con 'random' para generar strings aleatorias.
 from services.LinkService.AmountClicks import register_click  
 from services.LinkService.LinkService import generar_link_corto
+from services.LinkService.LinksCreated import count_links_last_month
+
+
+@app.route('/analytics/update-links/<int:user_id>', methods=['POST'])
+def update_links_created(user_id):
+    try:
+        count_links_last_month(user_id)
+        return jsonify({"message": "User analytics updated with links created for the last month."}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @cross_origin  # Implementa CORS

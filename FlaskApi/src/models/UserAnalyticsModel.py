@@ -9,5 +9,6 @@ class UserAnalytics(db.Model):
     User_LinksCreated = db.Column(db.Integer, default=0)  # Valor por defecto
     User_Earning = db.Column(db.Integer, default=0)  # Valor por defecto
     CreatedAt = db.Column(db.DateTime, default=db.func.now())  # Valor por defecto para la fecha
+    Usernumberclicks = db.Column(db.Integer, default=0)
     
 
