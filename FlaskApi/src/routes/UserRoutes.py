@@ -88,6 +88,8 @@ if __name__ == '__main__':
 @cross_origin  # Implementa CORS
 @app.route('/user/referral/<string:short_url>', methods=['POST'])
 def create_ref_to_user(short_url):
+    from events.UserCreated import create_payout_data, create_user_analytics, create_referral_link
+
     data = request.json
 
     # Verifica que la contraseña esté en el cuerpo de la solicitud
