@@ -12,7 +12,8 @@ from services.LinkService.AmountClicks import register_click
 from services.LinkService.LinkService import generar_link_corto
 from services.LinkService.LinksCreated import count_links_last_month
 
-
+@cross_origin  # Implementa CORS
+@jwt_required # 
 @app.route('/analytics/update-links/<int:user_id>', methods=['POST'])
 def update_links_created(user_id):
     try:
@@ -56,7 +57,6 @@ def create_link():
         LinkShortUrl=link_short_url,  
         ClickCount=data.get('ClickCount', 0),
         Earnings=data.get('Earnings', 0),
-        CreatedAt=data.get('CreatedAt'),
         userId=data.get('userId')
     )
 
