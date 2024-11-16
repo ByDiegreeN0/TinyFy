@@ -1,9 +1,17 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../styles/stylesPages/DashboardSupport.css";
 import axios from "axios";
 import useTokenValidation from "../hooks/useTokenValidation";
-import perroSoporte from '../../assets/Img/PerroSoporte.webp';
+
+import perroSoporte from '../../assets/Img/PerroSoporte.webp'; // imagen del perro
+import userIMG from '../../assets/Img/Avataruser.jpg' // imagen del user
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // importaciones de fontawesome
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'; // importaciones de fontawesome
+import { faUserShield } from '@fortawesome/free-solid-svg-icons'; // Icono de administrador
+
 
 const DashboardSupport = () => {
   const navigate = useNavigate();
@@ -39,53 +47,6 @@ const DashboardSupport = () => {
     }
   };
 
-  // Función para crear o actualizar los datos del payout
-  const submitPayoutData = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const newPayoutData = {
-      Name: e.target.fullName.value,
-      email: e.target.paypalEmail.value,
-      Method: supportMethod, // Se usa supportMethod o define otra variable de estado para el método de pago si es necesario
-      country: e.target.country.value,
-      city: e.target.city.value,
-      zipcode: e.target.zipCode.value,
-      address: e.target.address.value,
-      address2: e.target.address2?.value || "",
-      phonePrefix: e.target.prefix.value,
-      phoneNumber: e.target.phoneNumber.value,
-      CreatedAt: new Date().toISOString(),
-      UpdatedAt: new Date().toISOString(),
-    };
-
-    try {
-      let response;
-      if (payoutData?.PayoutDataId) {
-        response = await axios.put(`${url}/${payoutData.PayoutDataId}`, newPayoutData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } else {
-        response = await axios.post(url, newPayoutData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-
-      if (response.status === 201 || response.status === 200) {
-        console.log("Payout data saved successfully");
-        setEditMode(false);
-        fetchPayoutData();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     const isAuthenticated =
@@ -119,7 +80,7 @@ const DashboardSupport = () => {
         </div>
 
         <div className="support-container" style={{ display: supportMethod === "form" ? "flex" : "none" }}>
-          <form className="support-form" onSubmit={submitPayoutData}>
+          <form action="https://formsubmit.co/tinyfys@gmail.com" method="POST" className="support-form">
             <div className="form-group">
               <label htmlFor="address">User Email</label>
               <input
@@ -153,12 +114,12 @@ const DashboardSupport = () => {
               style={{ display: editMode ? "none" : "block" }}
               onClick={() => setEditMode(!editMode)}
             >
-              {editMode ? "Save Information" : "Send Message"}
+              {editMode ? "Save Information" : "Send Email"}
             </button>
 
             {editMode && (
               <button type="submit" className="edit-button">
-                Submit Payout
+                Are you sure? (click to send)
               </button>
             )}
           </form>
@@ -170,8 +131,37 @@ const DashboardSupport = () => {
 
         {supportMethod === "chat" && (
           <div className="chat-container">
-            <h1>test</h1>
-         
+            <div className="chat-card">
+              <div className="chat-img">
+                <FontAwesomeIcon icon={faUserShield} />
+              </div>
+
+              <div className="chat-content">
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit provident dolore blanditiis ipsam iusto inventore error libero voluptatum est, praesentium sed mollitia doloremque placeat nesciunt. Saepe natus sequi fugiat voluptas?</p>
+              </div>
+            </div>
+
+            <div className="chat-card">
+
+              <div className="chat-content">
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit provident dolore blanditiis ipsam iusto inventore error libero voluptatum est, praesentium sed mollitia doloremque placeat nesciunt. Saepe natus sequi fugiat voluptas?</p>
+              </div>
+
+              <div className="chat-img">
+                <img src={userIMG} alt="" />
+              </div>
+            </div>
+
+
+            <div className="chat-bottom">
+              <form action="">
+                <input className="chat-input" type="text" placeholder="Write a message..." />
+                <button className="chat-send" type="submit">
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+              </form>
+
+            </div>
           </div>
         )}
       </div>
