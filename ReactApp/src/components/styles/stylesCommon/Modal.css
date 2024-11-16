@@ -1,0 +1,97 @@
+/* Modal.css */
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999999999999999;
+  top: -120px;
+  height: 100vh;
+  width: 100vw;
+}
+
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 28rem;
+  z-index: 999999999999999999999999;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.close-button {
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.close-button:hover {
+  background-color: #f3f4f6;
+}
+
+.close-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #6b7280;
+}
+
+/* Animation classes */
+.modal-enter {
+  opacity: 0;
+  transform: translate(-50%, -40%);
+}
+
+.modal-enter-active {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease-out;
+}
+
+.modal-exit {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.modal-exit-active {
+  opacity: 0;
+  transform: translate(-50%, -60%);
+  transition: all 0.3s ease-in;
+}
+
+.overlay-enter {
+  opacity: 0;
+}
+
+.overlay-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
+
+.overlay-exit {
+  opacity: 1;
+}
+
+.overlay-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}

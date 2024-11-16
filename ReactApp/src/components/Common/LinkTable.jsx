@@ -16,6 +16,14 @@ const LinkTable = ({
   const indexOfLastLink = currentPage * linksPerPage;
   const indexOfFirstLink = indexOfLastLink - linksPerPage;
   const currentLinks = filteredLinks.slice(indexOfFirstLink, indexOfLastLink);
+  const pageDomain = "http://localhost:5173/"; {/* Esto se tiene que cambiar en el momento que se pase a produccion y tengamos un dominio real */ }
+
+  const copyToClipboard = (shortUrl) => {
+    navigator.clipboard.writeText(pageDomain + shortUrl);
+    alert('ShortUrl link copied to clipboard!');
+  };
+  
+
 
   return (
     <>
@@ -26,6 +34,7 @@ const LinkTable = ({
             <th>Short URL</th>
             <th>Target URL</th>
             <th>Views</th>
+            <th>Incomes</th>
             <th>Created At</th>
             <th>Actions</th>
           </tr>
@@ -41,9 +50,20 @@ const LinkTable = ({
                 transition={{ duration: 0.3 }}
               >
                 <td>{link.LinkName}</td>
-                <td>{link.LinkShortUrl}</td>
-                <td><a href={link.LinkUrl} target='_blank'>Target</a></td>
+                <td
+                  onClick={() => copyToClipboard(link.LinkShortUrl)}
+                  role="button"
+                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  
+                >
+                  {pageDomain + link.LinkShortUrl}
+                </td>
+
+                {/* Yo se que eso se ve feo, los estilos se los dejo al viejo carlos, esto solo lo hice para adelantar las tareas :D */}
+                <td><a className='TargetLink transitionBorder' href={link.LinkUrl} target="_blank" rel="noopener noreferrer">Target</a></td>
+
                 <td>{link.ClickCount}</td>
+                <td>{link.Earnings}</td>
                 <td>{new Date(link.CreatedAt).toLocaleDateString()}</td>
                 <td>
                   <button
