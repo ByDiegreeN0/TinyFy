@@ -8,28 +8,24 @@ from models.PayoutDataModel import Payout_Data
 
 
 
-
-#create
-@cross_origin # implementa CORS
-@app.route('/payout_data', methods=['POST'])
+# create
+@app.route('/payout_data', methods=['POST']) 
 @jwt_required()
 def create_payout_data():
     data = request.json
     new_payout_data = Payout_Data(
+        UserId=data['UserId'],
         Name=data['Name'],
         email=data['email'],
-        Method=data['Method'],
-        country=data['country'],
-        city=data['city'],
-        zipcode=data['zipcode'],
-        address=data['address'],
-        address2=data.get('address2', ''),
-        phonePrefix=data['phonePrefix'],
-        phoneNumber=data['phoneNumber'],
-        CreatedAt=data.get('CreatedAt'),
-        UpdatedAt=data.get('UpdatedAt')
+        Method=data.get('Method'),
+        country=data.get('country'),
+        city=data.get('city'),
+        zipcode=data.get('zipcode'),
+        address=data.get('address'),
+        address2=data.get('address2'),
+        phonePrefix=data.get('phonePrefix'),
+        phoneNumber=data.get('phoneNumber'),
     )
-    new_payout_data.UserId = data.get('UserId', None)
     db.session.add(new_payout_data)
     db.session.commit()
     return jsonify({'message': 'Payout Data created successfully'}), 201
@@ -85,8 +81,7 @@ def get_payout_data_by_id(payout_data_id):
 # Update
 @cross_origin # implementa CORS
 @app.route('/payout_data/<int:payout_data_id>', methods=['PUT'])
-@jwt_required() # con este metodo se protege la ruta
-
+@jwt_required()
 def update_payout_data(payout_data_id):
     payout_data = Payout_Data.query.get_or_404(payout_data_id)
     data = request.json
@@ -100,10 +95,9 @@ def update_payout_data(payout_data_id):
     payout_data.address2 = data.get('address2', payout_data.address2)
     payout_data.phonePrefix = data.get('phonePrefix', payout_data.phonePrefix)
     payout_data.phoneNumber = data.get('phoneNumber', payout_data.phoneNumber)
-    payout_data.CreatedAt = data.get('CreatedAt', payout_data.CreatedAt)
-    payout_data.UpdatedAt = data.get('UpdatedAt', payout_data.UpdatedAt)
     db.session.commit()
     return jsonify({'message': 'Payout Data updated successfully'})
+
 
 # Delete
 

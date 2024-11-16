@@ -42,7 +42,7 @@ const LinkTable = ({
               >
                 <td>{link.LinkName}</td>
                 <td>{link.LinkShortUrl}</td>
-                <td>{link.LinkUrl}</td>
+                <td><a href={link.LinkUrl} target='_blank'>Target</a></td>
                 <td>{link.ClickCount}</td>
                 <td>{new Date(link.CreatedAt).toLocaleDateString()}</td>
                 <td>
