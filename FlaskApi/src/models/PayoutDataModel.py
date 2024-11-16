@@ -15,8 +15,8 @@ class Payout_Data(db.Model):
     address2 = db.Column(db.String(50))
     phonePrefix = db.Column(db.String(3))
     phoneNumber = db.Column(db.String(11))
-    CreatedAt = db.Column(db.DateTime, default=db.func.now())
-    UpdatedAt = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())  # Auto-update
+    CreatedAt = db.Column(db.DateTime, default=db.func.now())  # Manejado automáticamente
+    UpdatedAt = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())  # Actualización automática
 
     def __init__(self, UserId, Name, email, Method=None, country=None, city=None, zipcode=None, 
                  address=None, address2=None, phonePrefix=None, phoneNumber=None):
@@ -31,4 +31,3 @@ class Payout_Data(db.Model):
         self.address2 = address2 if address2 else ''
         self.phonePrefix = phonePrefix if phonePrefix else '+00'
         self.phoneNumber = phoneNumber if phoneNumber else '0000000000'
- 

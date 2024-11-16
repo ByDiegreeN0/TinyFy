@@ -5,8 +5,8 @@ class Links(db.Model):
 
     LinkId = db.Column(db.Integer, primary_key=True)
     LinkName = db.Column(db.String(50))
-    LinkUrl = db.Column(db.String(50), nullable=False)
-    LinkShortUrl = db.Column(db.String(50))
+    LinkUrl = db.Column(db.String(300), nullable=False)
+    LinkShortUrl = db.Column(db.String(300))
     ClickCount = db.Column(db.Integer, nullable=False)
     Earnings = db.Column(db.Integer, default=0)
     CreatedAt = db.Column(db.DateTime, default=db.func.now())

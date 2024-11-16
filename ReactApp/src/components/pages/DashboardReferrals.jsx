@@ -32,7 +32,7 @@ const DashboardReferrals = () => {
     <div className="dashboard">
       <div className="referral-container">
         <div className="referral-section">
-          <h2>Referral Link</h2>
+          <h2>Share your Referral Link</h2>
           <div className="referral-link">
             <input type="text" value={referralLink} readOnly />
             <button onClick={copyToClipboard}>Copy</button>
@@ -54,6 +54,7 @@ const DashboardReferrals = () => {
           <div className="referral-link">
             <input type="text" placeholder='Paste their referral link here' />
             <button>Refer</button>
+
           </div>
         </div>
 

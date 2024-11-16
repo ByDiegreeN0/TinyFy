@@ -314,7 +314,7 @@ export default function DashboardPayouts() {
               className="edit-button"
               style={{ display: editMode ? "block" : "none" }}
             >
-              Submit Payout
+              Save Changes
             </button>
           )}
         </form>
