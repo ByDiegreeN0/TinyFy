@@ -220,3 +220,20 @@
   justify-content: center;
   cursor: pointer;
 }
+
+
+@media (max-width: 768px) {
+  .support-img {
+    display: none;
+  }
+
+ 
+}
+
+@media (max-width: 721px) {
+  .payment-option {
+    display: none;
+  }
+
+ 
+}
