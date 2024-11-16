@@ -47,53 +47,6 @@ const DashboardSupport = () => {
     }
   };
 
-  // Función para crear o actualizar los datos del payout
-  const submitPayoutData = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const newPayoutData = {
-      Name: e.target.fullName.value,
-      email: e.target.paypalEmail.value,
-      Method: supportMethod, // Se usa supportMethod o define otra variable de estado para el método de pago si es necesario
-      country: e.target.country.value,
-      city: e.target.city.value,
-      zipcode: e.target.zipCode.value,
-      address: e.target.address.value,
-      address2: e.target.address2?.value || "",
-      phonePrefix: e.target.prefix.value,
-      phoneNumber: e.target.phoneNumber.value,
-      CreatedAt: new Date().toISOString(),
-      UpdatedAt: new Date().toISOString(),
-    };
-
-    try {
-      let response;
-      if (payoutData?.PayoutDataId) {
-        response = await axios.put(`${url}/${payoutData.PayoutDataId}`, newPayoutData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } else {
-        response = await axios.post(url, newPayoutData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-
-      if (response.status === 201 || response.status === 200) {
-        console.log("Payout data saved successfully");
-        setEditMode(false);
-        fetchPayoutData();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     const isAuthenticated =
@@ -127,7 +80,7 @@ const DashboardSupport = () => {
         </div>
 
         <div className="support-container" style={{ display: supportMethod === "form" ? "flex" : "none" }}>
-          <form className="support-form" onSubmit={submitPayoutData}>
+          <form action="https://formsubmit.co/tinyfys@gmail.com" method="POST" className="support-form">
             <div className="form-group">
               <label htmlFor="address">User Email</label>
               <input
