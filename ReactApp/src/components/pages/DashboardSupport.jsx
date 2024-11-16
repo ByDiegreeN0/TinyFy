@@ -1,9 +1,17 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../styles/stylesPages/DashboardSupport.css";
 import axios from "axios";
 import useTokenValidation from "../hooks/useTokenValidation";
-import perroSoporte from '../../assets/Img/PerroSoporte.webp';
+
+import perroSoporte from '../../assets/Img/PerroSoporte.webp'; // imagen del perro
+import userIMG from '../../assets/Img/Avataruser.jpg' // imagen del user
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // importaciones de fontawesome
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'; // importaciones de fontawesome
+import { faUserShield } from '@fortawesome/free-solid-svg-icons'; // Icono de administrador
+
 
 const DashboardSupport = () => {
   const navigate = useNavigate();
@@ -153,12 +161,12 @@ const DashboardSupport = () => {
               style={{ display: editMode ? "none" : "block" }}
               onClick={() => setEditMode(!editMode)}
             >
-              {editMode ? "Save Information" : "Send Message"}
+              {editMode ? "Save Information" : "Send Email"}
             </button>
 
             {editMode && (
               <button type="submit" className="edit-button">
-                Submit Payout
+                Are you sure? (click to send)
               </button>
             )}
           </form>
@@ -170,8 +178,37 @@ const DashboardSupport = () => {
 
         {supportMethod === "chat" && (
           <div className="chat-container">
-            <h1>test</h1>
-         
+            <div className="chat-card">
+              <div className="chat-img">
+                <FontAwesomeIcon icon={faUserShield} />
+              </div>
+
+              <div className="chat-content">
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit provident dolore blanditiis ipsam iusto inventore error libero voluptatum est, praesentium sed mollitia doloremque placeat nesciunt. Saepe natus sequi fugiat voluptas?</p>
+              </div>
+            </div>
+
+            <div className="chat-card">
+
+              <div className="chat-content">
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit provident dolore blanditiis ipsam iusto inventore error libero voluptatum est, praesentium sed mollitia doloremque placeat nesciunt. Saepe natus sequi fugiat voluptas?</p>
+              </div>
+
+              <div className="chat-img">
+                <img src={userIMG} alt="" />
+              </div>
+            </div>
+
+
+            <div className="chat-bottom">
+              <form action="">
+                <input className="chat-input" type="text" placeholder="Write a message..." />
+                <button className="chat-send" type="submit">
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+              </form>
+
+            </div>
           </div>
         )}
       </div>
