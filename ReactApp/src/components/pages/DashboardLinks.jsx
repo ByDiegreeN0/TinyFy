@@ -193,17 +193,19 @@ export default function DashboardLinks() {
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <h3>Number of links</h3>
-          <p>{totalLinks}</p>
+          <h3>Links made in the month</h3>
+          <p>{linksThisMonth}</p>
         </motion.div>
+
         <motion.div
           className="cards"
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <h3>Links made in the month</h3>
-          <p>{linksThisMonth}</p>
+          <h3>Aviable Earnings</h3>
+          <p>${totalLinks}</p>
         </motion.div>
+        
         <motion.div
           className="cards"
           whileHover={{ scale: 1.05 }}
@@ -217,7 +219,7 @@ export default function DashboardLinks() {
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <h3>CPM as of today</h3>
+          <h3>Today´s CPM</h3>
           <div className="trend">
             <p>${totalIncome.toFixed(2)}</p>
           </div>
