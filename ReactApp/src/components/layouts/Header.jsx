@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthenticatedHeader from "./AuthenticatedHeader";
 import UnauthenticatedHeader from "./UnauthenticatedHeader";
+import HeaderInter from "./HeaderInter";
 
 const Header = ({ isAuthenticated, onLogout, user }) => {
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -14,6 +16,11 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     onLogout();
     navigate("/");
   };
+
+  // Show InterstitialHeader for shortened URLs
+  if (location.pathname !== "/" && !location.pathname.startsWith("/dashboard")) {
+    return <HeaderInter />;
+  }
 
   return isAuthenticated ? (
     <AuthenticatedHeader user={user} onLogout={handleLogout} />

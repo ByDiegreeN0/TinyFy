@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import SignIn from "./components/pages/Signin";
 import SignUp from "./components/pages/Signup";
 import Header from "./components/layouts/Header";
@@ -19,18 +13,14 @@ import PageLoader from "./components/Common/LoadingScreen";
 import TerminosYCondiciones from "./components/Common/TerminosCondiciones";
 import UserEditForm from "./components/pages/UserEditForm";
 import PasswordRecovery from "./components/pages/PasswordRecovery";
+import InterstitialPage from "./components/pages/InterstitialPage";
 import logo from "./assets/Svg/Logos/HomeSVG.svg";
-import RedirectPage from "./components/pages/RedirectPage";
 import "./components/styles/index.css";
 
 const App = () => {
-  // Estado para manejar la autenticación del usuario
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Estado para manejar si la aplicación está en proceso de carga
   const [isLoading, setIsLoading] = useState(true);
-
-  // Hooks para acceder a la ubicación actual y para navegar entre rutas
+  const [shortLinks, setShortLinks] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -38,6 +28,16 @@ const App = () => {
   const title = "TinyFy";
   const description =
     "TinyFy es un acortador de URLs innovador que integra estratégicamente anuncios publicitarios. Permite a los usuarios generar enlaces cortos personalizados que muestran anuncios relevantes antes de redirigir al destino final. Los ingresos por publicidad se comparten con los usuarios, incentivando su uso. Con un enfoque en la seguridad, privacidad y desempeño óptimo, TinyFy facilita la gestión eficiente de enlaces en plataformas digitales.";
+
+    const isShortLink = (pathname) => {
+      // Exclude known routes
+      const knownRoutes = [
+        '/', '/Signin', '/Signup', '/dashboardlinks', '/dashboardestadisticas',
+        '/dashboardreferrals', '/dashboardpayouts', '/dashboardsupport',
+        '/edit-profile', '/passwordRecovery', '/TerminosYCondiciones'
+      ];
+      return !knownRoutes.includes(pathname);
+    };
 
   // Efecto para verificar el estado de autenticación al cargar la aplicación
   useEffect(() => {
@@ -126,7 +126,11 @@ const App = () => {
   return (
     <>
       {/* Header que cambia dependiendo si el usuario está autenticado */}
-      <Header isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+      <Header
+        isAuthenticated={isAuthenticated}
+        onLogout={handleLogout}
+        shortLinks={shortLinks}
+      />
 
       {/* Definición de rutas utilizando react-router-dom */}
       <Routes>
@@ -229,14 +233,22 @@ const App = () => {
         {/* Ruta para recuperación de contraseña */}
         <Route path="/passwordRecovery" element={<PasswordRecovery />} />
 
-        <Route
-          path="/redirectpage"
-          element={<RedirectPage />}
-        />
         {/* Ruta para términos y condiciones */}
         <Route
           path="/TerminosYCondiciones"
           element={<TerminosYCondiciones />}
+        />
+
+        {/* Modificar la ruta de InterstitialPage para que use parámetros */}
+        <Route
+          path="/:shortUrl"
+          element={
+            isShortLink(location.pathname) ? (
+              <InterstitialPage />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
         />
       </Routes>
     </>
