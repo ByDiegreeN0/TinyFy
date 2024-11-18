@@ -80,13 +80,12 @@ def create_link():
 @app.route('/links', methods=['GET'])
 def get_links():
     links = Links.query.all()
-    domain = "http://localhost:5000"  # Cambia esto por tu dominio real
-
+    
     return jsonify([{
         'LinkId': l.LinkId,
         'LinkName': l.LinkName,
         'LinkUrl': l.LinkUrl,
-        'LinkShortUrl': f"{domain}/{l.LinkShortUrl}",  # Incluir dominio en el enlace corto
+        'LinkShortUrl': l.LinkShortUrl,  
         'ClickCount': l.ClickCount,
         'Earnings': l.Earnings,
         'CreatedAt': l.CreatedAt,
@@ -99,12 +98,12 @@ def get_links():
 @app.route('/links/<int:link_id>', methods=['GET'])
 def get_link(link_id):
     link = Links.query.get_or_404(link_id)
-    domain = "http://localhost:5000"  # Cambia esto por tu dominio real
+    
     return jsonify({
         'LinkId': link.LinkId,
         'LinkName': link.LinkName,
         'LinkUrl': link.LinkUrl,
-        'LinkShortUrl': f"{domain}/{link.LinkShortUrl}",  # Incluir dominio en el enlace corto
+        'LinkShortUrl': link.LinkShortUrl,  # Incluir dominio en el enlace corto
         'ClickCount': link.ClickCount,
         'Earnings': link.Earnings,
         'CreatedAt': link.CreatedAt,
