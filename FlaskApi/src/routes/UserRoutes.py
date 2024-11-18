@@ -90,6 +90,9 @@ if __name__ == '__main__':
 @app.route('/user/referral/<string:referral_link>', methods=['POST'])
 def create_ref_to_user(referral_link):
     from events.UserCreated import create_payout_data, create_user_analytics, create_referral_link
+    from services.ReferralService.ReferralService import get_referral_user_id
+    
+    referred_user_id = get_referral_user_id(referral_link)
 
     data = request.json
 
@@ -98,22 +101,26 @@ def create_ref_to_user(referral_link):
         return jsonify({"msg": "Password is required"}), 400
     
     hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
-    
-    user_referral_link = create_referral_link()  # Crea el link de referido para el usuario que se esa registrando
-    referred_user = User.query.filter_by(referral_link=referral_link).first()
-    
-    if referred_user is None:
-        return jsonify({"msg": "Invalid referral link"}), 400
-    
+
+    # Crea el link de referido para el usuario que se está registrando
+    user_referral_link = create_referral_link()
+
+    # Usa la función 'get_referral_user_id' para obtener el ID del usuario referido
+    referred_user_id = get_referral_user_id(referral_link)
+
+    if not referred_user_id:
+        # Mejor manejo del error y log para ver qué pasa
+        return jsonify({"msg": f"Invalid referral link: {referral_link} could not be found"}), 400
+
     # Verifica si el usuario está intentando referirse a sí mismo
-    if referred_user.id == data.get('referral_to_id'):
+    if referred_user_id == data.get('referral_to_id'):  # Verifica si el ID del referido es el mismo que el del nuevo usuario
         return jsonify({"msg": "User cannot refer themselves"}), 400
-     
+    
     new_user = User(
         username=data['username'], 
         email=data['email'], 
         password=hashed_password,
-        referral_to_id=referred_user.id, 
+        referral_to_id=referred_user_id,  # Usamos el ID del referido
         referral_link=user_referral_link,
         role_id=data.get('RoleId')  
     )
@@ -136,6 +143,9 @@ def create_ref_to_user(referral_link):
 @jwt_required()  # Con este método se protege la ruta
 @app.route('/update_referral/<int:user_id>', methods=['PUT']) 
 def update_create_ref_to_user(user_id):
+    
+    from services.ReferralService.ReferralService import get_referral_user_id
+
     try:
         data = request.json
         link = data.get('referral_link')  # Este es el link de referido a ingresar
@@ -144,22 +154,22 @@ def update_create_ref_to_user(user_id):
         if not link:
             return jsonify({"msg": "Referral link is required"}), 400
 
-        # Usamos el ORM para buscar al usuario con el referral_link
-        referred_user = User.query.filter_by(referral_link=link).first()
+        # Usa la función 'get_referral_user_id' para obtener el user_id del referido
+        referred_user_id = get_referral_user_id(link)
+
+        # Verifica si no se encontró un usuario con ese link
+        if not referred_user_id:
+            return jsonify({"msg": "Invalid referral link"}), 400
 
         # Usamos el ORM para buscar el usuario por ID
         user = User.query.get_or_404(user_id)
 
-        # Verifica si el usuario referido existe
-        if referred_user is None:
-            return jsonify({"msg": "Invalid referral link"}), 400
-
         # Verifica que el usuario no se refiera a sí mismo
-        if referred_user.id == user.id:
+        if referred_user_id == user.id:
             return jsonify({"msg": "You cannot refer yourself"}), 400
 
         # Actualiza el 'ReferralToId' del usuario
-        user.referral_to_id = referred_user.id
+        user.referral_to_id = referred_user_id
         db.session.commit()  # Guarda los cambios en la base de datos
 
         return jsonify({'message': 'Referral link updated successfully'}), 200
@@ -167,4 +177,3 @@ def update_create_ref_to_user(user_id):
         # En caso de error general, hace rollback y devuelve un mensaje de error
         db.session.rollback()  
         return jsonify({"msg": f"An error occurred: {str(e)}"}), 500
-
