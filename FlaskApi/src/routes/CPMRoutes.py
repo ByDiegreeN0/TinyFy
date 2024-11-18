@@ -8,6 +8,19 @@ from models.User import db
 from models.CPMModel import CPM
 
 from services.CPM.CpmService import obtener_cpm, obtener_cpm_ultimo_año
+from services.CPM.CpmService import obtener_cpm_ultimo_diez_dias
+
+@app.route('/api/cpm-ultimo-diez-dias', methods=['GET'])
+def obtener_cpm_diez_dias():
+    api_key = 'your_api_key_here'  # Asegúrate de reemplazarlo con tu API Key
+    data, status_code = obtener_cpm_ultimo_diez_dias(api_key)
+
+    if status_code == 200:
+        # Retornar los datos como JSON
+        return jsonify(data)
+    else:
+        # Manejo de errores
+        return jsonify(data), status_code
 
 # Create Creación de otra ruta para crear el cpm, esta ruta es solo para mostrar a los profesores 
 # ya que trae el cpm del ultimo año o también sirve para pruebas pero no en producción REPITO
