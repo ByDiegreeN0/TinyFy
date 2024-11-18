@@ -90,3 +90,36 @@ def obtener_cpm_ultimo_año(api_key):
     except Exception as e:
         # Esto es para encontrar algun error aunque como digo no es 100% esencial el try
         return {"error": f"Ocurrió un error: {str(e)}"}, 500
+    
+def obtener_cpm_ultimo_diez_dias(api_key):
+    today = date.today()
+    start_date = today - relativedelta(days=10)
+    
+    url = f"https://api3.adsterratools.com/publisher/stats.json?start_date={start_date}&finish_date={today}&group_by=date"
+    
+    headers = {
+        "Authorization": f"Bearer {'dc5ecf146f8450b3da4082d0109595a3'}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-API-Key": 'dc5ecf146f8450b3da4082d0109595a3'
+    }
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Lanza un error si la solicitud falla
+        
+        json_data = response.json()  # Parsear la respuesta como JSON
+        
+        items = json_data.get('items', [])
+        if not items:
+            return jsonify({"error": "No se encontraron ítems en la respuesta"}), 404
+        
+        # Procesar los datos de CPM
+        cpm_values = [item.get('cpm') for item in items]
+        
+        # Retorna solo los datos que se pueden serializar como JSON
+        return jsonify({"cpm_values": cpm_values}), 200
+    
+    except requests.exceptions.RequestException as e:
+        # Devuelve el error como JSON
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
