@@ -6,6 +6,7 @@ import UnauthenticatedHeader from "./UnauthenticatedHeader";
 import HeaderInter from "./HeaderInter";
 
 const Header = ({ isAuthenticated, onLogout, user }) => {
+  const [shortCodes, setShortCodes] = useState([]); // Lista de códigos válidos
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -17,11 +18,39 @@ const Header = ({ isAuthenticated, onLogout, user }) => {
     navigate("/");
   };
 
-  // Show InterstitialHeader for shortened URLs
-  if (location.pathname !== "/" && !location.pathname.startsWith("/dashboard")) {
+  useEffect(() => {
+    // Función para obtener los códigos desde la API
+    const fetchShortCodes = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/links", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // Extraer solo los códigos cortos de la respuesta
+          const codes = data.map((link) => `/${link.LinkShortUrl}`);
+          setShortCodes(codes);
+        } else {
+          console.error("Error al obtener los códigos cortos.");
+        }
+      } catch (error) {
+        console.error("Error al conectarse con el backend:", error);
+      }
+    };
+
+    fetchShortCodes();
+  }, []);
+
+  // Verificar si la ruta actual coincide con algún código
+  const isShortLink = shortCodes.includes(location.pathname);
+
+  if (isShortLink) {
     return <HeaderInter />;
   }
 
+  // Renderizar encabezado según autenticación
   return isAuthenticated ? (
     <AuthenticatedHeader user={user} onLogout={handleLogout} />
   ) : (
